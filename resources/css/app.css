@@ -1,9 +1,6920 @@
-@import 'tailwindcss';
+/* =======================
+   Global Variables
+   ======================= */
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
+:root {
+    --backgroundColor: #0f1115;
+    --surfaceColor: #22262b;
+    --accentColor: #ffb800;
+    --textColor: #ffffff;
+    --mutedTextColor: #a1a1a1;
+    --borderColor: #35393e;
+    --inputBackgroundColor: #23272c;
+    --fontFamily: "Poppins", sans-serif;
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--fontFamily);
+    background-color: var(--backgroundColor);
+    color: var(--textColor);
+}
+
+/* =======================
+   Auth - Login Page
+   ======================= */
+
+/* =======================
+   Global Layout
+   ======================= */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    font-family: var(--fontFamily);
+    background-color: var(--backgroundColor);
+    color: var(--textColor);
+}
+
+/* =======================
+   Auth - Login Page
+   ======================= */
+
+#authLoginPage {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+#authLoginBackground {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+#authLoginBackground img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.7);
+}
+
+#authLoginContainer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 26.875rem;
+    padding: 1.75rem 2.5rem 1.5rem;
+    background-color: var(--backgroundColor);
+    border: 0.0625rem solid var(--borderColor);
+    border-radius: 0.875rem;
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.4);
+}
+
+#authLoginBranding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+}
+
+#authLoginLogo {
+    width: 4.25rem;
+    height: 4.25rem;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+}
+
+#authLoginBusinessName {
+    font-size: 1.125rem;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+#authLoginDepartment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.125rem;
+    color: #d0d0d0;
+    font-size: 0.875rem;
+}
+
+#authLoginDepartment::before,
+#authLoginDepartment::after {
+    content: "";
+    width: 3.25rem;
+    height: 0.0625rem;
+    background-color: #777777;
+}
+
+#authLoginSystemName {
+    margin-top: 0.375rem;
+    padding: 0.25rem 0.875rem;
+    background-color: var(--accentColor);
+    border-radius: 2rem;
+    color: #080808;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+#authLoginHeading {
+    width: 100%;
+    margin-top: 0.875rem;
+    text-align: center;
+}
+
+#authLoginHeading h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+#authLoginHeading p {
+    color: #c5c5c5;
+    font-size: 0.75rem;
+}
+
+#authLoginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    width: 100%;
+    margin-top: 1.125rem;
+}
+
+#authLoginUsernameGroup,
+#authLoginPasswordGroup {
+    width: 100%;
+}
+
+#authLoginUsernameGroup > label,
+#authLoginPasswordGroup > label {
+    position: absolute;
+    width: 0.0625rem;
+    height: 0.0625rem;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+#authLoginUsernameField,
+#authLoginPasswordField {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    height: 3.25rem;
+    padding: 0 1rem;
+    background-color: var(--inputBackgroundColor);
+    border: 0.0625rem solid var(--borderColor);
+    border-radius: 0.875rem;
+    box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.15);
+}
+
+#authLoginUsernameField:focus-within,
+#authLoginPasswordField:focus-within {
+    border-color: var(--accentColor);
+}
+
+#authLoginUsernameField input,
+#authLoginPasswordField input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.875rem;
+}
+
+#authLoginUsernameField input::placeholder,
+#authLoginPasswordField input::placeholder {
+    color: #929292;
+    font-weight: 300;
+}
+
+.authLoginUsernameIcon,
+.authLoginPasswordIcon {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+#authLoginPasswordToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--mutedTextColor);
+    cursor: pointer;
+}
+
+.authLoginVisibilityIcon {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+#authLoginOptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.125rem;
+}
+
+#authLoginRememberLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+#authLoginRemember {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    accent-color: var(--accentColor);
+    cursor: pointer;
+}
+
+#authLoginForgotPassword {
+    color: var(--accentColor);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+#authLoginForgotPassword:hover {
+    text-decoration: underline;
+}
+
+#authLoginSubmit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    height: 3.25rem;
+    margin-top: -0.125rem;
+    background-color: var(--accentColor);
+    border: none;
+    border-radius: 0.875rem;
+    color: #080808;
+    font-family: inherit;
+    font-size: 1.125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#authLoginSubmit:hover {
+    background-color: #e5a600;
+}
+
+.authLoginArrowIcon {
+    font-size: 1.625rem;
+    font-weight: 400;
+    line-height: 1;
+}
+
+/* =======================
+   Auth - Login Icons
+   ======================= */
+
+.authLoginInputIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--textColor);
+    font-size: 1.5rem;
+    font-weight: 400;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+.authLoginVisibilityIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--mutedTextColor);
+    font-size: 1.375rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+#authLoginPasswordToggle:hover .authLoginVisibilityIcon {
+    color: var(--textColor);
+}
+
+/* =======================
+   Dashboard
+   ======================= */
+
+:root {
+    --sidebarColor: #0e1016;
+    --dashboardBackgroundColor: #0d0f13;
+    --dashboardHeaderColor: #16191f;
+    --dashboardCardColor: #16191f;
+    --dashboardBorderColor: #292d34;
+    --dashboardHoverColor: #242830;
+    --dashboardVioletColor: #a82cf7;
+    --dashboardBlueColor: #1878d0;
+    --dashboardOrangeColor: #e14905;
+    --dashboardGreenColor: #17a321;
+    --dashboardWarningColor: #ff4f58;
+    --dashboardAccentColor: #ffb800;
+    --dashboardMutedColor: #a1a1a8;
+}
+
+/* Dashboard Main Layout */
+
+#dashboardPage {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--dashboardBackgroundColor);
+    color: var(--textColor);
+}
+
+#dashboardSidebar {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 12.375rem;
+    height: 100%;
+    padding: 1.25rem 0.75rem 1.125rem;
+    background-color: var(--sidebarColor);
+}
+
+#dashboardMain {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Sidebar Branding */
+
+#dashboardSidebarBranding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0 0.375rem 1.125rem;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+#dashboardSidebarLogo {
+    width: 4.25rem;
+    height: 3.75rem;
+    object-fit: contain;
+}
+
+#dashboardSidebarBusinessName {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-style: italic;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Sidebar Navigation */
+
+#dashboardSidebarNavigation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-top: 1.5rem;
+}
+
+.dashboardNavLink {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    height: 2.375rem;
+    padding: 0 0.875rem;
+    border-radius: 0.375rem;
+    color: var(--textColor);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.dashboardNavLink .material-symbols-outlined {
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+.dashboardNavLink:hover:not(.active) {
+    background-color: var(--dashboardHoverColor);
+    color: var(--dashboardAccentColor);
+}
+
+/* Active Navigation and Pill Indicator */
+
+.dashboardNavLink.active {
+    background-color: var(--dashboardAccentColor);
+    color: #080808;
+}
+
+.dashboardNavLink.active .material-symbols-outlined {
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 500,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+.dashboardNavLink.active::before {
+    content: "";
+    position: absolute;
+    left: -0.75rem;
+    top: 50%;
+    width: 0.5rem;
+    height: 2.375rem;
+    background-color: var(--dashboardAccentColor);
+    border-radius: 1rem;
+    transform: translateY(-50%);
+}
+
+#dashboardSidebarFooter {
+    margin-top: auto;
+}
+
+/* Dashboard Header */
+
+#dashboardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    width: 100%;
+    height: 5rem;
+    padding: 0 1rem;
+    background-color: var(--dashboardHeaderColor);
+}
+
+#dashboardHeaderTitle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#dashboardHeaderTitle h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+#dashboardHeaderTitle p {
+    color: #c4c4c8;
+    font-size: 0.75rem;
+}
+
+#dashboardHeaderProfile {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    min-height: 3.25rem;
+    padding-left: 1rem;
+    border-left: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+#dashboardProfileIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #555862;
+    color: var(--textColor);
+    font-size: 1.75rem;
+}
+
+#dashboardProfileDetails {
+    display: flex;
+    flex-direction: column;
+}
+
+#dashboardProfileDetails h2 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+#dashboardProfileDetails p {
+    color: #c4c4c8;
+    font-size: 0.75rem;
+}
+
+/* Dashboard Content */
+
+#dashboardContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1.125rem;
+    min-height: 0;
+    padding: 1.125rem 1rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--dashboardBorderColor) transparent;
+}
+
+/* Statistics Cards */
+
+#dashboardStatistics {
+    display: flex;
+    gap: 0.625rem;
+    width: 100%;
+}
+
+.dashboardStatCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 0;
+    min-height: 5.125rem;
+    padding: 0.875rem 0.625rem;
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.5rem;
+}
+
+.dashboardStatInformation {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.dashboardStatValue {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.dashboardStatValue h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.dashboardStatInformation > p {
+    color: var(--dashboardMutedColor);
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+.dashboardGrowthBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.0625rem 0.25rem;
+    border-radius: 1rem;
+    background-color: #2bd94b;
+    color: #080808;
+    font-size: 0.5625rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.dashboardGrowthBadge .material-symbols-outlined {
+    font-size: 0.625rem;
+    font-weight: 700;
+}
+
+.dashboardStatIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2.375rem;
+    height: 2.375rem;
+    border-radius: 50%;
+    color: #101010;
+}
+
+.dashboardStatIcon .material-symbols-outlined {
+    font-size: 1.375rem;
+}
+
+.dashboardVioletIcon {
+    background-color: var(--dashboardVioletColor);
+}
+
+.dashboardBlueIcon {
+    background-color: var(--dashboardBlueColor);
+}
+
+.dashboardOrangeIcon {
+    background-color: var(--dashboardOrangeColor);
+}
+
+.dashboardGreenIcon {
+    background-color: var(--dashboardGreenColor);
+}
+
+/* Dashboard Chart Placeholders */
+
+#dashboardCharts {
+    display: flex;
+    gap: 0.875rem;
+    width: 100%;
+    min-height: 13.875rem;
+}
+
+#dashboardTopSellingProducts,
+#dashboardSalesByCategory {
+    min-width: 0;
+    height: 13.875rem;
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.5rem;
+    box-shadow: inset 0 0.125rem 0 rgba(255, 255, 255, 0.03);
+}
+
+#dashboardTopSellingProducts {
+    flex: 1.45;
+}
+
+#dashboardSalesByCategory {
+    flex: 1;
+}
+
+/* Dashboard Bottom Panels */
+
+#dashboardBottomPanels {
+    display: flex;
+    gap: 0.875rem;
+    width: 100%;
+    min-height: 12.125rem;
+}
+
+.dashboardPanel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 12.125rem;
+    padding: 0.875rem;
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.5rem;
+    box-shadow: inset 0 0.125rem 0 rgba(255, 255, 255, 0.03);
+}
+
+#dashboardRecentTransactions {
+    flex: 1.4;
+}
+
+#dashboardLowStockAlerts {
+    flex: 1.05;
+}
+
+#dashboardTodaySummary {
+    flex: 0.95;
+}
+
+/* Panel Headers */
+
+.dashboardPanelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 2rem;
+    margin-bottom: 0.75rem;
+}
+
+.dashboardPanelTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-width: 0;
+}
+
+.dashboardPanelTitle h2 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.dashboardPanelIcon {
+    flex-shrink: 0;
+    color: var(--dashboardAccentColor);
+    font-size: 1.75rem;
+}
+
+.dashboardPanelLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.125rem;
+    color: var(--dashboardAccentColor);
+    font-size: 0.625rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.dashboardPanelLink .material-symbols-outlined {
+    font-size: 0.875rem;
+}
+
+.dashboardPanelLink:hover {
+    text-decoration: underline;
+}
+
+/* Recent Transactions */
+
+#dashboardTransactionTableContainer {
+    width: 100%;
+    overflow: hidden;
+}
+
+#dashboardTransactionTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#dashboardTransactionTable thead {
+    background-color: #1d2128;
+}
+
+#dashboardTransactionTable th {
+    padding: 0.375rem 0.5rem;
+    color: #c4c4c8;
+    font-size: 0.5625rem;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+#dashboardTransactionTable th:first-child {
+    border-radius: 0.375rem 0 0 0.375rem;
+}
+
+#dashboardTransactionTable th:last-child {
+    border-radius: 0 0.375rem 0.375rem 0;
+}
+
+#dashboardTransactionTable td {
+    padding: 0.5rem;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+    color: #d2d2d6;
+    font-size: 0.5625rem;
+    white-space: nowrap;
+}
+
+#dashboardTransactionTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+#dashboardTransactionTable td:first-child {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+#dashboardTransactionTable td .material-symbols-outlined {
+    color: var(--textColor);
+    font-size: 0.875rem;
+}
+
+/* Low Stock Alerts */
+
+#dashboardLowStockList {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.dashboardLowStockItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 2.625rem;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+.dashboardLowStockItem:last-child {
+    border-bottom: none;
+}
+
+.dashboardLowStockProduct {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-width: 0;
+    color: #d2d2d6;
+    font-size: 0.625rem;
+}
+
+.dashboardLowStockProduct .material-symbols-outlined {
+    flex-shrink: 0;
+    color: var(--textColor);
+    font-size: 1.25rem;
+}
+
+.dashboardStockBadge {
+    flex-shrink: 0;
+    padding: 0.1875rem 0.375rem;
+    background-color: var(--dashboardWarningColor);
+    border-radius: 0.25rem;
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Today's Summary */
+
+#dashboardSummaryList {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.dashboardSummaryItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 1.625rem;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+    color: #e0e0e4;
+    font-size: 0.625rem;
+}
+
+.dashboardSummaryItem:last-child {
+    border-bottom: none;
+}
+
+/* =======================
+   Products
+   ======================= */
+
+:root {
+    --productsBackgroundColor: #0d0f13;
+    --productsSurfaceColor: #16191f;
+    --productsInputColor: #1c2026;
+    --productsBorderColor: #292d34;
+    --productsHoverColor: #242830;
+    --productsAccentColor: #ffb800;
+    --productsMutedColor: #a1a1a8;
+    --productsSuccessColor: #17a321;
+    --productsDangerColor: #e14949;
+}
+
+/* Products Main Layout */
+
+#productsPage {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--productsBackgroundColor);
+    color: var(--textColor);
+}
+
+#productsContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.875rem;
+    min-height: 0;
+    padding: 1.125rem 1rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--productsBorderColor) transparent;
+}
+
+/* Category Tabs and Add Product */
+
+#productsToolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+
+#productsCategoryTabs {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.productsCategoryTab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.375rem;
+    padding: 0 0.875rem;
+    background-color: var(--productsSurfaceColor);
+    border: 0.0625rem solid var(--productsBorderColor);
+    border-radius: 0.5rem;
+    color: #d2d2d6;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.productsCategoryTab .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.productsCategoryTab:hover:not(.active) {
+    background-color: var(--productsHoverColor);
+    color: var(--textColor);
+}
+
+.productsCategoryTab.active {
+    background-color: var(--productsAccentColor);
+    border-color: var(--productsAccentColor);
+    color: #080808;
+    font-weight: 600;
+}
+
+#productsAddButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    height: 2.375rem;
+    padding: 0 1rem;
+    background-color: var(--productsAccentColor);
+    border: none;
+    border-radius: 0.5rem;
+    color: #080808;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#productsAddButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#productsAddButton:hover {
+    background-color: #e5a600;
+}
+
+/* Search and Filters */
+
+#productsFilterSection {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    width: 100%;
+}
+
+#productsSearchContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex: 1;
+    min-width: 0;
+    height: 2.375rem;
+    padding: 0 0.875rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid var(--productsBorderColor);
+    border-radius: 0.5rem;
+}
+
+#productsSearchContainer:focus-within {
+    border-color: var(--productsAccentColor);
+}
+
+#productsSearchContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.25rem;
+}
+
+#productsSearchInput {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.75rem;
+}
+
+#productsSearchInput::placeholder {
+    color: var(--productsMutedColor);
+}
+
+#productsSearchInput::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+#productsCategoryFilter,
+#productsStockFilter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    height: 2.375rem;
+    padding: 0 0.625rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid var(--productsBorderColor);
+    border-radius: 0.5rem;
+}
+
+#productsCategoryFilter label,
+#productsStockFilter label {
+    color: #d2d2d6;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+#productsCategorySelect,
+#productsStockSelect {
+    min-width: 6rem;
+    height: 1.75rem;
+    padding: 0 0.375rem;
+    background-color: var(--productsSurfaceColor);
+    border: 0.0625rem solid var(--productsBorderColor);
+    border-radius: 0.375rem;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    cursor: pointer;
+}
+
+#productsCategorySelect:focus,
+#productsStockSelect:focus {
+    border-color: var(--productsAccentColor);
+}
+
+/* Products Table Section */
+
+#productsTableSection {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--productsSurfaceColor);
+    border: 0.0625rem solid var(--productsBorderColor);
+    border-radius: 0.625rem;
+    overflow: hidden;
+}
+
+#productsTableContainer {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#productsTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#productsTable thead {
+    background-color: #20242b;
+}
+
+#productsTable th {
+    height: 2.5rem;
+    padding: 0 0.625rem;
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+#productsTable th:first-child,
+#productsTable td:first-child {
+    width: 2.75rem;
+    text-align: center;
+}
+
+#productsTable th:last-child,
+#productsTable td:last-child {
+    text-align: center;
+}
+
+.productsTableHeading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.productsTableHeading .material-symbols-outlined {
+    color: var(--productsMutedColor);
+    font-size: 0.875rem;
+}
+
+/* Product Table Rows */
+
+#productsTable tbody tr {
+    background-color: var(--productsSurfaceColor);
+    transition: background-color 0.2s ease;
+}
+
+#productsTable tbody tr:hover {
+    background-color: var(--productsHoverColor);
+}
+
+#productsTable td {
+    height: 2.75rem;
+    padding: 0.25rem 0.625rem;
+    border-bottom: 0.0625rem solid var(--productsBorderColor);
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+#productsTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Product Checkboxes */
+
+#productsTable input[type="checkbox"] {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin: 0;
+    accent-color: var(--productsAccentColor);
+    cursor: pointer;
+}
+
+/* Product Information and Images */
+
+.productsProductInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.productsProductImage {
+    flex-shrink: 0;
+    width: 2.375rem;
+    height: 2.375rem;
+    padding: 0.375rem;
+    background-color: #242830;
+    border-radius: 0.375rem;
+    object-fit: contain;
+}
+
+/* Product Category Badges */
+
+.productsCategoryBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    max-width: 100%;
+    padding: 0.25rem 0.5rem;
+    background-color: #252930;
+    border-radius: 1rem;
+    color: #d2d2d6;
+    font-size: 0.625rem;
+    white-space: nowrap;
+}
+
+.productsCategoryBadge .material-symbols-outlined {
+    font-size: 1rem;
+}
+
+/* Product Stock Status */
+
+.productsStatusBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.productsInStock {
+    background-color: #103b25;
+    color: #30d66d;
+}
+
+.productsLowStock {
+    background-color: #512326;
+    color: #ff8585;
+}
+
+/* Product Action Buttons */
+
+.productsActionButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.productsEditButton,
+.productsDeleteButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    height: 1.875rem;
+    padding: 0;
+    background-color: #252930;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.productsEditButton .material-symbols-outlined,
+.productsDeleteButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.productsEditButton {
+    color: #e0e0e4;
+}
+
+.productsDeleteButton {
+    color: #ff5555;
+}
+
+.productsEditButton:hover {
+    background-color: #3a4049;
+}
+
+.productsDeleteButton:hover {
+    background-color: #512326;
+}
+
+/* Products Pagination */
+
+#productsPagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 3.375rem;
+    padding: 0.625rem 0.875rem;
+    border-top: 0.0625rem solid var(--productsBorderColor);
+}
+
+#productsPaginationInfo {
+    color: #c4c4c8;
+    font-size: 0.6875rem;
+}
+
+#productsPaginationControls {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.productsPaginationButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.875rem;
+    height: 1.875rem;
+    padding: 0 0.375rem;
+    background-color: var(--productsSurfaceColor);
+    border: 0.0625rem solid var(--productsBorderColor);
+    border-radius: 0.375rem;
+    color: #d2d2d6;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.productsPaginationButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.productsPaginationButton:hover:not(.active):not(:disabled) {
+    background-color: var(--productsHoverColor);
+}
+
+.productsPaginationButton.active {
+    background-color: var(--productsAccentColor);
+    border-color: var(--productsAccentColor);
+    color: #080808;
+    font-weight: 700;
+}
+
+.productsPaginationButton:disabled {
+    color: #646870;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.productsPaginationEllipsis {
+    padding: 0 0.25rem;
+    color: var(--productsMutedColor);
+    font-size: 0.6875rem;
+}
+
+/* =======================
+   Products - Add Product Modal
+   ======================= */
+
+/* Modal Overlay */
+
+.productsModalOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.productsModalOverlay[hidden] {
+    display: none;
+}
+
+.productsModalOpen {
+    overflow: hidden;
+}
+
+/* Modal Container */
+
+#productsAddModal {
+    display: flex;
+    flex-direction: column;
+    width: 25.25rem;
+    max-height: calc(100vh - 2rem);
+    background-color: var(--productsSurfaceColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.875rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Modal Header */
+
+#productsAddModalHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4.625rem;
+    margin: 0 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 0.0625rem solid var(--productsBorderColor);
+}
+
+.productsModalHeaderIcon {
+    flex-shrink: 0;
+    color: var(--productsAccentColor);
+    font-size: 2.25rem;
+}
+
+#productsAddModalHeading {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+#productsAddModalTitle {
+    color: var(--textColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+#productsAddModalHeading p {
+    color: #c4c4c8;
+    font-size: 0.625rem;
+}
+
+#productsAddModalClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0.375rem;
+    color: #c4c4c8;
+    cursor: pointer;
+}
+
+#productsAddModalClose .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#productsAddModalClose:hover {
+    background-color: var(--productsHoverColor);
+    color: var(--textColor);
+}
+
+/* Modal Form */
+
+#productsAddForm {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#productsAddModalBody {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 0.875rem 1rem 1rem;
+    overflow-y: auto;
+}
+
+/* Product Image Upload */
+
+#productsAddImageGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 0 0 6rem;
+    min-width: 0;
+}
+
+#productsAddImageGroup > label:first-child {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+}
+
+#productsAddImageUpload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    width: 100%;
+    height: 5.5rem;
+    padding: 0.375rem;
+    background-color: #1c2026;
+    border: 0.0625rem dashed #666b73;
+    border-radius: 0.5rem;
+    color: var(--textColor);
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+#productsAddImageUpload:hover {
+    border-color: var(--productsAccentColor);
+}
+
+#productsAddImageUpload > .material-symbols-outlined {
+    font-size: 1.5rem;
+    color: #c4c4c8;
+}
+
+#productsAddImageUpload > span:not(.material-symbols-outlined) {
+    font-size: 0.5625rem;
+    white-space: nowrap;
+}
+
+#productsAddImageUpload small {
+    color: #c4c4c8;
+    font-size: 0.4375rem;
+    white-space: nowrap;
+}
+
+/* Product Image Preview */
+
+.productsImagePreview {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0.375rem;
+}
+
+#productsAddImageUpload [hidden] {
+    display: none;
+}
+
+/* Product Form Fields */
+
+#productsAddFields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.productsAddFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    min-width: 0;
+}
+
+.productsAddFieldGroup > label {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.productsAddFieldGroup > label span {
+    color: #ff5555;
+}
+
+.productsAddInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 2rem;
+    padding: 0 0.625rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.375rem;
+}
+
+.productsAddInputContainer:focus-within {
+    border-color: var(--productsAccentColor);
+}
+
+.productsAddInputContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.125rem;
+}
+
+.productsAddInputContainer input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.625rem;
+}
+
+.productsAddInputContainer input::placeholder {
+    color: #a1a1a8;
+}
+
+.productsAddInputContainer input::-webkit-inner-spin-button,
+.productsAddInputContainer input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.productsAddInputContainer input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+/* Price and Stock Fields */
+
+#productsAddNumberFields {
+    display: flex;
+    gap: 0.875rem;
+    width: 100%;
+}
+
+#productsAddNumberFields .productsAddFieldGroup {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.productsAddCurrencyIcon {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Modal Footer */
+
+#productsAddModalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+    min-height: 3.75rem;
+    padding: 0.75rem 1rem;
+    border-top: 0.0625rem solid var(--productsBorderColor);
+}
+
+#productsAddCancelButton,
+#productsAddSaveButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.25rem;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#productsAddCancelButton {
+    min-width: 6rem;
+    background-color: transparent;
+    border: 0.0625rem solid #a1a1a8;
+    color: var(--textColor);
+}
+
+#productsAddCancelButton:hover {
+    background-color: var(--productsHoverColor);
+}
+
+#productsAddSaveButton {
+    min-width: 7.625rem;
+    background-color: var(--productsAccentColor);
+    border: 0.0625rem solid var(--productsAccentColor);
+    color: #080808;
+}
+
+#productsAddSaveButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#productsAddSaveButton:hover {
+    background-color: #e5a600;
+}
+
+/* =======================
+   Products - Edit Product Modal
+   ======================= */
+
+/* Edit Modal Container */
+
+#productsEditModal {
+    display: flex;
+    flex-direction: column;
+    width: 25.25rem;
+    max-height: calc(100vh - 2rem);
+    background-color: var(--productsSurfaceColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.875rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Edit Modal Header */
+
+#productsEditModalHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4.625rem;
+    margin: 0 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 0.0625rem solid var(--productsBorderColor);
+}
+
+.productsEditHeaderIcon {
+    flex-shrink: 0;
+    color: var(--productsAccentColor);
+    font-size: 2.25rem;
+}
+
+#productsEditModalHeading {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+#productsEditModalTitle {
+    color: var(--textColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+#productsEditModalHeading p {
+    color: #c4c4c8;
+    font-size: 0.625rem;
+}
+
+#productsEditModalClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0.375rem;
+    color: #c4c4c8;
+    cursor: pointer;
+}
+
+#productsEditModalClose .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#productsEditModalClose:hover {
+    background-color: var(--productsHoverColor);
+    color: var(--textColor);
+}
+
+/* Edit Modal Form */
+
+#productsEditForm {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#productsEditModalBody {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 0.875rem 1rem 1rem;
+    overflow-y: auto;
+}
+
+/* Product Image Section */
+
+#productsEditImageGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 0 0 6rem;
+    min-width: 0;
+}
+
+#productsEditImageGroup > label {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+}
+
+#productsEditImageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.375rem;
+    width: 100%;
+    height: 7.375rem;
+    padding: 0.5rem;
+    background-color: #1c2026;
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+#productsEditImagePreview {
+    display: block;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    object-fit: contain;
+}
+
+#productsEditImageActions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+#productsEditImageButton,
+#productsEditRemoveImage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    height: 1.5rem;
+    padding: 0;
+    background-color: #252930;
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#productsEditImageButton {
+    color: #e0e0e4;
+}
+
+#productsEditRemoveImage {
+    color: #ff5555;
+}
+
+#productsEditImageButton .material-symbols-outlined,
+#productsEditRemoveImage .material-symbols-outlined {
+    font-size: 1rem;
+}
+
+#productsEditImageButton:hover {
+    background-color: #3a4049;
+}
+
+#productsEditRemoveImage:hover {
+    background-color: #512326;
+}
+
+/* Product Form Fields */
+
+#productsEditFields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.productsEditFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    min-width: 0;
+}
+
+.productsEditFieldGroup > label {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.productsEditFieldGroup > label span {
+    color: #ff5555;
+}
+
+/* Input Containers */
+
+.productsEditInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    height: 2rem;
+    padding: 0 0.625rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.375rem;
+}
+
+.productsEditInputContainer:focus-within {
+    border-color: var(--productsAccentColor);
+}
+
+.productsEditInputContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.125rem;
+}
+
+.productsEditInputContainer input,
+.productsEditInputContainer select {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.625rem;
+}
+
+.productsEditInputContainer input::placeholder {
+    color: #a1a1a8;
+}
+
+.productsEditInputContainer select {
+    cursor: pointer;
+}
+
+.productsEditInputContainer select option {
+    background-color: var(--productsSurfaceColor);
+    color: var(--textColor);
+}
+
+/* Price and Stock Fields */
+
+#productsEditNumberFields {
+    display: flex;
+    gap: 0.875rem;
+    width: 100%;
+}
+
+#productsEditNumberFields .productsEditFieldGroup {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.productsEditCurrencyIcon {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Hide Number Input Arrows */
+
+.productsEditInputContainer input::-webkit-inner-spin-button,
+.productsEditInputContainer input::-webkit-outer-spin-button,
+#productsEditStock::-webkit-inner-spin-button,
+#productsEditStock::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.productsEditInputContainer input[type="number"],
+#productsEditStock {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+/* Stock Quantity Controls */
+
+.productsEditQuantityControl {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem;
+    width: 100%;
+    height: 2rem;
+    padding: 0 0.375rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.375rem;
+}
+
+.productsEditQuantityControl:focus-within {
+    border-color: var(--productsAccentColor);
+}
+
+#productsEditDecreaseStock,
+#productsEditIncreaseStock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+#productsEditDecreaseStock {
+    background-color: #35393e;
+    color: var(--textColor);
+}
+
+#productsEditIncreaseStock {
+    background-color: var(--productsAccentColor);
+    color: #080808;
+}
+
+#productsEditDecreaseStock:hover {
+    background-color: #4a4f57;
+}
+
+#productsEditIncreaseStock:hover {
+    background-color: #e5a600;
+}
+
+#productsEditDecreaseStock .material-symbols-outlined,
+#productsEditIncreaseStock .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+#productsEditStock {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    text-align: center;
+}
+
+/* Edit Modal Footer */
+
+#productsEditModalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+    min-height: 3.75rem;
+    padding: 0.75rem 1rem;
+    border-top: 0.0625rem solid var(--productsBorderColor);
+}
+
+#productsEditCancelButton,
+#productsEditSaveButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.25rem;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#productsEditCancelButton {
+    min-width: 6rem;
+    background-color: transparent;
+    border: 0.0625rem solid #a1a1a8;
+    color: var(--textColor);
+}
+
+#productsEditCancelButton:hover {
+    background-color: var(--productsHoverColor);
+}
+
+#productsEditSaveButton {
+    min-width: 7.625rem;
+    background-color: var(--productsAccentColor);
+    border: 0.0625rem solid var(--productsAccentColor);
+    color: #080808;
+}
+
+#productsEditSaveButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#productsEditSaveButton:hover {
+    background-color: #e5a600;
+}
+
+/* =======================
+   Customers
+   ======================= */
+
+/* Customers Main Layout */
+
+#customersPage {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--dashboardBackgroundColor);
+    color: var(--textColor);
+}
+
+#customersContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1.25rem;
+    min-height: 0;
+    padding: 1.125rem 1rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--dashboardBorderColor) transparent;
+}
+
+/* Search and Add Customer */
+
+#customersToolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+
+#customersSearchContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 26.25rem;
+    height: 2.375rem;
+    padding: 0 0.875rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid var(--productsBorderColor);
+    border-radius: 0.5rem;
+}
+
+#customersSearchContainer:focus-within {
+    border-color: var(--productsAccentColor);
+}
+
+#customersSearchContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.25rem;
+}
+
+#customersSearchInput {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.75rem;
+}
+
+#customersSearchInput::placeholder {
+    color: var(--productsMutedColor);
+}
+
+#customersSearchInput::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+#customersAddButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    height: 2.375rem;
+    padding: 0 1rem;
+    background-color: var(--productsAccentColor);
+    border: none;
+    border-radius: 0.5rem;
+    color: #080808;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#customersAddButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#customersAddButton:hover {
+    background-color: #e5a600;
+}
+
+/* Customers Table Section */
+
+#customersTableSection {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.625rem;
+    overflow: hidden;
+}
+
+#customersTableContainer {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#customersTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#customersTable thead {
+    background-color: #20242b;
+}
+
+#customersTable th {
+    height: 2.75rem;
+    padding: 0 1rem;
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+#customersTable th:last-child,
+#customersTable td:last-child {
+    text-align: center;
+}
+
+.customersTableHeading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.customersTableHeading .material-symbols-outlined {
+    color: var(--dashboardMutedColor);
+    font-size: 0.875rem;
+}
+
+/* Customer Table Rows */
+
+#customersTable tbody tr {
+    background-color: var(--dashboardCardColor);
+    transition: background-color 0.2s ease;
+}
+
+#customersTable tbody tr:hover {
+    background-color: var(--dashboardHoverColor);
+}
+
+#customersTable td {
+    height: 2.875rem;
+    padding: 0.5rem 1rem;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+#customersTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Customer Action Buttons */
+
+.customersActionButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.customersEditButton,
+.customersDeleteButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    height: 1.875rem;
+    padding: 0;
+    background-color: #252930;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.customersEditButton .material-symbols-outlined,
+.customersDeleteButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.customersEditButton {
+    color: #e0e0e4;
+}
+
+.customersDeleteButton {
+    color: #ff5555;
+}
+
+.customersEditButton:hover {
+    background-color: #3a4049;
+}
+
+.customersDeleteButton:hover {
+    background-color: #512326;
+}
+
+/* Customers Pagination */
+
+#customersPagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 3.375rem;
+    padding: 0.625rem 0.875rem;
+    border-top: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+#customersPaginationInfo {
+    color: #c4c4c8;
+    font-size: 0.6875rem;
+}
+
+#customersPaginationControls {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.customersPaginationButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.875rem;
+    height: 1.875rem;
+    padding: 0 0.375rem;
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.375rem;
+    color: #d2d2d6;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.customersPaginationButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.customersPaginationButton:hover:not(.active):not(:disabled) {
+    background-color: var(--dashboardHoverColor);
+}
+
+.customersPaginationButton.active {
+    background-color: var(--dashboardAccentColor);
+    border-color: var(--dashboardAccentColor);
+    color: #080808;
+    font-weight: 700;
+}
+
+.customersPaginationButton:disabled {
+    color: #646870;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.customersPaginationEllipsis {
+    padding: 0 0.25rem;
+    color: var(--dashboardMutedColor);
+    font-size: 0.6875rem;
+}
+
+/* =======================
+   Customers - Add Customer Modal
+   ======================= */
+
+/* Modal Overlay */
+
+.customersModalOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.customersModalOverlay[hidden] {
+    display: none;
+}
+
+.customersModalOpen {
+    overflow: hidden;
+}
+
+/* Modal Container */
+
+#customersAddModal {
+    display: flex;
+    flex-direction: column;
+    width: 31.5rem;
+    max-height: calc(100vh - 2rem);
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.875rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Modal Header */
+
+#customersAddModalHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    min-height: 4.5rem;
+    margin: 0 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+.customersModalHeaderIcon {
+    flex-shrink: 0;
+    color: var(--dashboardAccentColor);
+    font-size: 2.25rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+#customersAddModalHeading {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+#customersAddModalTitle {
+    color: var(--textColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+#customersAddModalHeading p {
+    color: #c4c4c8;
+    font-size: 0.625rem;
+}
+
+#customersAddModalClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0.375rem;
+    color: #c4c4c8;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+#customersAddModalClose .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#customersAddModalClose:hover {
+    background-color: var(--dashboardHoverColor);
+    color: var(--textColor);
+}
+
+/* Modal Form */
+
+#customersAddForm {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#customersAddModalBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem 1rem;
+    overflow-y: auto;
+}
+
+/* Customer Form Fields */
+
+.customersAddFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.customersAddFieldGroup > label {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+}
+
+.customersAddFieldGroup > label span {
+    color: #ff5555;
+}
+
+/* Input Containers */
+
+.customersAddInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.125rem;
+    padding: 0 0.625rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.375rem;
+    transition: border-color 0.2s ease;
+}
+
+.customersAddInputContainer:focus-within {
+    border-color: var(--dashboardAccentColor);
+}
+
+.customersAddInputContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.125rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+.customersAddInputContainer input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.625rem;
+}
+
+.customersAddInputContainer input::placeholder {
+    color: #a1a1a8;
+    opacity: 1;
+}
+
+/* Phone Number and Email Layout */
+
+#customersAddContactFields {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+}
+
+#customersAddContactFields .customersAddFieldGroup {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+/* Modal Footer */
+
+#customersAddModalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+    border-top: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+#customersAddCancelButton,
+#customersAddSaveButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.375rem;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Cancel Button */
+
+#customersAddCancelButton {
+    min-width: 6.25rem;
+    background-color: transparent;
+    border: 0.0625rem solid #a1a1a8;
+    color: var(--textColor);
+}
+
+#customersAddCancelButton:hover {
+    background-color: var(--dashboardHoverColor);
+}
+
+/* Add Customer Button */
+
+#customersAddSaveButton {
+    min-width: 8rem;
+    background-color: var(--dashboardAccentColor);
+    border: 0.0625rem solid var(--dashboardAccentColor);
+    color: #080808;
+}
+
+#customersAddSaveButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#customersAddSaveButton:hover {
+    background-color: #e5a600;
+}
+
+/* =======================
+   Customers - Edit Customer Modal
+   ======================= */
+
+/* Edit Modal Container */
+
+#customersEditModal {
+    display: flex;
+    flex-direction: column;
+    width: 31.5rem;
+    max-height: calc(100vh - 2rem);
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.875rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Edit Modal Header */
+
+#customersEditModalHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    min-height: 4.5rem;
+    margin: 0 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+.customersEditHeaderIcon {
+    flex-shrink: 0;
+    color: var(--dashboardAccentColor);
+    font-size: 2.25rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+#customersEditModalHeading {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+#customersEditModalTitle {
+    color: var(--textColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+#customersEditModalHeading p {
+    color: #c4c4c8;
+    font-size: 0.625rem;
+}
+
+/* Close Button */
+
+#customersEditModalClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0.375rem;
+    color: #c4c4c8;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+#customersEditModalClose .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#customersEditModalClose:hover {
+    background-color: var(--dashboardHoverColor);
+    color: var(--textColor);
+}
+
+/* Edit Modal Form */
+
+#customersEditForm {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#customersEditModalBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding: 0.875rem 1rem 1rem;
+    overflow-y: auto;
+}
+
+/* Customer Form Fields */
+
+.customersEditFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.customersEditFieldGroup > label {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+}
+
+.customersEditFieldGroup > label span {
+    color: #ff5555;
+}
+
+/* Input Containers */
+
+.customersEditInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.125rem;
+    padding: 0 0.625rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.375rem;
+    transition: border-color 0.2s ease;
+}
+
+.customersEditInputContainer:focus-within {
+    border-color: var(--dashboardAccentColor);
+}
+
+.customersEditInputContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.125rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+.customersEditInputContainer input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.625rem;
+}
+
+.customersEditInputContainer input::placeholder {
+    color: #a1a1a8;
+    opacity: 1;
+}
+
+/* Phone Number and Email Layout */
+
+#customersEditContactFields {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+}
+
+#customersEditContactFields .customersEditFieldGroup {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+/* Edit Modal Footer */
+
+#customersEditModalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+    border-top: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+/* Footer Buttons */
+
+#customersEditCancelButton,
+#customersEditSaveButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.375rem;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Cancel Button */
+
+#customersEditCancelButton {
+    min-width: 6.25rem;
+    background-color: transparent;
+    border: 0.0625rem solid #a1a1a8;
+    color: var(--textColor);
+}
+
+#customersEditCancelButton:hover {
+    background-color: var(--dashboardHoverColor);
+}
+
+/* Save Changes Button */
+
+#customersEditSaveButton {
+    min-width: 8rem;
+    background-color: var(--dashboardAccentColor);
+    border: 0.0625rem solid var(--dashboardAccentColor);
+    color: #080808;
+}
+
+#customersEditSaveButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#customersEditSaveButton:hover {
+    background-color: #e5a600;
+}
+
+/* =======================
+   Staff
+   ======================= */
+
+/* Staff Main Layout */
+
+#staffPage {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--dashboardBackgroundColor);
+    color: var(--textColor);
+}
+
+#staffContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1.25rem;
+    min-height: 0;
+    padding: 1.125rem 1rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--dashboardBorderColor) transparent;
+}
+
+/* Search and Add Staff */
+
+#staffToolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+
+#staffSearchContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 26.25rem;
+    height: 2.375rem;
+    padding: 0 0.875rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid var(--productsBorderColor);
+    border-radius: 0.5rem;
+}
+
+#staffSearchContainer:focus-within {
+    border-color: var(--productsAccentColor);
+}
+
+#staffSearchContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.25rem;
+}
+
+#staffSearchInput {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.75rem;
+}
+
+#staffSearchInput::placeholder {
+    color: var(--productsMutedColor);
+}
+
+#staffSearchInput::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+#staffAddButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    height: 2.375rem;
+    padding: 0 1rem;
+    background-color: var(--productsAccentColor);
+    border: none;
+    border-radius: 0.5rem;
+    color: #080808;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#staffAddButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#staffAddButton:hover {
+    background-color: #e5a600;
+}
+
+/* Staff Table Section */
+
+#staffTableSection {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.625rem;
+    overflow: hidden;
+}
+
+#staffTableContainer {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#staffTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#staffTable thead {
+    background-color: #20242b;
+}
+
+#staffTable th {
+    height: 2.75rem;
+    padding: 0 0.875rem;
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+#staffTable th:first-child,
+#staffTable td:first-child {
+    width: 4.5rem;
+    text-align: center;
+}
+
+#staffTable th:last-child,
+#staffTable td:last-child {
+    text-align: center;
+}
+
+.staffTableHeading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.staffTableHeading .material-symbols-outlined {
+    color: var(--dashboardMutedColor);
+    font-size: 0.875rem;
+}
+
+/* Staff Table Rows */
+
+#staffTable tbody tr {
+    background-color: var(--dashboardCardColor);
+    transition: background-color 0.2s ease;
+}
+
+#staffTable tbody tr:hover {
+    background-color: var(--dashboardHoverColor);
+}
+
+#staffTable td {
+    height: 2.875rem;
+    padding: 0.375rem 0.875rem;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+#staffTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Staff Avatar */
+
+.staffAvatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    height: 1.875rem;
+    background-color: #60636a;
+    border: 0.0625rem solid #85888e;
+    border-radius: 50%;
+    color: var(--textColor);
+    overflow: hidden;
+}
+
+.staffAvatar .material-symbols-outlined {
+    font-size: 1.625rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 300,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+/* Staff Action Buttons */
+
+.staffActionButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.staffEditButton,
+.staffDeleteButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    height: 1.875rem;
+    padding: 0;
+    background-color: #252930;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.staffEditButton .material-symbols-outlined,
+.staffDeleteButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.staffEditButton {
+    color: #e0e0e4;
+}
+
+.staffDeleteButton {
+    color: #ff5555;
+}
+
+.staffEditButton:hover {
+    background-color: #3a4049;
+}
+
+.staffDeleteButton:hover {
+    background-color: #512326;
+}
+
+/* Staff Pagination */
+
+#staffPagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 3.375rem;
+    padding: 0.625rem 0.875rem;
+    border-top: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+#staffPaginationInfo {
+    color: #c4c4c8;
+    font-size: 0.6875rem;
+}
+
+#staffPaginationControls {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.staffPaginationButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.875rem;
+    height: 1.875rem;
+    padding: 0 0.375rem;
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.375rem;
+    color: #d2d2d6;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.staffPaginationButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.staffPaginationButton:hover:not(.active):not(:disabled) {
+    background-color: var(--dashboardHoverColor);
+}
+
+.staffPaginationButton.active {
+    background-color: var(--dashboardAccentColor);
+    border-color: var(--dashboardAccentColor);
+    color: #080808;
+    font-weight: 700;
+}
+
+.staffPaginationButton:disabled {
+    color: #646870;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* =======================
+   Staff - Add Staff Modal
+   ======================= */
+
+/* Modal Overlay */
+
+.staffModalOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+.staffModalOverlay[hidden] {
+    display: none;
+}
+
+.staffModalOpen {
+    overflow: hidden;
+}
+
+/* Modal Container */
+
+#staffAddModal {
+    display: flex;
+    flex-direction: column;
+    width: 31.5rem;
+    max-height: calc(100vh - 2rem);
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.875rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Modal Header */
+
+#staffAddModalHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    min-height: 4.5rem;
+    margin: 0 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+.staffAddHeaderIcon {
+    flex-shrink: 0;
+    color: var(--dashboardAccentColor);
+    font-size: 2.25rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+#staffAddModalHeading {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+#staffAddModalTitle {
+    color: var(--textColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+#staffAddModalHeading p {
+    color: #c4c4c8;
+    font-size: 0.625rem;
+}
+
+/* Close Button */
+
+#staffAddModalClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0.375rem;
+    color: #c4c4c8;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+#staffAddModalClose .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#staffAddModalClose:hover {
+    background-color: var(--dashboardHoverColor);
+    color: var(--textColor);
+}
+
+/* Add Staff Form */
+
+#staffAddForm {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#staffAddModalBody {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 0.875rem 1rem 0.625rem;
+}
+
+/* Profile Picture Section */
+
+#staffAddImageGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 0 6.5rem;
+    min-width: 0;
+}
+
+#staffAddImageGroup > label:first-child {
+    align-self: flex-start;
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+}
+
+#staffAddImageUpload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
+    cursor: pointer;
+}
+
+#staffAddAvatarContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.75rem;
+    height: 3.75rem;
+    margin-bottom: 0.25rem;
+    background-color: #60636a;
+    border: 0.0625rem solid #85888e;
+    border-radius: 50%;
+}
+
+.staffAddAvatarIcon {
+    color: var(--textColor);
+    font-size: 3.25rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 200,
+        "GRAD" 0,
+        "opsz" 48;
+}
+
+#staffAddCameraIcon {
+    position: absolute;
+    right: -0.375rem;
+    bottom: -0.125rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--dashboardAccentColor);
+    border: 0.125rem solid var(--dashboardCardColor);
+    border-radius: 50%;
+    color: #080808;
+    font-size: 0.875rem;
+}
+
+#staffAddImageUpload > span:not(#staffAddAvatarContainer) {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    white-space: nowrap;
+}
+
+#staffAddImageUpload small {
+    color: #c4c4c8;
+    font-size: 0.5rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Profile Picture Preview */
+
+.staffAddImagePreview {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#staffAddAvatarContainer .staffAddAvatarIcon[hidden] {
+    display: none;
+}
+
+/* Full Name and Username Fields */
+
+#staffAddFields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.staffAddFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.staffAddFieldGroup > label {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+}
+
+.staffAddFieldGroup > label span {
+    color: #ff5555;
+}
+
+/* Input Containers */
+
+.staffAddInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.125rem;
+    padding: 0 0.625rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.375rem;
+    transition: border-color 0.2s ease;
+}
+
+.staffAddInputContainer:focus-within {
+    border-color: var(--dashboardAccentColor);
+}
+
+.staffAddInputContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.125rem;
+}
+
+.staffAddInputContainer input,
+.staffAddInputContainer select {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.625rem;
+}
+
+.staffAddInputContainer input::placeholder {
+    color: #a1a1a8;
+    opacity: 1;
+}
+
+.staffAddInputContainer select {
+    cursor: pointer;
+}
+
+.staffAddInputContainer select:invalid {
+    color: #a1a1a8;
+}
+
+.staffAddInputContainer select option {
+    background-color: var(--dashboardCardColor);
+    color: var(--textColor);
+}
+
+/* Password and Role Layout */
+
+#staffAddBottomFields {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    width: 100%;
+    padding: 0.375rem 1rem 1rem;
+}
+
+#staffAddBottomFields .staffAddFieldGroup {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+/* Password Visibility Toggle */
+
+#staffAddPasswordToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: #c4c4c8;
+    cursor: pointer;
+}
+
+#staffAddPasswordToggle .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+#staffAddPasswordToggle:hover {
+    color: var(--textColor);
+}
+
+/* Modal Footer */
+
+#staffAddModalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+    border-top: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+/* Footer Buttons */
+
+#staffAddCancelButton,
+#staffAddSaveButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.375rem;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#staffAddCancelButton {
+    min-width: 6.25rem;
+    background-color: transparent;
+    border: 0.0625rem solid #a1a1a8;
+    color: var(--textColor);
+}
+
+#staffAddCancelButton:hover {
+    background-color: var(--dashboardHoverColor);
+}
+
+#staffAddSaveButton {
+    min-width: 8rem;
+    background-color: var(--dashboardAccentColor);
+    border: 0.0625rem solid var(--dashboardAccentColor);
+    color: #080808;
+}
+
+#staffAddSaveButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#staffAddSaveButton:hover {
+    background-color: #e5a600;
+}
+
+/* =======================
+   Staff - Edit Staff Modal
+   ======================= */
+
+/* Edit Modal Container */
+
+#staffEditModal {
+    display: flex;
+    flex-direction: column;
+    width: 31.5rem;
+    max-height: calc(100vh - 2rem);
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.875rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Edit Modal Header */
+
+#staffEditModalHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    min-height: 4.5rem;
+    margin: 0 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+.staffEditHeaderIcon {
+    flex-shrink: 0;
+    color: var(--dashboardAccentColor);
+    font-size: 2.25rem;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+#staffEditModalHeading {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+#staffEditModalTitle {
+    color: var(--textColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+#staffEditModalHeading p {
+    color: #c4c4c8;
+    font-size: 0.625rem;
+}
+
+/* Close Button */
+
+#staffEditModalClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0.375rem;
+    color: #c4c4c8;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+#staffEditModalClose .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#staffEditModalClose:hover {
+    background-color: var(--dashboardHoverColor);
+    color: var(--textColor);
+}
+
+/* Edit Staff Form */
+
+#staffEditForm {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#staffEditModalBody {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 0.875rem 1rem 0.625rem;
+}
+
+/* Profile Picture Section */
+
+#staffEditImageGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 0 6.5rem;
+    min-width: 0;
+}
+
+#staffEditImageGroup > label:first-child {
+    align-self: flex-start;
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+}
+
+#staffEditImageUpload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
+    cursor: pointer;
+}
+
+#staffEditAvatarContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.75rem;
+    height: 3.75rem;
+    margin-bottom: 0.25rem;
+    background-color: #60636a;
+    border: 0.0625rem solid #85888e;
+    border-radius: 50%;
+}
+
+#staffEditImagePreview {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+#staffEditCameraIcon {
+    position: absolute;
+    right: -0.375rem;
+    bottom: -0.125rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--dashboardAccentColor);
+    border: 0.125rem solid var(--dashboardCardColor);
+    border-radius: 50%;
+    color: #080808;
+    font-size: 0.875rem;
+}
+
+#staffEditImageUpload > span:not(#staffEditAvatarContainer) {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    white-space: nowrap;
+}
+
+#staffEditImageUpload small {
+    color: #c4c4c8;
+    font-size: 0.5rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Full Name and Username Fields */
+
+#staffEditFields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.staffEditFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.staffEditFieldGroup > label {
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+}
+
+.staffEditFieldGroup > label span {
+    color: #ff5555;
+}
+
+/* Input Containers */
+
+.staffEditInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.125rem;
+    padding: 0 0.625rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid #383d45;
+    border-radius: 0.375rem;
+    transition: border-color 0.2s ease;
+}
+
+.staffEditInputContainer:focus-within {
+    border-color: var(--dashboardAccentColor);
+}
+
+.staffEditInputContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.125rem;
+}
+
+.staffEditInputContainer input,
+.staffEditInputContainer select {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.625rem;
+}
+
+.staffEditInputContainer input::placeholder {
+    color: #a1a1a8;
+    opacity: 1;
+}
+
+.staffEditInputContainer select {
+    cursor: pointer;
+}
+
+.staffEditInputContainer select option {
+    background-color: var(--dashboardCardColor);
+    color: var(--textColor);
+}
+
+/* Password and Role Layout */
+
+#staffEditBottomFields {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    width: 100%;
+    padding: 0.375rem 1rem 1rem;
+}
+
+#staffEditBottomFields .staffEditFieldGroup {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+/* Password Visibility Toggle */
+
+#staffEditPasswordToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: #c4c4c8;
+    cursor: pointer;
+}
+
+#staffEditPasswordToggle .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+#staffEditPasswordToggle:hover {
+    color: var(--textColor);
+}
+
+/* Modal Footer */
+
+#staffEditModalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+    border-top: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+/* Footer Buttons */
+
+#staffEditCancelButton,
+#staffEditSaveButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.375rem;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Cancel Button */
+
+#staffEditCancelButton {
+    min-width: 6.25rem;
+    background-color: transparent;
+    border: 0.0625rem solid #a1a1a8;
+    color: var(--textColor);
+}
+
+#staffEditCancelButton:hover {
+    background-color: var(--dashboardHoverColor);
+}
+
+/* Save Changes Button */
+
+#staffEditSaveButton {
+    min-width: 8rem;
+    background-color: var(--dashboardAccentColor);
+    border: 0.0625rem solid var(--dashboardAccentColor);
+    color: #080808;
+}
+
+#staffEditSaveButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#staffEditSaveButton:hover {
+    background-color: #e5a600;
+}
+
+/* =======================
+   POS
+   ======================= */
+
+:root {
+    --posBackgroundColor: #0d0f13;
+    --posSurfaceColor: #16191f;
+    --posInputColor: #1c2026;
+    --posBorderColor: #292d34;
+    --posHoverColor: #242830;
+    --posAccentColor: #ffb800;
+    --posMutedColor: #a1a1a8;
+    --posDangerColor: #ff5555;
+}
+
+/* POS Main Layout */
+
+#posPage {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--posBackgroundColor);
+    color: var(--textColor);
+}
+
+#posContent {
+    display: flex;
+    flex: 1;
+    gap: 0.875rem;
+    min-height: 0;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+/* POS Panels */
+
+#posProductsPanel,
+#posOrderPanel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    background-color: var(--posSurfaceColor);
+    border: 0.0625rem solid var(--posBorderColor);
+    border-radius: 0.625rem;
+    overflow: hidden;
+    box-shadow: inset 0 0.125rem 0 rgba(255, 255, 255, 0.03);
+}
+
+#posProductsPanel {
+    flex: 1.4;
+    padding: 0.875rem;
+}
+
+#posOrderPanel {
+    flex: 1;
+}
+
+/* POS Category Navigation */
+
+#posCategoryNavigation {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-shrink: 0;
+    width: 100%;
+    min-height: 2.625rem;
+    padding: 0.375rem;
+    margin-bottom: 0.75rem;
+    background-color: #20242b;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.posCategoryButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+    height: 1.875rem;
+    padding: 0 0.5rem;
+    background-color: var(--posSurfaceColor);
+    border: 0.0625rem solid var(--posBorderColor);
+    border-radius: 0.375rem;
+    color: #d2d2d6;
+    font-family: inherit;
+    font-size: 0.625rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.posCategoryButton .material-symbols-outlined {
+    font-size: 1rem;
+}
+
+.posCategoryButton:hover:not(.active) {
+    background-color: var(--posHoverColor);
+    color: var(--textColor);
+}
+
+.posCategoryButton.active {
+    background-color: var(--posAccentColor);
+    border-color: var(--posAccentColor);
+    color: #080808;
+    font-weight: 600;
+}
+
+#posCategoryNextButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin-left: auto;
+    background-color: #292d34;
+    border: none;
+    border-radius: 50%;
+    color: var(--textColor);
+    cursor: pointer;
+}
+
+#posCategoryNextButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+#posCategoryNextButton:hover {
+    background-color: #3a4049;
+}
+
+/* POS Search and View Options */
+
+#posProductsToolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex-shrink: 0;
+    width: 100%;
+    margin-bottom: 0.875rem;
+}
+
+#posSearchContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+    height: 2.125rem;
+    padding: 0 0.625rem;
+    background-color: var(--posInputColor);
+    border: 0.0625rem solid var(--posBorderColor);
+    border-radius: 0.375rem;
+}
+
+#posSearchContainer:focus-within {
+    border-color: var(--posAccentColor);
+}
+
+#posSearchContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.125rem;
+}
+
+#posSearchInput {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.625rem;
+}
+
+#posSearchInput::placeholder {
+    color: var(--posMutedColor);
+}
+
+#posViewOptions {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    flex-shrink: 0;
+    height: 2.125rem;
+    padding: 0.1875rem;
+    background-color: #20242b;
+    border: 0.0625rem solid var(--posBorderColor);
+    border-radius: 0.375rem;
+}
+
+.posViewButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.625rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0.25rem;
+    color: #a1a1a8;
+    cursor: pointer;
+}
+
+.posViewButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.posViewButton:hover:not(.active) {
+    background-color: var(--posHoverColor);
+    color: var(--textColor);
+}
+
+.posViewButton.active {
+    background-color: var(--posAccentColor);
+    color: #080808;
+}
+
+/* POS Products Heading */
+
+#posProductsHeading {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-bottom: 0.875rem;
+}
+
+#posProductsHeading h2 {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+#posProductsHeading h2 span {
+    color: var(--posMutedColor);
+    font-size: 0.75rem;
+    font-weight: 400;
+}
+
+/* POS Product Cards */
+
+#posProductsList {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 0.625rem;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--posBorderColor) transparent;
+}
+
+.posProductCard {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 calc((100% - 1.875rem) / 4);
+    min-width: 0;
+    height: 9.5rem;
+    background-color: #12151a;
+    border: 0.0625rem solid var(--posBorderColor);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.posProductCard:hover {
+    background-color: var(--posHoverColor);
+    border-color: #555b64;
+}
+
+.posProductImage {
+    display: block;
+    width: 100%;
+    height: 5.625rem;
+    padding: 0.75rem;
+    background-color: #242830;
+    object-fit: contain;
+}
+
+.posProductDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    gap: 0.25rem;
+    min-height: 0;
+    padding: 0.375rem 0.5rem;
+}
+
+.posProductDetails h3 {
+    overflow: hidden;
+    color: var(--textColor);
+    font-size: 0.625rem;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.posProductFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem;
+}
+
+.posProductFooter > span {
+    color: #e0e0e4;
+    font-size: 0.625rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.posAddProductButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.375rem;
+    height: 1.375rem;
+    padding: 0;
+    background-color: var(--posAccentColor);
+    border: none;
+    border-radius: 0.25rem;
+    color: #080808;
+    cursor: pointer;
+}
+
+.posAddProductButton .material-symbols-outlined {
+    font-size: 1rem;
+}
+
+.posAddProductButton:hover {
+    background-color: #e5a600;
+}
+
+/* Current Order Header */
+
+#posOrderHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    min-height: 3.375rem;
+    padding: 0 0.875rem;
+    border-bottom: 0.0625rem solid var(--posBorderColor);
+}
+
+#posOrderTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+#posOrderTitle > .material-symbols-outlined {
+    color: #e0e0e4;
+    font-size: 1.5rem;
+}
+
+#posOrderTitle h2 {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+#posClearOrderButton {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--posDangerColor);
+    font-family: inherit;
+    font-size: 0.625rem;
+    cursor: pointer;
+}
+
+#posClearOrderButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+#posClearOrderButton:hover {
+    color: #ff8585;
+}
+
+/* Current Order Table */
+
+#posOrderItemsContainer {
+    flex: 1;
+    min-height: 0;
+    padding: 0.375rem 0.875rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--posBorderColor) transparent;
+}
+
+#posOrderTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#posOrderTable th {
+    height: 2rem;
+    padding: 0 0.25rem;
+    border-bottom: 0.0625rem solid var(--posBorderColor);
+    color: #d2d2d6;
+    font-size: 0.625rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+#posOrderTable td {
+    height: 2.75rem;
+    padding: 0.375rem 0.25rem;
+    border-bottom: 0.0625rem solid var(--posBorderColor);
+    color: #e0e0e4;
+    font-size: 0.625rem;
+    white-space: nowrap;
+}
+
+#posOrderTable th:last-child,
+#posOrderTable td:last-child {
+    text-align: center;
+}
+
+.posOrderProduct {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.posOrderProduct img {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0.375rem;
+    background-color: #242830;
+    border-radius: 0.375rem;
+    object-fit: contain;
+}
+
+.posOrderProduct span {
+    font-size: 0.625rem;
+}
+
+/* Quantity Controls */
+
+.posQuantityControl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: 1.5rem;
+    border: 0.0625rem solid #3a4049;
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
+.posQuantityControl button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.375rem;
+    height: 100%;
+    padding: 0;
+    background-color: #252930;
+    border: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.posQuantityControl button:hover {
+    background-color: #3a4049;
+}
+
+.posQuantityControl > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    height: 100%;
+    color: var(--textColor);
+    font-size: 0.625rem;
+}
+
+/* Remove Item Button */
+
+.posRemoveItemButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: var(--posDangerColor);
+    cursor: pointer;
+}
+
+.posRemoveItemButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.posRemoveItemButton:hover {
+    color: #ff8585;
+}
+
+/* Order Summary */
+
+#posOrderSummary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    flex-shrink: 0;
+    margin: 0 0.875rem;
+    padding: 0.875rem 0;
+    border-top: 0.0625rem solid #3a4049;
+}
+
+.posOrderSummaryRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: #e0e0e4;
+    font-size: 0.75rem;
+}
+
+#posDiscountControl {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 1.75rem;
+    padding: 0 0.5rem;
+    background-color: #252930;
+    border: 0.0625rem solid #3a4049;
+    border-radius: 0.375rem;
+}
+
+#posDiscountControl > span {
+    color: #c4c4c8;
+    font-size: 0.875rem;
+}
+
+#posDiscountInput {
+    width: 3.75rem;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    text-align: right;
+}
+
+#posOrderTotal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.625rem;
+    border-top: 0.0625rem solid var(--posBorderColor);
+}
+
+#posOrderTotal strong:first-child {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+#posOrderTotal strong:last-child {
+    color: var(--posAccentColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+/* Order Action Buttons */
+
+#posOrderActions {
+    display: flex;
+    gap: 0.625rem;
+    flex-shrink: 0;
+    padding: 0.875rem;
+    border-top: 0.0625rem solid var(--posBorderColor);
+}
+
+#posCancelButton,
+#posCompleteSaleButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.625rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#posCancelButton {
+    flex: 0.65;
+    background-color: transparent;
+    border: 0.0625rem solid #d2d2d6;
+    color: var(--textColor);
+}
+
+#posCancelButton:hover {
+    background-color: var(--posHoverColor);
+}
+
+#posCompleteSaleButton {
+    flex: 1;
+    background-color: var(--posAccentColor);
+    border: 0.0625rem solid var(--posAccentColor);
+    color: #080808;
+}
+
+#posCompleteSaleButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#posCompleteSaleButton:hover {
+    background-color: #e5a600;
+}
+
+/* Accessibility Helper */
+
+.posVisuallyHidden {
+    position: absolute;
+    width: 0.0625rem;
+    height: 0.0625rem;
+    padding: 0;
+    margin: -0.0625rem;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* =======================
+   POS - Checkout Modal
+   ======================= */
+
+:root {
+    --posModalBackgroundColor: #16191f;
+    --posModalPanelColor: #1a1d23;
+    --posModalInputColor: #1c2026;
+    --posModalBorderColor: #383d45;
+    --posModalMutedColor: #a1a1a8;
+    --posModalAccentColor: #ffb800;
+    --posModalTextColor: #ffffff;
+    --posModalHoverColor: #30353d;
+    --posModalSuccessColor: #65ee69;
+    --posModalDangerColor: #ff777e;
+}
+
+/* Modal Overlay */
+
+.posModalOverlay,
+.posCustomerModalOverlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.posModalOverlay {
+    z-index: 1000;
+}
+
+.posCustomerModalOverlay {
+    z-index: 1100;
+}
+
+.posModalOverlay[hidden],
+.posCustomerModalOverlay[hidden] {
+    display: none;
+}
+
+.posModalOpen {
+    overflow: hidden;
+}
+
+/* Checkout Container */
+
+#posCheckoutModal {
+    display: flex;
+    flex-direction: column;
+    width: 60rem;
+    max-width: 100%;
+    max-height: calc(100vh - 2rem);
+    background-color: var(--posModalBackgroundColor);
+    border: 0.0625rem solid var(--posModalBorderColor);
+    border-radius: 0.875rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Checkout Header */
+
+#posCheckoutModalHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 5rem;
+    margin: 0 1.5rem;
+    padding: 1rem 0;
+}
+
+.posCheckoutHeaderIcon {
+    flex-shrink: 0;
+    color: var(--posModalAccentColor);
+    font-size: 2.5rem;
+}
+
+#posCheckoutModalHeading {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+#posCheckoutModalTitle {
+    color: var(--posModalTextColor);
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+#posCheckoutModalHeading p {
+    color: #c4c4c8;
+    font-size: 0.75rem;
+}
+
+#posCheckoutModalClose,
+#posAddCustomerModalClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0.375rem;
+    color: #c4c4c8;
+    cursor: pointer;
+}
+
+#posCheckoutModalClose:hover,
+#posAddCustomerModalClose:hover {
+    background-color: var(--posModalHoverColor);
+    color: var(--posModalTextColor);
+}
+
+#posCheckoutModalClose .material-symbols-outlined,
+#posAddCustomerModalClose .material-symbols-outlined {
+    font-size: 1.375rem;
+}
+
+/* Checkout Form and Body */
+
+#posCheckoutForm {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+#posCheckoutModalBody {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    min-height: 0;
+    padding: 0.5rem 1.5rem 1.5rem;
+    overflow-y: auto;
+}
+
+/* Shared Panels */
+
+#posCheckoutOrderSummary,
+#posCheckoutCustomerSection,
+#posCheckoutPaymentDetails {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 1rem;
+    background-color: var(--posModalPanelColor);
+    border: 0.0625rem solid #343941;
+    border-radius: 0.625rem;
+}
+
+#posCheckoutOrderSummary h3,
+#posCheckoutCustomerSection h3,
+#posCheckoutPaymentDetails h3 {
+    color: var(--posModalTextColor);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Order Summary */
+
+#posCheckoutOrderSummary {
+    flex: 1 1 0;
+}
+
+#posCheckoutTableContainer {
+    width: 100%;
+    margin-top: 0.875rem;
+    overflow-x: auto;
+}
+
+#posCheckoutTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#posCheckoutTable thead {
+    background-color: #252930;
+}
+
+#posCheckoutTable th {
+    height: 2.75rem;
+    padding: 0 0.5rem;
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+#posCheckoutTable td {
+    height: 2.75rem;
+    padding: 0.5rem;
+    border-bottom: 0.0625rem solid #343941;
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+#posCheckoutTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+#posCheckoutTable th:not(:first-child),
+#posCheckoutTable td:not(:first-child) {
+    text-align: right;
+}
+
+/* Order Total */
+
+#posCheckoutTotal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 0.0625rem solid #555b64;
+}
+
+#posCheckoutTotal strong:first-child {
+    color: var(--posModalTextColor);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+#posCheckoutTotalAmount {
+    color: var(--posModalAccentColor);
+    font-size: 1.5rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Right Column */
+
+#posCheckoutRightColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: visible;
+}
+
+/* =======================
+   POS - Customer Search
+   ======================= */
+
+/* Customer Section */
+
+#posCheckoutCustomerSection {
+    position: relative;
+    overflow: visible;
+}
+
+#posCheckoutCustomerSection h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.875rem;
+}
+
+#posCheckoutCustomerSection h3 .material-symbols-outlined {
+    font-size: 1.375rem;
+}
+
+/* Search Layout */
+
+#posCheckoutCustomerControls {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+}
+
+#posCheckoutCustomerSearchWrapper {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+#posCheckoutCustomerSearchContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    background-color: var(--posModalInputColor);
+    border: 0.0625rem solid #454a53;
+    border-radius: 0.5rem;
+}
+
+#posCheckoutCustomerSearchContainer:focus-within {
+    border-color: var(--posModalAccentColor);
+}
+
+#posCheckoutCustomerSearchContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: var(--posModalMutedColor);
+    font-size: 1.25rem;
+}
+
+#posCheckoutCustomerSearch {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--posModalTextColor);
+    font-family: inherit;
+    font-size: 0.75rem;
+}
+
+#posCheckoutCustomerSearch::placeholder {
+    color: var(--posModalMutedColor);
+}
+
+#posCheckoutCustomerSearch::-webkit-search-cancel-button {
+    display: none;
+}
+
+/* Clear Customer */
+
+#posCheckoutClearCustomer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0.25rem;
+    color: var(--posModalMutedColor);
+    cursor: pointer;
+}
+
+#posCheckoutClearCustomer:hover {
+    background-color: var(--posModalHoverColor);
+    color: var(--posModalTextColor);
+}
+
+#posCheckoutClearCustomer .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+/* Suggestions Container */
+
+#posCheckoutCustomerSuggestions {
+    position: absolute;
+    top: calc(100% + 0.375rem);
+    left: 0;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 14rem;
+    padding: 0.375rem;
+    background-color: var(--posModalInputColor);
+    border: 0.0625rem solid #454a53;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.45);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #454a53 transparent;
+}
+
+#posCheckoutCustomerSuggestions[hidden],
+#posCheckoutClearCustomer[hidden],
+#posCheckoutNoCustomerResults[hidden],
+.posCheckoutCustomerSuggestion[hidden] {
+    display: none;
+}
+
+/* Suggestion Items */
+
+.posCheckoutCustomerSuggestion {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.5rem 0.625rem;
+    background-color: transparent;
+    border: none;
+    border-radius: 0.375rem;
+    color: var(--posModalTextColor);
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.posCheckoutCustomerSuggestion:hover,
+.posCheckoutCustomerSuggestion:focus-visible,
+.posCheckoutCustomerSuggestion.posCheckoutSuggestionActive {
+    background-color: var(--posModalHoverColor);
+    outline: none;
+}
+
+.posCheckoutCustomerSuggestion[aria-selected="true"] {
+    background-color: #39351f;
+}
+
+.posCheckoutCustomerSuggestion > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.5rem;
+}
+
+.posCheckoutCustomerSuggestion:hover > .material-symbols-outlined {
+    color: var(--posModalAccentColor);
+}
+
+.posCheckoutSuggestionDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1875rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.posCheckoutSuggestionDetails strong {
+    overflow: hidden;
+    color: var(--posModalTextColor);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.posCheckoutSuggestionDetails small {
+    overflow: hidden;
+    color: var(--posModalMutedColor);
+    font-size: 0.625rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* No Results */
+
+#posCheckoutNoCustomerResults {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    min-height: 6rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+#posCheckoutNoCustomerResults > .material-symbols-outlined {
+    color: var(--posModalMutedColor);
+    font-size: 1.75rem;
+}
+
+#posCheckoutNoCustomerResults p {
+    color: var(--posModalTextColor);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+#posCheckoutNoCustomerResults small {
+    color: var(--posModalMutedColor);
+    font-size: 0.625rem;
+}
+
+/* Add New Customer Button */
+
+#posCheckoutAddCustomerButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    flex-shrink: 0;
+    height: 2.5rem;
+    padding: 0 0.875rem;
+    background-color: transparent;
+    border: 0.0625rem solid var(--posModalAccentColor);
+    border-radius: 0.5rem;
+    color: var(--posModalAccentColor);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+#posCheckoutAddCustomerButton:hover {
+    background-color: #302a14;
+}
+
+#posCheckoutAddCustomerButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+/* =======================
+   POS - Payment Details
+   ======================= */
+
+#posCheckoutPaymentDetails {
+    gap: 1rem;
+}
+
+#posCheckoutPaymentDetails h3 {
+    padding-bottom: 0.75rem;
+    border-bottom: 0.0625rem solid #343941;
+}
+
+#posCheckoutPaymentMethodGroup,
+#posCheckoutAmountGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+#posCheckoutPaymentMethodGroup > p,
+#posCheckoutAmountGroup > label {
+    color: var(--posModalTextColor);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+#posCheckoutPaymentMethodGroup > p span,
+#posCheckoutAmountGroup > label span {
+    color: #ff5555;
+}
+
+#posCheckoutPaymentOptions {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.posCheckoutPaymentOption {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--posModalTextColor);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.posCheckoutPaymentOption input[type="radio"] {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    accent-color: var(--posModalAccentColor);
+    cursor: pointer;
+}
+
+/* Amount Received */
+
+#posCheckoutAmountInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    height: 2.5rem;
+    padding: 0 0.875rem;
+    background-color: var(--posModalInputColor);
+    border: 0.0625rem solid #454a53;
+    border-radius: 0.5rem;
+}
+
+#posCheckoutAmountInputContainer:focus-within {
+    border-color: var(--posModalAccentColor);
+}
+
+#posCheckoutAmountInputContainer > span {
+    color: #d2d2d6;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+#posCheckoutAmountReceived {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--posModalTextColor);
+    font-family: inherit;
+    font-size: 0.875rem;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+#posCheckoutAmountReceived::-webkit-inner-spin-button,
+#posCheckoutAmountReceived::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#posCheckoutAmountReceived:read-only {
+    color: var(--posModalMutedColor);
+    cursor: not-allowed;
+}
+
+/* Change Indicator */
+
+#posCheckoutChangeContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 3.5rem;
+    padding: 0.75rem 0.875rem;
+    background-color: #203b25;
+    border: 0.0625rem solid #357a3c;
+    border-radius: 0.5rem;
+}
+
+#posCheckoutChangeContainer > span {
+    color: var(--posModalTextColor);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+#posCheckoutChangeAmount {
+    color: var(--posModalSuccessColor);
+    font-size: 1.375rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.posCheckoutInsufficient {
+    background-color: #481a20;
+    border-color: #ff3b45;
+}
+
+.posCheckoutInsufficient #posCheckoutChangeAmount {
+    color: var(--posModalDangerColor);
+    font-size: 0.875rem;
+}
+
+/* Checkout Footer */
+
+#posCheckoutModalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.875rem;
+    margin: 0 1.5rem;
+    padding: 1rem 0 1.25rem;
+    border-top: 0.0625rem solid var(--posModalBorderColor);
+}
+
+#posCheckoutCancelButton,
+#posCheckoutConfirmButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    height: 2.75rem;
+    padding: 0 1.5rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+#posCheckoutCancelButton {
+    min-width: 8rem;
+    background-color: transparent;
+    border: 0.0625rem solid #c4c4c8;
+    color: var(--posModalTextColor);
+}
+
+#posCheckoutCancelButton:hover {
+    background-color: var(--posModalHoverColor);
+}
+
+#posCheckoutConfirmButton {
+    min-width: 12rem;
+    background-color: var(--posModalAccentColor);
+    border: 0.0625rem solid var(--posModalAccentColor);
+    color: #080808;
+}
+
+#posCheckoutConfirmButton:hover {
+    background-color: #e5a600;
+}
+
+#posCheckoutConfirmButton .material-symbols-outlined {
+    font-size: 1.375rem;
+}
+
+/* =======================
+   POS - Add New Customer Modal
+   ======================= */
+
+/* Modal Container */
+
+#posAddCustomerModal {
+    display: flex;
+    flex-direction: column;
+    width: 31.5rem;
+    max-width: 100%;
+    max-height: calc(100vh - 2rem);
+    background-color: var(--posModalBackgroundColor);
+    border: 0.0625rem solid var(--posModalBorderColor);
+    border-radius: 0.875rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Add Customer Header */
+
+#posAddCustomerModalHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    min-height: 4.5rem;
+    margin: 0 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 0.0625rem solid var(--posModalBorderColor);
+}
+
+.posAddCustomerHeaderIcon {
+    flex-shrink: 0;
+    color: var(--posModalAccentColor);
+    font-size: 2.25rem;
+}
+
+#posAddCustomerModalHeading {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+#posAddCustomerModalTitle {
+    color: var(--posModalTextColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+#posAddCustomerModalHeading p {
+    color: #c4c4c8;
+    font-size: 0.625rem;
+}
+
+/* Add Customer Form */
+
+#posAddCustomerForm {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+#posAddCustomerModalBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.posAddCustomerFieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    width: 100%;
+    min-width: 0;
+}
+
+.posAddCustomerFieldGroup > label {
+    color: var(--posModalTextColor);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+}
+
+.posAddCustomerFieldGroup > label span:not(.posAddCustomerOptional) {
+    color: #ff5555;
+}
+
+.posAddCustomerOptional {
+    color: var(--posModalMutedColor);
+    font-size: 0.625rem;
+    font-weight: 400;
+}
+
+/* Add Customer Inputs */
+
+.posAddCustomerInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.375rem;
+    padding: 0 0.75rem;
+    background-color: var(--posModalInputColor);
+    border: 0.0625rem solid var(--posModalBorderColor);
+    border-radius: 0.5rem;
+}
+
+.posAddCustomerInputContainer:focus-within {
+    border-color: var(--posModalAccentColor);
+}
+
+.posAddCustomerInputContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.25rem;
+}
+
+.posAddCustomerInputContainer input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--posModalTextColor);
+    font-family: inherit;
+    font-size: 0.75rem;
+}
+
+.posAddCustomerInputContainer input::placeholder {
+    color: var(--posModalMutedColor);
+}
+
+/* Add Customer Footer */
+
+#posAddCustomerModalFooter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+    min-height: 4rem;
+    padding: 0.75rem 1rem;
+    border-top: 0.0625rem solid var(--posModalBorderColor);
+}
+
+#posAddCustomerCancelButton,
+#posAddCustomerSaveButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.375rem;
+    padding: 0 1rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+#posAddCustomerCancelButton {
+    min-width: 6.25rem;
+    background-color: transparent;
+    border: 0.0625rem solid #a1a1a8;
+    color: var(--posModalTextColor);
+}
+
+#posAddCustomerCancelButton:hover {
+    background-color: var(--posModalHoverColor);
+}
+
+#posAddCustomerSaveButton {
+    min-width: 8rem;
+    background-color: var(--posModalAccentColor);
+    border: 0.0625rem solid var(--posModalAccentColor);
+    color: #080808;
+}
+
+#posAddCustomerSaveButton:hover {
+    background-color: #e5a600;
+}
+
+#posAddCustomerSaveButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+/* =======================
+   Sales
+   ======================= */
+
+/* Sales Main Layout */
+
+#salesPage {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--dashboardBackgroundColor);
+    color: var(--textColor);
+}
+
+#salesContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1.25rem;
+    min-height: 0;
+    padding: 1.125rem 1rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--dashboardBorderColor) transparent;
+}
+
+/* Sales Toolbar */
+
+#salesToolbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.875rem;
+    width: 100%;
+}
+
+/* Date Range Filter */
+
+#salesDateFilter {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 17.5rem;
+}
+
+#salesDateFilter label {
+    margin-bottom: 0.25rem;
+    color: var(--textColor);
+    font-size: 0.6875rem;
+    font-weight: 500;
+}
+
+#salesDateRangeContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.375rem;
+    padding: 0 0.75rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.5rem;
+}
+
+#salesDateRangeContainer:focus-within {
+    border-color: var(--dashboardAccentColor);
+}
+
+#salesDateRangeContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.25rem;
+}
+
+#salesDateRange {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    cursor: pointer;
+}
+
+#salesDateRange option {
+    background-color: var(--dashboardCardColor);
+    color: var(--textColor);
+}
+
+/* Sales Search */
+
+#salesSearchContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex: 1;
+    min-width: 0;
+    height: 2.375rem;
+    padding: 0 0.875rem;
+    background-color: var(--productsInputColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.5rem;
+}
+
+#salesSearchContainer:focus-within {
+    border-color: var(--dashboardAccentColor);
+}
+
+#salesSearchContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.25rem;
+}
+
+#salesSearchInput {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.6875rem;
+}
+
+#salesSearchInput::placeholder {
+    color: var(--dashboardMutedColor);
+}
+
+#salesSearchInput::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+/* Export Button */
+
+#salesExportButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    height: 2.375rem;
+    padding: 0 1.25rem;
+    background-color: var(--dashboardAccentColor);
+    border: none;
+    border-radius: 0.5rem;
+    color: #080808;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#salesExportButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+#salesExportButton:hover {
+    background-color: #e5a600;
+}
+
+/* Sales Table Section */
+
+#salesTableSection {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.625rem;
+    overflow: hidden;
+}
+
+#salesTableContainer {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#salesTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#salesTable thead {
+    background-color: #20242b;
+}
+
+#salesTable th {
+    height: 2.75rem;
+    padding: 0 0.75rem;
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+#salesTable th:last-child,
+#salesTable td:last-child {
+    text-align: center;
+}
+
+.salesTableHeading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.salesTableHeading .material-symbols-outlined {
+    color: var(--dashboardMutedColor);
+    font-size: 0.875rem;
+}
+
+/* Sales Table Rows */
+
+#salesTable tbody tr {
+    background-color: var(--dashboardCardColor);
+    transition: background-color 0.2s ease;
+}
+
+#salesTable tbody tr:hover {
+    background-color: var(--dashboardHoverColor);
+}
+
+#salesTable td {
+    height: 2.875rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 0.0625rem solid var(--dashboardBorderColor);
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+#salesTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Sales Action Buttons */
+
+.salesActionButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.salesViewButton,
+.salesPrintButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    height: 1.875rem;
+    padding: 0;
+    background-color: #252930;
+    border: none;
+    border-radius: 0.375rem;
+    color: #e0e0e4;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.salesViewButton .material-symbols-outlined,
+.salesPrintButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.salesViewButton:hover,
+.salesPrintButton:hover {
+    background-color: #3a4049;
+    color: var(--dashboardAccentColor);
+}
+
+/* Sales Pagination */
+
+#salesPagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-height: 3.375rem;
+    padding: 0.625rem 0.875rem;
+    border-top: 0.0625rem solid var(--dashboardBorderColor);
+}
+
+#salesPaginationInfo {
+    color: #c4c4c8;
+    font-size: 0.6875rem;
+}
+
+#salesPaginationControls {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.salesPaginationButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.875rem;
+    height: 1.875rem;
+    padding: 0 0.375rem;
+    background-color: var(--dashboardCardColor);
+    border: 0.0625rem solid var(--dashboardBorderColor);
+    border-radius: 0.375rem;
+    color: #d2d2d6;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.salesPaginationButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.salesPaginationButton:hover:not(.active):not(:disabled) {
+    background-color: var(--dashboardHoverColor);
+}
+
+.salesPaginationButton.active {
+    background-color: var(--dashboardAccentColor);
+    border-color: var(--dashboardAccentColor);
+    color: #080808;
+    font-weight: 700;
+}
+
+.salesPaginationButton:disabled {
+    color: #646870;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* =======================
+   Reports
+   ======================= */
+
+:root {
+    --reportsBackgroundColor: #0d0f13;
+    --reportsSurfaceColor: #16191f;
+    --reportsInputColor: #1c2026;
+    --reportsBorderColor: #292d34;
+    --reportsHoverColor: #242830;
+    --reportsAccentColor: #ffb800;
+    --reportsMutedColor: #a1a1a8;
+    --reportsSuccessColor: #17a321;
+}
+
+/* Reports Main Layout */
+
+#reportsPage {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--reportsBackgroundColor);
+    color: var(--textColor);
+}
+
+#reportsContent {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.875rem;
+    min-height: 0;
+    padding: 1rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--reportsBorderColor) transparent;
+}
+
+/* Report Tabs */
+
+#reportsTabs {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex-shrink: 0;
+}
+
+.reportsTabButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.375rem;
+    padding: 0 1rem;
+    text-decoration: none;
+    background-color: var(--reportsSurfaceColor);
+    border: 0.0625rem solid var(--reportsBorderColor);
+    border-radius: 0.5rem;
+    color: #d2d2d6;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.reportsTabButton .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+.reportsTabButton:hover:not(.active) {
+    background-color: var(--reportsHoverColor);
+    color: var(--textColor);
+}
+
+.reportsTabButton.active {
+    background-color: var(--reportsAccentColor);
+    border-color: var(--reportsAccentColor);
+    color: #080808;
+    font-weight: 600;
+}
+
+/* Sales Report Section */
+
+#reportsSalesSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    width: 100%;
+}
+
+/* Report Filters */
+
+#reportsFilters {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.875rem;
+    width: 100%;
+}
+
+#reportsDateFilter,
+#reportsPaymentFilter {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+#reportsDateFilter label,
+#reportsPaymentFilter label {
+    margin-bottom: 0.25rem;
+    color: var(--textColor);
+    font-size: 0.6875rem;
+    font-weight: 500;
+}
+
+#reportsDateRangeContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.375rem;
+    padding: 0 0.75rem;
+    background-color: var(--reportsInputColor);
+    border: 0.0625rem solid var(--reportsBorderColor);
+    border-radius: 0.5rem;
+}
+
+#reportsDateRangeContainer:focus-within {
+    border-color: var(--reportsAccentColor);
+}
+
+#reportsDateRangeContainer > .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #c4c4c8;
+    font-size: 1.25rem;
+}
+
+#reportsDateRange {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    cursor: pointer;
+}
+
+#reportsPaymentMethod {
+    width: 100%;
+    height: 2.375rem;
+    padding: 0 0.75rem;
+    background-color: var(--reportsInputColor);
+    border: 0.0625rem solid var(--reportsBorderColor);
+    border-radius: 0.5rem;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    cursor: pointer;
+}
+
+#reportsPaymentMethod:focus {
+    border-color: var(--reportsAccentColor);
+}
+
+#reportsDateRange option,
+#reportsPaymentMethod option {
+    background-color: var(--reportsSurfaceColor);
+    color: var(--textColor);
+}
+
+/* Generate and Export Buttons */
+
+#reportsGenerateButton,
+#reportsExportButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    height: 2.375rem;
+    padding: 0 0.875rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#reportsGenerateButton {
+    background-color: var(--reportsAccentColor);
+    border: 0.0625rem solid var(--reportsAccentColor);
+    color: #080808;
+}
+
+#reportsGenerateButton:hover {
+    background-color: #e5a600;
+}
+
+#reportsExportButton {
+    background-color: transparent;
+    border: 0.0625rem solid #777b83;
+    color: var(--textColor);
+}
+
+#reportsExportButton:hover {
+    background-color: var(--reportsHoverColor);
+}
+
+#reportsGenerateButton .material-symbols-outlined,
+#reportsExportButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+/* Sales Statistics */
+
+#reportsSalesStatistics {
+    display: flex;
+    gap: 0.875rem;
+    width: 100%;
+}
+
+.reportsStatCard {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    flex: 1;
+    min-width: 0;
+    min-height: 4.25rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--reportsSurfaceColor);
+    border: 0.0625rem solid var(--reportsBorderColor);
+    border-radius: 0.5rem;
+}
+
+.reportsStatIcon {
+    flex-shrink: 0;
+    color: var(--reportsAccentColor);
+    font-size: 1.875rem;
+}
+
+.reportsStatInformation {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.reportsStatInformation p {
+    color: #d2d2d6;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+.reportsStatInformation h2 {
+    color: var(--textColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.reportsGrowthCard > .material-symbols-outlined {
+    color: #25d65a;
+    font-size: 1.875rem;
+}
+
+.reportsGrowthCard .reportsStatInformation h2 {
+    color: #25d65a;
+}
+
+/* Report Panels */
+
+.reportsPanel {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0.875rem;
+    background-color: var(--reportsSurfaceColor);
+    border: 0.0625rem solid var(--reportsBorderColor);
+    border-radius: 0.625rem;
+    overflow: hidden;
+}
+
+.reportsPanelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-height: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.reportsPanelHeader h2 {
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+/* Sales Overview */
+
+#reportsSalesOverview {
+    display: flex;
+    gap: 0.875rem;
+    width: 100%;
+}
+
+#reportsSalesTrend {
+    flex: 1.2;
+    height: 12.5rem;
+}
+
+#reportsTopSellingProducts {
+    flex: 1;
+    height: 12.5rem;
+}
+
+/* Sales Trend Chart Placeholder */
+
+#reportsSalesTrendChart {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    border-radius: 0.375rem;
+}
+
+/* Top Selling Products */
+
+.reportsViewAllLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--reportsAccentColor);
+    font-size: 0.625rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+#reportsPaymentBreakdown {
+    flex: 1;
+    height: 10rem;
+}
+
+#reportsPaymentContent {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+}
+
+.reportsViewAllLink .material-symbols-outlined {
+    font-size: 0.875rem;
+}
+
+.reportsViewAllLink:hover {
+    text-decoration: underline;
+}
+
+#reportsTopProductsList {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.reportsTopProductItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex: 1;
+    min-height: 0;
+    border-bottom: 0.0625rem solid var(--reportsBorderColor);
+}
+
+.reportsTopProductItem:last-child {
+    border-bottom: none;
+}
+
+.reportsTopProductInformation {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.reportsTopProductInformation img {
+    flex-shrink: 0;
+    width: 1.875rem;
+    height: 1.875rem;
+    padding: 0.375rem;
+    background-color: #242830;
+    border-radius: 0.375rem;
+    object-fit: contain;
+}
+
+.reportsTopProductInformation span {
+    overflow: hidden;
+    color: #e0e0e4;
+    font-size: 0.625rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.reportsTopProductItem > span {
+    flex-shrink: 0;
+    color: #d2d2d6;
+    font-size: 0.625rem;
+    white-space: nowrap;
+}
+
+.reportsTopProductItem > span:last-child {
+    min-width: 4.5rem;
+    text-align: right;
+}
+
+/* Sales Details */
+
+#reportsSalesDetails {
+    display: flex;
+    gap: 0.875rem;
+    width: 100%;
+}
+
+#reportsPaymentBreakdown {
+    flex: 1;
+    height: 10rem;
+}
+
+#reportsSalesSummary {
+    flex: 1.25;
+    height: 10rem;
+}
+
+/* Payment Breakdown */
+
+#reportsPaymentContent {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-height: 0;
+}
+
+#reportsPaymentChart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 7.5rem;
+    height: 7.5rem;
+    border: 1.125rem solid var(--reportsAccentColor);
+    border-radius: 50%;
+    background-color: var(--reportsSurfaceColor);
+}
+
+#reportsPaymentChartCenter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#reportsPaymentChartCenter strong {
+    color: var(--textColor);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+#reportsPaymentChartCenter span {
+    color: #c4c4c8;
+    font-size: 0.5625rem;
+}
+
+#reportsPaymentLegend {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.625rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.reportsPaymentLegendItem {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    width: 100%;
+    color: #d2d2d6;
+    font-size: 0.625rem;
+}
+
+.reportsPaymentLegendItem > span:last-child {
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.reportsLegendColor {
+    flex-shrink: 0;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 0.125rem;
+}
+
+.reportsCashColor {
+    background-color: #ffcc00;
+}
+
+.reportsGcashColor {
+    background-color: #bfc1c5;
+}
+
+.reportsCardColor {
+    background-color: #60636a;
+}
+
+/* Sales Summary */
+
+#reportsSummaryList {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.reportsSummaryItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex: 1;
+    min-height: 0;
+    border-bottom: 0.0625rem solid var(--reportsBorderColor);
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+}
+
+.reportsSummaryItem:last-child {
+    border-bottom: none;
+}
+
+.reportsSummaryItem > div {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-width: 0;
+}
+
+.reportsSummaryItem > div .material-symbols-outlined {
+    flex-shrink: 0;
+    color: #d2d2d6;
+    font-size: 1.25rem;
+}
+
+.reportsSummaryItem > span:last-child {
+    flex-shrink: 0;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* =======================
+   Reports - Inventory
+   ======================= */
+
+/* Inventory Main Layout */
+
+#reportsInventorySection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    width: 100%;
+    min-width: 0;
+}
+
+/* Inventory Filters */
+
+#reportsInventoryFilters {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.875rem;
+    width: 100%;
+    min-width: 0;
+}
+
+#reportsInventoryDateFilter,
+#reportsInventoryCategoryFilter {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+#reportsInventoryDateFilter label,
+#reportsInventoryCategoryFilter label {
+    display: block;
+    height: 1.25rem;
+    margin: 0 0 0.25rem;
+    color: var(--textColor);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+}
+
+/* Date Range Container */
+
+#reportsInventoryDateContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: 100%;
+    height: 2.375rem;
+    min-height: 2.375rem;
+    padding: 0 0.75rem;
+    background-color: var(--reportsInputColor);
+    border: 0.0625rem solid var(--reportsBorderColor);
+    border-radius: 0.5rem;
+}
+
+#reportsInventoryDateContainer:focus-within {
+    border-color: var(--reportsAccentColor);
+}
+
+#reportsInventoryDateContainer > .material-symbols-outlined {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    color: #c4c4c8;
+}
+
+#reportsInventoryDateRange {
+    display: block;
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    line-height: normal;
+    cursor: pointer;
+}
+
+/* Category Filter */
+
+#reportsInventoryCategory {
+    display: block;
+    width: 100%;
+    height: 2.375rem;
+    min-height: 2.375rem;
+    margin: 0;
+    padding: 0 0.75rem;
+    background-color: var(--reportsInputColor);
+    border: 0.0625rem solid var(--reportsBorderColor);
+    border-radius: 0.5rem;
+    outline: none;
+    color: var(--textColor);
+    font-family: inherit;
+    font-size: 0.6875rem;
+    line-height: normal;
+    cursor: pointer;
+}
+
+#reportsInventoryCategory:focus {
+    border-color: var(--reportsAccentColor);
+}
+
+#reportsInventoryDateRange option,
+#reportsInventoryCategory option {
+    background-color: var(--reportsSurfaceColor);
+    color: var(--textColor);
+}
+
+/* Inventory Action Buttons */
+
+#reportsInventoryGenerateButton,
+#reportsInventoryExportButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    height: 2.375rem;
+    min-height: 2.375rem;
+    margin: 0;
+    padding: 0 0.875rem;
+    border-radius: 0.5rem;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#reportsInventoryGenerateButton {
+    background-color: var(--reportsAccentColor);
+    border: 0.0625rem solid var(--reportsAccentColor);
+    color: #080808;
+}
+
+#reportsInventoryGenerateButton:hover {
+    background-color: #e5a600;
+}
+
+#reportsInventoryExportButton {
+    background-color: transparent;
+    border: 0.0625rem solid #777b83;
+    color: var(--textColor);
+}
+
+#reportsInventoryExportButton:hover {
+    background-color: var(--reportsHoverColor);
+}
+
+#reportsInventoryGenerateButton .material-symbols-outlined,
+#reportsInventoryExportButton .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+/* Inventory Statistics */
+
+#reportsInventoryStatistics {
+    display: flex;
+    align-items: stretch;
+    gap: 0.875rem;
+    width: 100%;
+    min-width: 0;
+}
+
+.reportsInventoryStatCard {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 4.25rem;
+    padding: 0.75rem 0.875rem;
+    background-color: var(--reportsSurfaceColor);
+    border: 0.0625rem solid var(--reportsBorderColor);
+    border-radius: 0.5rem;
+}
+
+.reportsInventoryStatIcon {
+    flex-shrink: 0;
+    color: var(--reportsAccentColor);
+    font-size: 1.875rem;
+}
+
+.reportsInventoryDangerIcon {
+    color: #ff3b45;
+}
+
+.reportsInventoryStatInformation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.reportsInventoryStatInformation p {
+    color: #d2d2d6;
+    font-size: 0.6875rem;
+    font-weight: 400;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.reportsInventoryStatInformation h2 {
+    color: var(--textColor);
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+/* Inventory Chart Containers */
+
+#reportsInventoryCharts {
+    display: flex;
+    align-items: stretch;
+    gap: 0.875rem;
+    width: 100%;
+    min-width: 0;
+}
+
+#reportsInventoryByCategory,
+#reportsStockStatusOverview {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 12.5rem;
+}
+
+#reportsInventoryByCategory {
+    flex: 1.4 1 0;
+}
+
+#reportsStockStatusOverview {
+    flex: 1 1 0;
+}
+
+#reportsInventoryCategoryChart,
+#reportsStockStatusChart {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    border-radius: 0.375rem;
+}
+
+/* Inventory Stock Details */
+
+#reportsInventoryDetails {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    padding: 0.875rem;
+}
+
+#reportsInventoryTableContainer {
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    border: 0.0625rem solid var(--reportsBorderColor);
+    border-radius: 0.375rem;
+}
+
+#reportsInventoryTable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#reportsInventoryTable thead {
+    background-color: #20242b;
+}
+
+#reportsInventoryTable th {
+    height: 2rem;
+    padding: 0 0.75rem;
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+#reportsInventoryTable th:nth-child(3),
+#reportsInventoryTable th:nth-child(4),
+#reportsInventoryTable td:nth-child(3),
+#reportsInventoryTable td:nth-child(4) {
+    text-align: center;
+}
+
+/* Inventory Table Rows */
+
+#reportsInventoryTable tbody tr {
+    background-color: var(--reportsSurfaceColor);
+    transition: background-color 0.2s ease;
+}
+
+#reportsInventoryTable tbody tr:hover {
+    background-color: var(--reportsHoverColor);
+}
+
+#reportsInventoryTable td {
+    height: 2.125rem;
+    padding: 0.25rem 0.75rem;
+    border-bottom: 0.0625rem solid var(--reportsBorderColor);
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+    white-space: nowrap;
+}
+
+#reportsInventoryTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Inventory Product Information */
+
+.reportsInventoryProduct {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.reportsInventoryProduct img {
+    flex-shrink: 0;
+    width: 1.625rem;
+    height: 1.625rem;
+    padding: 0.25rem;
+    background-color: #242830;
+    border-radius: 0.25rem;
+    object-fit: contain;
+}
+
+.reportsInventoryProduct span {
+    color: #e0e0e4;
+    font-size: 0.6875rem;
+}
+
+/* Inventory Stock Status */
+
+.reportsInventoryStatus {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 5.5rem;
+    padding: 0.1875rem 0.625rem;
+    border: 0.0625rem solid transparent;
+    border-radius: 1rem;
+    font-size: 0.625rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.reportsInventoryInStock {
+    background-color: #103b25;
+    border-color: #17a321;
+    color: #4bea7b;
+}
+
+.reportsInventoryLowStock {
+    background-color: #473600;
+    border-color: #ffb800;
+    color: #ffda59;
+}
+
+.reportsInventoryOutOfStock {
+    background-color: #481a20;
+    border-color: #ff3b45;
+    color: #ff777e;
 }
