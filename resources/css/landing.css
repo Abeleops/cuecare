@@ -1,0 +1,635 @@
+:root {
+    --landing-background: #0f1115;
+    --landing-surface: #191c21;
+    --landing-surface-raised: #22262b;
+    --landing-accent: #ffb800;
+    --landing-accent-hover: #ffc933;
+    --landing-text: #ffffff;
+    --landing-muted: #c3c5c9;
+    --landing-border: #35393e;
+    --landing-font: "Poppins", sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 8rem;
+}
+
+body {
+    min-width: 20rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: var(--landing-background);
+    color: var(--landing-text);
+    font-family: var(--landing-font);
+}
+
+body::selection,
+#landingPage ::selection {
+    background: var(--landing-accent);
+    color: #111318;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+#landingPage {
+    min-height: 100vh;
+    background: var(--landing-background);
+}
+
+#landingHeader {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    height: 4.5rem;
+    padding: 0 clamp(1.25rem, 5vw, 5rem);
+    background: rgba(15, 17, 21, 0.96);
+    border-bottom: 0.0625rem solid var(--landing-border);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.28);
+}
+
+#landingBrand {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+#landingHeaderLogo {
+    width: 2.75rem;
+    height: 2.75rem;
+    object-fit: contain;
+}
+
+#landingBrandName {
+    font-size: clamp(0.78rem, 1.5vw, 1rem);
+    font-style: italic;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+#landingNavigation {
+    position: fixed;
+    top: 4.5rem;
+    right: 0;
+    left: 0;
+    z-index: 49;
+    display: flex;
+    justify-content: center;
+    gap: clamp(1.25rem, 4vw, 3.5rem);
+    height: 3.25rem;
+    padding: 0 1rem;
+    overflow-x: auto;
+    background: rgba(25, 28, 33, 0.97);
+    border-bottom: 0.0625rem solid var(--landing-border);
+    scrollbar-width: none;
+}
+
+#landingNavigation::-webkit-scrollbar {
+    display: none;
+}
+
+.landingNavLink {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    color: var(--landing-muted);
+    font-size: 0.84rem;
+    font-weight: 500;
+    transition: color 180ms ease;
+}
+
+.landingNavLink::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 0.16rem;
+    background: var(--landing-accent);
+    content: "";
+    transform: scaleX(0);
+    transition: transform 180ms ease;
+}
+
+.landingNavLink:hover,
+.landingNavLink.active {
+    color: var(--landing-text);
+}
+
+.landingNavLink.active::after {
+    transform: scaleX(1);
+}
+
+.landingNavLink:focus-visible,
+#landingPosLoginButton:focus-visible {
+    outline: 0.16rem solid var(--landing-accent);
+    outline-offset: 0.2rem;
+}
+
+.landingSection {
+    position: relative;
+    scroll-margin-top: 7.75rem;
+}
+
+#landingHome {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    padding: 10.5rem 1.5rem 5rem;
+    isolation: isolate;
+    text-align: center;
+}
+
+#landingHome::before,
+#landingHome::after {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    content: "";
+}
+
+#landingHome::before {
+    background: url("/images/loginBackground.png") center / cover no-repeat;
+}
+
+#landingHome::after {
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(9, 11, 14, 0.65), rgba(9, 11, 14, 0.94));
+}
+
+#landingHeroContent {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: min(100%, 54rem);
+}
+
+#landingHeroLogo {
+    width: clamp(6rem, 11vw, 8.5rem);
+    margin-bottom: 1.35rem;
+    filter: drop-shadow(0 0.65rem 1rem rgba(0, 0, 0, 0.36));
+}
+
+#landingHeroTitle {
+    max-width: 15ch;
+    font-size: clamp(2.25rem, 6vw, 4.8rem);
+    font-style: italic;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+}
+
+#landingHeroSubtitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 0.9rem;
+    color: #e2e3e5;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+}
+
+#landingHeroSubtitle span {
+    width: clamp(2.5rem, 8vw, 5.5rem);
+    height: 0.0625rem;
+    background: #73767b;
+}
+
+#landingPosBadge {
+    margin-top: 1.35rem;
+    padding: 0.55rem 1.3rem;
+    background: var(--landing-accent);
+    border-radius: 999px;
+    color: #111318;
+    font-size: clamp(0.88rem, 2vw, 1.1rem);
+    font-weight: 700;
+}
+
+#landingHeroDescription {
+    max-width: 68ch;
+    margin-top: 1.5rem;
+    color: var(--landing-muted);
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    line-height: 1.8;
+}
+
+#landingAbout {
+    padding: clamp(5.5rem, 10vw, 8rem) clamp(1.25rem, 7vw, 7rem);
+    background: var(--landing-background);
+}
+
+#landingAboutContent {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(18rem, 0.92fr);
+    align-items: center;
+    gap: clamp(2.5rem, 7vw, 6rem);
+    width: min(100%, 76rem);
+    margin: 0 auto;
+}
+
+#landingAboutImageContainer {
+    overflow: hidden;
+    border: 0.0625rem solid var(--landing-border);
+    border-radius: 1rem;
+    box-shadow: 0 1.2rem 2.5rem rgba(0, 0, 0, 0.32);
+}
+
+#landingAboutImage {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+}
+
+#landingAboutHeading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#landingAboutTitle,
+#landingPosSystemTitle,
+#landingTeamTitle {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+}
+
+#landingAboutHeadingLine,
+#landingTeamHeadingLine {
+    display: block;
+    flex: 1;
+    height: 0.18rem;
+    background: var(--landing-accent);
+}
+
+#landingAboutDescription,
+#landingAboutProjectDescription {
+    margin-top: 1.5rem;
+    color: var(--landing-muted);
+    line-height: 1.8;
+}
+
+#landingAboutAddress {
+    margin-top: 1.5rem;
+    color: var(--landing-text);
+    font-size: 0.94rem;
+    font-weight: 600;
+}
+
+#landingAboutAddress::before {
+    margin-right: 0.55rem;
+    color: var(--landing-accent);
+    content: "•";
+}
+
+#landingPosSystem {
+    padding: clamp(5.5rem, 10vw, 8rem) clamp(1.25rem, 5vw, 4rem);
+    overflow: hidden;
+    background: var(--landing-surface);
+}
+
+#landingPosSystemWrapper {
+    position: relative;
+    width: min(100%, 76rem);
+    margin: 0 auto;
+}
+
+#landingPosSystemContent {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: clamp(2rem, 5vw, 4rem);
+    overflow: hidden;
+    background: var(--landing-surface-raised);
+    border: 0.0625rem solid var(--landing-border);
+    border-radius: 1.25rem;
+    box-shadow: 0 1.2rem 2.8rem rgba(0, 0, 0, 0.35);
+    text-align: center;
+}
+
+#landingPosTopLine {
+    position: absolute;
+    top: 0;
+    right: 12%;
+    left: 12%;
+    height: 0.28rem;
+    background: var(--landing-accent);
+}
+
+#landingPosHeading p {
+    max-width: 60ch;
+    margin: 1rem auto 0;
+    color: var(--landing-muted);
+    line-height: 1.7;
+}
+
+#landingPosImageContainer {
+    width: min(100%, 48rem);
+    margin-top: 2.4rem;
+}
+
+#landingPosLaptopImage {
+    width: 100%;
+    filter: drop-shadow(0 1.4rem 1.3rem rgba(0, 0, 0, 0.38));
+}
+
+#landingPosLoginButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 3.1rem;
+    margin-top: 1.5rem;
+    padding: 0.7rem 1.35rem;
+    background: var(--landing-accent);
+    border-radius: 0.75rem;
+    color: #111318;
+    font-weight: 700;
+    transition: background-color 160ms ease, transform 160ms ease;
+}
+
+#landingPosLoginButton:hover {
+    background: var(--landing-accent-hover);
+    transform: translateY(-0.12rem);
+}
+
+#landingPosFeatures {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    width: 100%;
+    margin-top: 2.8rem;
+}
+
+.landingPosFeature {
+    padding: 1.4rem 1rem;
+    background: #181b1f;
+    border: 0.0625rem solid var(--landing-border);
+    border-radius: 0.85rem;
+}
+
+.landingPosFeature .material-symbols-outlined {
+    color: var(--landing-accent);
+    font-size: 2rem;
+}
+
+.landingPosFeature h3 {
+    margin-top: 0.7rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.landingPosDecorations {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    gap: 1rem;
+    width: 8rem;
+    transform: translateY(-50%);
+}
+
+#landingPosLeftDecorations {
+    left: -5rem;
+}
+
+#landingPosRightDecorations {
+    right: -5rem;
+}
+
+.landingPosDecorationBar {
+    height: 0.28rem;
+    background: var(--landing-accent);
+}
+
+.landingPosDecorationBar:last-child {
+    width: 65%;
+}
+
+#landingPosRightDecorations .landingPosDecorationBar:last-child {
+    justify-self: end;
+}
+
+#landingTeam {
+    padding: clamp(5.5rem, 10vw, 8rem) clamp(1.25rem, 6vw, 6rem);
+    background: var(--landing-background);
+}
+
+#landingTeamContent {
+    width: min(100%, 76rem);
+    margin: 0 auto;
+}
+
+#landingTeamHeader {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+#landingTeamLogoContainer {
+    display: grid;
+    place-items: center;
+    width: 5.5rem;
+    height: 5.5rem;
+    margin-bottom: 1rem;
+}
+
+#landingTeamLogo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#landingTeamHeadingLine {
+    width: 4.5rem;
+    flex: none;
+    margin-top: 1rem;
+}
+
+#landingTeamBrandName {
+    margin-top: 0.8rem;
+    color: var(--landing-muted);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+#landingTeamMembers {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 3rem;
+}
+
+.landingTeamCard {
+    overflow: hidden;
+    background: var(--landing-surface);
+    border: 0.0625rem solid var(--landing-border);
+    border-radius: 1rem;
+    box-shadow: 0 0.8rem 1.8rem rgba(0, 0, 0, 0.25);
+}
+
+.landingTeamPhotoContainer {
+    overflow: hidden;
+    background: var(--landing-surface-raised);
+    aspect-ratio: 4 / 5;
+}
+
+.landingTeamMemberPhoto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+.landingTeamMemberInformation {
+    padding: 1.25rem;
+}
+
+.landingTeamMemberInformation h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.landingTeamFirstName {
+    margin-top: 0.1rem;
+    color: var(--landing-muted);
+    font-size: 0.84rem;
+}
+
+.landingTeamMemberLine {
+    display: block;
+    width: 2.5rem;
+    height: 0.16rem;
+    margin: 0.9rem 0;
+    background: var(--landing-accent);
+}
+
+.landingTeamRole {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.landingReveal {
+    opacity: 0;
+    transition: opacity 600ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--landingRevealDelay, 0s);
+}
+
+.landingRevealUp {
+    transform: translateY(1.5rem);
+}
+
+.landingRevealLeft {
+    transform: translateX(-1.5rem);
+}
+
+.landingRevealRight {
+    transform: translateX(1.5rem);
+}
+
+.landingRevealZoom {
+    transform: scale(0.98);
+}
+
+.landingRevealVisible {
+    opacity: 1;
+    transform: none;
+}
+
+@media (max-width: 56rem) {
+    #landingAboutContent {
+        grid-template-columns: 1fr;
+    }
+
+    #landingAboutInformation {
+        max-width: 44rem;
+    }
+
+    #landingTeamMembers {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 40rem) {
+    html {
+        scroll-padding-top: 7.5rem;
+    }
+
+    #landingHeader {
+        height: 4rem;
+        padding-inline: 1rem;
+    }
+
+    #landingHeaderLogo {
+        width: 2.35rem;
+        height: 2.35rem;
+    }
+
+    #landingNavigation {
+        top: 4rem;
+        justify-content: flex-start;
+        height: 3rem;
+    }
+
+    #landingHome {
+        padding-top: 9.5rem;
+    }
+
+    #landingPosFeatures,
+    #landingTeamMembers {
+        grid-template-columns: 1fr;
+    }
+
+    .landingTeamCard {
+        display: grid;
+        grid-template-columns: 7.5rem 1fr;
+    }
+
+    .landingTeamPhotoContainer {
+        aspect-ratio: auto;
+        min-height: 9.5rem;
+    }
+
+    .landingTeamMemberInformation {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .landingPosDecorations {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .landingReveal,
+    .landingNavLink::after,
+    #landingPosLoginButton {
+        transition: none;
+    }
+}
