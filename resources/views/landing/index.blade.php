@@ -162,7 +162,7 @@
                                 <h3>Lizardo</h3>
                                 <p class="landingTeamFirstName">Ivan Mark</p>
                                 <span class="landingTeamMemberLine" aria-hidden="true"></span>
-                                <p class="landingTeamRole">Group Leader</p>
+                                <p class="landingTeamRole">Project Manager</p>
                             </div>
                         </article>
                         <!-- Backend Developer -->
@@ -186,7 +186,7 @@
                                 <h3>Bautista</h3>
                                 <p class="landingTeamFirstName">Ken Anthonie</p>
                                 <span class="landingTeamMemberLine" aria-hidden="true"></span>
-                                <p class="landingTeamRole">Database Developer</p>
+                                <p class="landingTeamRole">Database Engineer</p>
                             </div>
                         </article>
                         <!-- UI/UX Designer -->
