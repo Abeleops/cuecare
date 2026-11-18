@@ -1,74 +1,122 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-
-## About Laravel
-
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
-
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
-```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 # GG Billiards & Autocare POS
 
-Backend build notes and setup are documented in `docs/SECURITY.md`, `docs/ASSUMPTIONS.md`, and `docs/CHANGES.md`.
+CueCare is a web-based point-of-sale and inventory application for GG Billiards & Autocare, built with Laravel, MySQL, Blade, and Vite.
 
-## Setup and verification
+## Features
 
-1. Start XAMPP MySQL and create `cuecare_db` and `cuecare_test`.
-2. Run `composer install`.
-3. Run `npm install`.
-4. Run `npm run build`.
-5. Run `php artisan migrate`.
-6. For local demo data, run `php artisan db:seed`.
-7. Run `php artisan test`.
-8. Run `php artisan route:list` to inspect protected routes and middleware.
+- Dashboard with sales totals, top-selling products, and sales by category
+- Point of sale with a persistent cart and cash, GCash, or split payments
+- Product and category management, stock adjustments, and inventory tracking
+- Customer and staff management with role-based access
+- Sales history, printable receipts, and Excel report exports
 
-Before production, set `APP_DEBUG=false`, use HTTPS, rotate `APP_KEY` and database credentials (a development zip included `.env`), configure backups, and review `docs/SECURITY.md`.
+GCash payments are recorded by the POS; the application does not process payments through a GCash gateway. Split cash and GCash amounts must add up to the sale total.
+
+## Roles
+
+Administrators manage the application, cashiers can use the POS and view their own sales, and staff can view products and adjust inventory. Access depends on the user's assigned role and the permission configuration.
+
+## Requirements
+
+- PHP 8.3 or newer, with extensions required by Composer and Excel exports
+- Composer
+- Node.js and npm compatible with the versions in `package.json`
+- MySQL or MariaDB
+
+## Local setup
+
+Run these commands from the project directory. On Windows with Herd, use its PHP executable if `php` is unavailable in your terminal.
+
+1. Create a MySQL database named `cuecare_db` using phpMyAdmin or your database tool.
+2. Create a `.env` file in the project root if one does not already exist. This repository does not currently include an `.env.example`. Start with these settings and replace the database credentials:
+
+   ```dotenv
+   APP_NAME="GG Billiards & Autocare POS"
+   APP_ENV=local
+   APP_KEY=
+   APP_DEBUG=true
+   APP_URL=http://127.0.0.1:8000
+
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=cuecare_db
+   DB_USERNAME=root
+   DB_PASSWORD=
+
+   SESSION_DRIVER=database
+   CACHE_STORE=database
+   QUEUE_CONNECTION=sync
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   composer install
+   npm install
+   ```
+
+4. For a new installation with an empty `APP_KEY`, generate the application key:
+
+   ```bash
+   php artisan key:generate
+   ```
+
+   Keep the key for an existing installation. Changing it can invalidate sessions and make encrypted data unreadable.
+
+5. Create the database tables and build the assets:
+
+   ```bash
+   php artisan migrate
+   npm run build
+   php artisan storage:link
+   ```
+
+   The storage link makes public uploads accessible. Windows may require permission to create symbolic links.
+
+6. For a local demo, optionally seed roles, categories, an administrator, and sample data:
+
+   ```bash
+   php artisan db:seed
+   ```
+
+   The local administrator seeder creates or resets the `test` account with password `test1234`. It runs only in local or testing environments. These credentials are for development only. Seeding also modifies existing records, so review the seeders before running them against data you need to preserve.
+
+7. Start the application:
+
+   ```bash
+   php artisan serve
+   ```
+
+   Open `http://127.0.0.1:8000`. For frontend development, run `npm run dev` in another terminal instead of relying on the production build.
+
+## Reports
+
+Sales and inventory reports can be exported as formatted Excel (`.xlsx`) files. Sales reports accept a date range of up to 30 days. Split payments appear in unfiltered results but are excluded from the cash-only and GCash-only filters.
+
+## Tests
+
+Create a separate, disposable MySQL database named `cuecare_test` before running the suite. `phpunit.xml` forces the MySQL connection and this database name; it uses the configured host and credentials. Tests create and change data, so never point them at a database containing important records.
+
+```bash
+php artisan test
+```
+
+To inspect routes and middleware:
+
+```bash
+php artisan route:list
+```
+
+## Deployment
+
+Use a PHP host with compatible extensions and MySQL or MariaDB. Configure a separate production database and application key, set `APP_ENV=production` and `APP_DEBUG=false`, use HTTPS, build the Vite assets, and point the web server's document root to Laravel's `public` directory. Keep `.env` and the rest of the project outside the public web root. Configure backups and verify uploads, receipts, and Excel exports before using real business data.
+
+InfinityFree may be useful for a demonstration, but its shared-hosting restrictions make deployment more involved. Review its [Laravel installation guide](https://forum.infinityfree.com/t/how-to-install-a-laravel-site-on-infinityfree/118578), verify the available PHP version and extensions, and test database access and file uploads before relying on it for the POS.
+
+## Troubleshooting
+
+- **Vite manifest missing or CSS/JavaScript not loading:** Run `npm install` and `npm run build`, or start `npm run dev` and keep it running while developing. Check that the build finishes successfully.
+- **Database connection or migration errors:** Check the database name, credentials, and server in `.env`. Review existing data and schema before rerunning migrations.
+- **Images not appearing:** Check that `php artisan storage:link` completed and that the storage directories are writable.
+- **Configuration changes not taking effect:** Run `php artisan config:clear` and retry.
