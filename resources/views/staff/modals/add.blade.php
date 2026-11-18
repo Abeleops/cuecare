@@ -14,7 +14,8 @@
             </button>
         </div>
         <!-- Add Staff Form -->
-        <form id="staffAddForm">
+        <form id="staffAddForm" method="POST" action="{{ route('staff.store') }}" enctype="multipart/form-data">
+            @csrf
             <div id="staffAddModalBody">
                 <!-- Profile Picture -->
                 <div id="staffAddImageGroup">
@@ -35,7 +36,7 @@
                         <label for="staffAddFullName">Full Name <span>*</span></label>
                         <div class="staffAddInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                            <input type="text" id="staffAddFullName" name="fullName" placeholder="Enter full name (e.g., Juan Dela Cruz)" autocomplete="name" required>
+                            <input type="text" id="staffAddFullName" name="full_name" placeholder="Enter full name (e.g., Juan Dela Cruz)" autocomplete="name" required>
                         </div>
                     </div>
                     <div class="staffAddFieldGroup">
@@ -50,7 +51,7 @@
             <!-- Password and Role -->
             <div id="staffAddBottomFields">
                 <div class="staffAddFieldGroup">
-                    <label for="staffAddPassword">Password <span>*</span></label>
+                    <label for="staffAddPassword">Password <span>*</span> <small>(minimum 10 characters)</small></label>
                     <div class="staffAddInputContainer">
                         <span class="material-symbols-outlined" aria-hidden="true">lock</span>
                         <input type="password" id="staffAddPassword" name="password" placeholder="Enter password" autocomplete="new-password" required>
@@ -65,7 +66,7 @@
                         <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
                         <select id="staffAddRole" name="role" required>
                             <option value="" selected disabled>Select role</option>
-                            <option value="admin">Admin</option>
+                            <option value="admin">Administrator</option>
                             <option value="cashier">Cashier</option>
                             <option value="staff">Staff</option>
                         </select>

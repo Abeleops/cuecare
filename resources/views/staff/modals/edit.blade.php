@@ -14,7 +14,9 @@
             </button>
         </div>
         <!-- Edit Staff Form -->
-        <form id="staffEditForm">
+        <form id="staffEditForm" method="POST" action="" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
             <div id="staffEditModalBody">
                 <!-- Profile Picture -->
                 <div id="staffEditImageGroup">
@@ -35,7 +37,7 @@
                         <label for="staffEditFullName">Full Name <span>*</span></label>
                         <div class="staffEditInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                            <input type="text" id="staffEditFullName" name="fullName" value="Juan Dela Cruz" placeholder="Enter full name" autocomplete="name" required>
+                            <input type="text" id="staffEditFullName" name="full_name" value="Juan Dela Cruz" placeholder="Enter full name" autocomplete="name" required>
                         </div>
                     </div>
                     <div class="staffEditFieldGroup">
@@ -65,7 +67,7 @@
                         <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
                         <select id="staffEditRole" name="role" required>
                             <option value="" disabled>Select role</option>
-                            <option value="admin">Admin</option>
+                            <option value="admin">Administrator</option>
                             <option value="cashier" selected>Cashier</option>
                             <option value="staff">Staff</option>
                         </select>

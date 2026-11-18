@@ -74,12 +74,18 @@
             </header>
             <!-- Staff Content -->
             <div id="staffContent">
+                @if ($errors->any())
+                    <div role="alert">{{ $errors->first() }}</div>
+                @endif
+                @if (session('status'))
+                    <div role="status">{{ session('status') }}</div>
+                @endif
                 <!-- Search and Add Staff -->
                 <section id="staffToolbar">
-                    <div id="staffSearchContainer">
+                    <form id="staffSearchForm" method="GET" action="{{ route('staff.index') }}"><div id="staffSearchContainer">
                         <span class="material-symbols-outlined" aria-hidden="true">search</span>
-                        <input type="search" id="staffSearchInput" placeholder="Search staff (e.g., name, username...)" aria-label="Search staff">
-                    </div>
+                        <input type="search" id="staffSearchInput" name="search" value="{{ request('search') }}" placeholder="Search staff (e.g., name, username...)" aria-label="Search staff">
+                    </div></form>
                     <button type="button" id="staffAddButton">
                         <span class="material-symbols-outlined" aria-hidden="true">add</span>
                         Add Staff
@@ -126,6 +132,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if(isset($staff))
+                                    @foreach($staff as $member)
+                                        <tr><td><span class="staffAvatar">@if($member->avatar)<img src="{{ asset('storage/'.$member->avatar) }}" alt="{{ $member->full_name }}">@else<span class="material-symbols-outlined" aria-hidden="true">person</span>@endif</span></td><td>{{ $member->staff_code }}</td><td>{{ $member->full_name }}</td><td>{{ $member->username }}</td><td>{{ $member->role?->name }}</td><td>{{ optional($member->date_joined)->format('M d, Y') }}</td><td><button type="button" class="staffEditButton" data-user-id="{{ $member->id }}" data-role-key="{{ $member->role?->key }}" aria-label="Edit {{ $member->full_name }}">Edit</button><form method="POST" action="{{ route('staff.destroy', $member) }}" style="display:inline" onsubmit="return confirm('Deactivate this account?')">@csrf @method('DELETE')<button type="submit" class="staffDeleteButton">Deactivate</button></form></td></tr>
+                                    @endforeach
+                                @else
                                 <!-- Static Sample Staff 1 -->
                                 <tr>
                                     <td>
@@ -241,6 +252,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
