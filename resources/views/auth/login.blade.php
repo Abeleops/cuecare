@@ -27,7 +27,9 @@
                 <h1>Welcome Back</h1>
                 <p>Sign in to access your POS dashboard</p>
             </div>
-            <form id="authLoginForm">  
+            @if ($errors->any())<p role="alert">Invalid username or password.</p>@endif
+            <form id="authLoginForm" method="POST" action="{{ route('login.store') }}">
+                @csrf
                 <div id="authLoginUsernameGroup">
                     <label for="authLoginUsername">Username</label>
                     <div id="authLoginUsernameField">
@@ -50,13 +52,13 @@
                         <input type="checkbox" id="authLoginRemember" name="remember">
                         <span>Remember me</span>
                     </label>
-                    <a href="#" id="authLoginForgotPassword">Forgot Password?</a>
+                    <span id="authLoginForgotPassword">Contact an administrator to reset your password.</span>
                 </div>
                 
-                <a href="{{ route('dashboard') }}" id="authLoginSubmit">
+                <button type="submit" id="authLoginSubmit">
                     <span>Log In</span>
                     <span class="authLoginArrowIcon" aria-hidden="true">→</span>
-                </a>
+                </button>
 
             </form>
         </section>
