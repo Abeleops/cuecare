@@ -12,7 +12,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Throwable;
 
 class ProductController extends Controller
 {
@@ -50,6 +52,7 @@ class ProductController extends Controller
         return view('products.index', [
             'products' => $products,
             'categories' => Category::query()->whereNull('parent_id')->with('children')->where('is_active', true)->get(),
+            'availableCategories' => Category::query()->where('is_active', true)->orderBy('name')->get(),
             'groupCounts' => $groupCounts,
             'allProductCount' => Product::query()->count(),
         ]);
@@ -78,25 +81,63 @@ class ProductController extends Controller
 
     public function update(ProductRequest $request, Product $product, AuditLogger $audit, ImageUploadService $images): RedirectResponse
     {
-        $oldPrice = $product->price;
         $data = $request->validated();
+        $stockChanged = array_key_exists('stock_quantity', $data)
+            && (int) $data['stock_quantity'] !== (int) $data['original_stock'];
+        if ($stockChanged) {
+            abort_unless($request->user()->hasPermission('InventoryAdjust'), 403);
+        }
+
+        $previousImage = $product->image;
+        $newImage = null;
         if ($request->hasFile('image')) {
-            $data['image'] = $images->store($request->file('image'), 'products', 'image');
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
+            $newImage = $images->store($request->file('image'), 'products', 'image');
+            $data['image'] = $newImage;
         } elseif ($request->boolean('remove_image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
             $data['image'] = null;
         }
-        unset($data['remove_image']);
-        // Stock changes use the separate adjustment route
-        unset($data['stock_quantity']);
-        $product->update($data);
-        if ((float) $oldPrice !== (float) $product->price) {
-            $audit->record('product_price_changed', $product, ['old_price' => $oldPrice, 'new_price' => $product->price]);
+
+        $newStock = $data['stock_quantity'] ?? null;
+        $originalStock = $data['original_stock'] ?? null;
+        unset($data['remove_image'], $data['stock_quantity'], $data['original_stock']);
+
+        try {
+            DB::transaction(function () use ($product, $data, $stockChanged, $newStock, $originalStock, $audit): void {
+                // Lock the product before comparing the stock shown in the form
+                $product = Product::query()->whereKey($product->id)->lockForUpdate()->firstOrFail();
+                if ($stockChanged && $product->stock_quantity !== (int) $originalStock) {
+                    throw ValidationException::withMessages([
+                        'stock_quantity' => 'Stock changed since you opened this form. Close and reopen it before updating stock.',
+                    ])->errorBag('productEdit');
+                }
+
+                $oldPrice = $product->price;
+                $product->update($data);
+                if ($stockChanged) {
+                    $change = (int) $newStock - $product->stock_quantity;
+                    $product->update(['stock_quantity' => (int) $newStock]);
+                    $product->stockMovements()->create([
+                        'recorded_by_user_id' => auth()->id(),
+                        'movement_type' => 'adjustment',
+                        'quantity_change' => $change,
+                        'resulting_stock' => (int) $newStock,
+                        'notes' => 'Stock changed in product edit',
+                    ]);
+                    $audit->record('stock_adjustment', $product, ['quantity_change' => $change, 'resulting_stock' => (int) $newStock]);
+                }
+                if ((float) $oldPrice !== (float) $product->price) {
+                    $audit->record('product_price_changed', $product, ['old_price' => $oldPrice, 'new_price' => $product->price]);
+                }
+            });
+        } catch (Throwable $exception) {
+            if ($newImage) {
+                Storage::disk('public')->delete($newImage);
+            }
+            throw $exception;
+        }
+
+        if ($previousImage && ($newImage || $request->boolean('remove_image'))) {
+            Storage::disk('public')->delete($previousImage);
         }
 
         return back()->with('status', 'Product updated.');
