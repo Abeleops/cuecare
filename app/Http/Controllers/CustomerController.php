@@ -7,6 +7,8 @@ use App\Models\Customer;
 use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class CustomerController extends Controller
@@ -34,10 +36,15 @@ class CustomerController extends Controller
 
     public function store(CustomerRequest $request, AuditLogger $audit): RedirectResponse
     {
-        $customer = Customer::query()->create([
-            ...$request->validated(),
-            'customer_code' => 'CUST-'.str_pad((string) (Customer::withTrashed()->max('id') + 1), 6, '0', STR_PAD_LEFT),
-        ]);
+        $customer = DB::transaction(function () use ($request): Customer {
+            $customer = Customer::query()->create([
+                ...$request->validated(),
+                'customer_code' => 'TMP-'.Str::random(16),
+            ]);
+            $customer->update(['customer_code' => 'CUST-'.str_pad((string) $customer->id, 6, '0', STR_PAD_LEFT)]);
+
+            return $customer;
+        });
         $audit->record('customer_created', $customer);
 
         return back()->with('status', 'Customer created.');
