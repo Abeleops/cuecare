@@ -56,3 +56,19 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# GG Billiards & Autocare POS
+
+Backend build notes and setup are documented in `docs/SECURITY.md`, `docs/ASSUMPTIONS.md`, and `docs/CHANGES.md`.
+
+## Setup and verification
+
+1. Start XAMPP MySQL and create `cuecare_db` and `cuecare_test`.
+2. Run `composer install`.
+3. Run `npm install`.
+4. Run `npm run build`.
+5. Run `php artisan migrate`.
+6. For local demo data, run `php artisan db:seed`.
+7. Run `php artisan test`.
+8. Run `php artisan route:list` to inspect protected routes and middleware.
+
+Before production, set `APP_DEBUG=false`, use HTTPS, rotate `APP_KEY` and database credentials (a development zip included `.env`), configure backups, and review `docs/SECURITY.md`.
