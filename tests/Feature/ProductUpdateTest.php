@@ -47,6 +47,23 @@ it('updates the category and threshold and audits price changes', function (): v
     $this->assertDatabaseHas('audit_logs', ['action' => 'product_price_changed', 'subject_id' => $this->product]);
 });
 
+it('returns product validation errors to the appropriate form', function (): void {
+    $this->from(route('products.index'))->followingRedirects()->post(route('products.store'), [
+        'name' => 'New product', 'category_id' => $this->category,
+        'price' => -1, 'stock_quantity' => 1, 'low_stock_threshold' => 2,
+    ])->assertOk()
+        ->assertSee('data-reopen="true"', false)
+        ->assertSee('Please correct the following')
+        ->assertSee('value="New product"', false);
+
+    $this->from(route('products.index'))->followingRedirects()->put(route('products.update', $this->product), [
+        ...$this->payload, 'price' => -1, '_edit_id' => $this->product,
+    ])->assertOk()
+        ->assertSee('data-edit-id="'.$this->product.'"', false)
+        ->assertSee('Please correct the following')
+        ->assertSee('value="Updated product"', false);
+});
+
 it('rejects invalid category and threshold values', function (): void {
     $invalidValues = [
         ['category_id' => null],

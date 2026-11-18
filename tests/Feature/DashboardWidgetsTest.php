@@ -43,5 +43,8 @@ it('uses the selected period for dashboard sales and product widgets', function 
     $user = (new User)->forceFill(['id' => 1, 'is_active' => true]);
     $user->setRelation('role', (new Role)->forceFill(['key' => 'admin', 'name' => 'Administrator']));
     $this->actingAs($user)->get(route('dashboard', ['start_date' => '2025-03-01', 'end_date' => '2025-03-31']))
-        ->assertOk()->assertSee('₱100.00')->assertSee('Low Stock Item')->assertSee('TRX-000001')->assertSee('Food');
+        ->assertOk()->assertViewHas('averageOrderValue', 100.0)
+        ->assertSee('₱100.00')->assertSee('Low Stock Item')->assertSee('TRX-000001')->assertSee('Food');
+    $this->get(route('dashboard', ['start_date' => '2024-03-01', 'end_date' => '2024-03-31']))
+        ->assertOk()->assertViewHas('averageOrderValue', 0);
 });

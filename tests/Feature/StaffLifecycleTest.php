@@ -24,6 +24,19 @@ beforeEach(function (): void {
     $this->actingAs($this->admin);
 });
 
+it('generates staff codes from inserted IDs', function (): void {
+    foreach (['sequence-one', 'sequence-two'] as $username) {
+        $this->post(route('staff.store'), [
+            'full_name' => 'Sequential worker',
+            'username' => $username,
+            'role' => 'staff',
+            'password' => 'password123',
+        ])->assertRedirect();
+        $user = User::query()->where('username', $username)->firstOrFail();
+        expect($user->staff_code)->toBe('STF-'.str_pad((string) $user->id, 4, '0', STR_PAD_LEFT));
+    }
+});
+
 it('creates an account with a hashed password and generated staff code', function (): void {
     $this->postJson(route('staff.store'), [
         'full_name' => 'New worker',

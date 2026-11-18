@@ -35,16 +35,23 @@ it('re-encodes uploaded product and staff images before storing them', function 
     $this->put(route('products.update', $productId), [
         ...$productUpdate,
         'image' => UploadedFile::fake()->createWithContent('invalid.png', 'not an image'),
-    ])->assertSessionHasErrors('image');
+    ])->assertSessionHasErrorsIn('productEdit', 'image');
     Storage::disk('public')->assertExists($productPath);
     $this->put(route('products.update', $productId), [
         ...$productUpdate,
         'image' => UploadedFile::fake()->image('replacement.jpeg', 20, 20),
+        'remove_image' => 1,
     ])->assertRedirect();
     $replacementPath = DB::table('products')->where('id', $productId)->value('image');
     Storage::disk('public')->assertMissing($productPath);
     Storage::disk('public')->assertExists($replacementPath);
     expect(getimagesizefromstring(Storage::disk('public')->get($replacementPath))['mime'])->toBe('image/jpeg');
+    $this->put(route('products.update', $productId), [
+        ...$productUpdate,
+        'remove_image' => 1,
+    ])->assertRedirect();
+    Storage::disk('public')->assertMissing($replacementPath);
+    expect(DB::table('products')->where('id', $productId)->value('image'))->toBeNull();
 
     $avatar = UploadedFile::fake()->image('avatar.png', 20, 20);
     file_put_contents($avatar->getRealPath(), 'UNTRUSTED_TRAILING_CONTENT', FILE_APPEND);

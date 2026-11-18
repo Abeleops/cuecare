@@ -8,6 +8,31 @@ use Illuminate\Support\Facades\DB;
 
 uses(DatabaseTransactions::class);
 
+it('generates customer codes from inserted IDs', function (): void {
+    foreach (['First code customer', 'Second code customer'] as $name) {
+        $this->post(route('customers.store'), ['full_name' => $name])->assertRedirect();
+        $customer = Customer::query()->where('full_name', $name)->firstOrFail();
+        expect($customer->customer_code)->toBe('CUST-'.str_pad((string) $customer->id, 6, '0', STR_PAD_LEFT));
+    }
+});
+
+it('returns customer validation errors to the appropriate form', function (): void {
+    $this->from(route('customers.index'))->followingRedirects()->post(route('customers.store'), [
+        'full_name' => 'New customer', 'phone' => 'invalid phone',
+    ])->assertOk()
+        ->assertSee('data-reopen="true"', false)
+        ->assertSee('Please correct the following')
+        ->assertSee('value="New customer"', false);
+
+    $customer = Customer::query()->create(['customer_code' => 'EDIT-TEST', 'full_name' => 'Original']);
+    $this->from(route('customers.index'))->followingRedirects()->put(route('customers.update', $customer), [
+        'full_name' => 'Changed name', 'phone' => 'invalid phone', '_edit_id' => $customer->id,
+    ])->assertOk()
+        ->assertSee('data-edit-id="'.$customer->id.'"', false)
+        ->assertSee('Please correct the following')
+        ->assertSee('value="Changed name"', false);
+});
+
 beforeEach(function (): void {
     $role = Role::query()->create(['name' => 'Test admin', 'key' => 'admin']);
     $this->user = User::query()->create([
