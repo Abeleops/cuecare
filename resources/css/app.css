@@ -462,6 +462,19 @@ body {
         color 0.2s ease;
 }
 
+#dashboardSidebarFooter form {
+    width: 100%;
+}
+
+button.dashboardNavLink {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
 .dashboardNavLink .material-symbols-outlined {
     flex-shrink: 0;
     font-size: 1.25rem;
