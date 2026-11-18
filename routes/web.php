@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PosController;
@@ -62,6 +63,9 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         ->name('pos.checkout');
 
     // Products and inventory
+    Route::post('/categories', [CategoryController::class, 'store'])
+        ->middleware('permission:ProductsManage')
+        ->name('categories.store');
     Route::get('/products', [ProductController::class, 'index'])
         ->middleware('permission:ProductsView')
         ->name('products.index');
