@@ -15,9 +15,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'discount_amount',
     'total_amount',
     'payment_method',
+    'gcash_reference',
+    'order_type',
     'amount_received',
     'change_amount',
     'status',
+    'void_reason',
     'notes',
     'completed_at',
 ])]
