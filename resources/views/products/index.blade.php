@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-    @vite(['resources/css/app.css'])
     @vite(['resources/css/app.css', 'resources/js/products.js'])
 </head>
 <body>
@@ -21,34 +20,34 @@
                 <p id="dashboardSidebarBusinessName">GG BILLIARDS & AUTOCARE</p>
             </div>
             <nav id="dashboardSidebarNavigation" aria-label="Main navigation">
-                <a href="{{ route('dashboard') }}" class="dashboardNavLink">
+                @can('DashboardView')<a href="{{ route('dashboard') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
                     <span>Dashboard</span>
-                </a>
-                <a href="{{ route('pos.index') }}" class="dashboardNavLink">
+                </a>@endcan
+                @can('PosAccess')<a href="{{ route('pos.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
                     <span>Record Sale</span>
-                </a>
-                <a href="{{ route('products.index') }}" class="dashboardNavLink active" aria-current="page">
+                </a>@endcan
+                @can('ProductsView')<a href="{{ route('products.index') }}" class="dashboardNavLink active" aria-current="page">
                     <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
                     <span>Products</span>
-                </a>
-                <a href="{{ route('customers.index') }}" class="dashboardNavLink">
+                </a>@endcan
+                @can('CustomersView')<a href="{{ route('customers.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">groups</span>
                     <span>Customers</span>
-                </a>
-                <a href="{{ route('staff.index') }}" class="dashboardNavLink">
+                </a>@endcan
+                @can('StaffView')<a href="{{ route('staff.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">account_box</span>
                     <span>Staff</span>
-                </a>
-                <a href="{{ route('sales.index') }}" class="dashboardNavLink">
+                </a>@endcan
+                @canany(['SalesViewAll', 'SalesViewOwn'])<a href="{{ route('sales.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
                     <span>Sales History</span>
-                </a>
-                <a href="{{ route('reports.index') }}" class="dashboardNavLink">
+                </a>@endcanany
+                @can('ReportsView')<a href="{{ route('reports.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">monitoring</span>
                     <span>Reports</span>
-                </a>
+                </a>@endcan
             </nav>
             <div id="dashboardSidebarFooter">
                 <a href="{{ route('login') }}" class="dashboardNavLink">
@@ -174,6 +173,19 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if(isset($products))
+                                    @foreach($products as $product)
+                                        <tr>
+                                            <td><input type="checkbox" aria-label="Select {{ $product->name }}"></td>
+                                            <td><div class="productsProductInfo"><img src="{{ $product->image ? asset('storage/'.$product->image) : asset('images/noImagePlaceholderWhite.png') }}" alt="{{ $product->name }}" class="productsProductImage"><span>{{ $product->name }}</span></div></td>
+                                            <td><span class="productsCategoryBadge">{{ $product->category?->name }}</span></td>
+                                            <td>₱{{ number_format((float) $product->price, 2) }}</td>
+                                            <td>{{ $product->stock_quantity }}</td>
+                                            <td><span class="productsStatusBadge {{ $product->stock_quantity <= $product->low_stock_threshold ? 'productsLowStock' : 'productsInStock' }}">{{ $product->stock_quantity <= $product->low_stock_threshold ? 'Low Stock' : 'In Stock' }}</span></td>
+                                            <td><div class="productsActionButtons"><button type="button" class="productsEditButton" data-product-id="{{ $product->id }}" aria-label="Edit {{ $product->name }}"><span class="material-symbols-outlined" aria-hidden="true">edit</span></button><form method="POST" action="{{ route('products.destroy', $product) }}" onsubmit="return confirm('Delete this product?')">@csrf @method('DELETE')<button type="submit" class="productsDeleteButton" aria-label="Delete {{ $product->name }}"><span class="material-symbols-outlined" aria-hidden="true">delete</span></button></form></div></td>
+                                        </tr>
+                                    @endforeach
+                                @else
                                 <!-- Static Sample Product 1 -->
                                 <tr>
                                     <td><input type="checkbox" aria-label="Select Mixilog"></td>
@@ -406,6 +418,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
