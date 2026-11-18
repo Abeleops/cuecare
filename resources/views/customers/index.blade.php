@@ -119,6 +119,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if(isset($customers))
+                                    @foreach($customers as $customer)
+                                        <tr><td>{{ $customer->customer_code }}</td><td>{{ $customer->full_name }}</td><td>{{ $customer->phone ?: '—' }}</td><td>{{ $customer->email ?: '—' }}</td><td><button type="button" class="customersEditButton" data-customer-id="{{ $customer->id }}" aria-label="Edit {{ $customer->full_name }}">Edit</button><form method="POST" action="{{ route('customers.destroy', $customer) }}" style="display:inline" onsubmit="return confirm('Delete this customer?')">@csrf @method('DELETE')<button type="submit" class="customersDeleteButton">Delete</button></form></td></tr>
+                                    @endforeach
+                                @else
                                 <!-- Static Sample Customer 1 -->
                                 <tr>
                                     <td>CUST-001</td>
@@ -204,6 +209,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
