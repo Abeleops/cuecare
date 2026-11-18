@@ -2,6 +2,18 @@
 
 CueCare is a web-based point-of-sale and inventory application for GG Billiards & Autocare, built with Laravel, MySQL, Blade, and Vite.
 
+## Repository structure
+
+- `app/` — application logic, models, controllers, and services
+- `config/` — application configuration and permissions
+- `database/` — migrations, seeders, and factories
+- `resources/` — Blade views, CSS, and JavaScript
+- `routes/` — web routes and endpoints
+- `public/` — application entry point and public assets
+- `tests/` — automated unit and feature tests
+
+The dependency manifests and lock files are in the repository root. Local configuration, installed dependencies, and generated files are managed separately from the source code.
+
 ## Features
 
 - Dashboard with sales totals, top-selling products, and sales by category
@@ -110,9 +122,13 @@ php artisan route:list
 
 ## Deployment
 
+**Hosted application:** No deployment URL has been verified for this project yet. Add the URL here after the application is deployed and tested.
+
 Use a PHP host with compatible extensions and MySQL or MariaDB. Configure a separate production database and application key, set `APP_ENV=production` and `APP_DEBUG=false`, use HTTPS, build the Vite assets, and point the web server's document root to Laravel's `public` directory. Keep `.env` and the rest of the project outside the public web root. Configure backups and verify uploads, receipts, and Excel exports before using real business data.
 
 InfinityFree may be useful for a demonstration, but its shared-hosting restrictions make deployment more involved. Review its [Laravel installation guide](https://forum.infinityfree.com/t/how-to-install-a-laravel-site-on-infinityfree/118578), verify the available PHP version and extensions, and test database access and file uploads before relying on it for the POS.
+
+For submission, deploy the same commit that is in the GitHub repository. Record the deployed commit hash and confirm the hosted application loads, login works, and the main POS functions and assets work as expected. Recheck the hosted application after updates so the submitted code and deployment stay aligned.
 
 ## Troubleshooting
 
