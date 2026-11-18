@@ -118,6 +118,85 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Add a category without losing the product form
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("[data-category-creator]").forEach((creator) => {
+        const toggle = creator.querySelector(".productsCategoryToggle");
+        const fields = creator.querySelector(".productsCategoryFields");
+        const name = creator.querySelector("[data-category-name]");
+        const group = creator.querySelector("[data-category-group]");
+        const message = creator.querySelector("[data-category-message]");
+        const result = creator.querySelector("[data-category-result]");
+        const save = creator.querySelector("[data-category-save]");
+        const cancel = creator.querySelector("[data-category-cancel]");
+        const form = creator.closest("form");
+
+        function closeFields() {
+            fields.hidden = true;
+            toggle.setAttribute("aria-expanded", "false");
+            name.value = "";
+            message.textContent = "";
+            toggle.focus();
+        }
+
+        toggle.addEventListener("click", () => {
+            if (!fields.hidden) {
+                closeFields();
+                return;
+            }
+            fields.hidden = false;
+            toggle.setAttribute("aria-expanded", "true");
+            result.textContent = "";
+            name.focus();
+        });
+        cancel.addEventListener("click", closeFields);
+        form.addEventListener("reset", () => {
+            fields.hidden = true;
+            toggle.setAttribute("aria-expanded", "false");
+            message.textContent = "";
+            result.textContent = "";
+        });
+        save.addEventListener("click", async () => {
+            const categoryName = name.value.trim();
+            if (!categoryName) {
+                message.textContent = "Enter a category name";
+                name.focus();
+                return;
+            }
+
+            save.disabled = true;
+            cancel.disabled = true;
+            message.textContent = "Saving category…";
+            try {
+                const response = await fetch(creator.dataset.url, {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": form.querySelector('input[name="_token"]').value,
+                    },
+                    body: JSON.stringify({ name: categoryName, category_group: group.value }),
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.errors?.name?.[0] || data.errors?.category_group?.[0] || data.message || "Could not add category");
+                }
+                document.querySelectorAll("#productsAddCategory, #productsEditCategory, #productsCategorySelect").forEach((select) => {
+                    select.add(new Option(data.name, String(data.id)));
+                });
+                form.querySelector('select[name="category_id"]').value = String(data.id);
+                closeFields();
+                result.textContent = "Category added and selected";
+            } catch (error) {
+                message.textContent = error.message || "Could not add category";
+            } finally {
+                save.disabled = false;
+                cancel.disabled = false;
+            }
+        });
+    });
+});
+
 /* =======================
    Products - Edit Product Modal
    ======================= */
@@ -132,6 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameInput = document.getElementById("productsEditName");
     const priceInput = document.getElementById("productsEditPrice");
     const thresholdInput = document.getElementById("productsEditThreshold");
+    const stockInput = document.getElementById("productsEditStockQuantity");
     const categorySelect = document.getElementById("productsEditCategory");
 
     const imageInput = document.getElementById("productsEditImage");
@@ -151,6 +231,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Open Edit Modal
     editButtons.forEach(function (button) {
         button.addEventListener("click", function () {
+            if (editOverlay.dataset.reopen !== "true") {
+                editForm.querySelectorAll('[role="alert"]').forEach((alert) => alert.remove());
+            }
             if (button.dataset.productId) {
                 editForm.action = button.dataset.updateUrl;
                 editForm.elements._edit_id.value = button.dataset.productId;
@@ -171,6 +254,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 ? cells[3].textContent.replace(/[^\d.]/g, "")
                 : "";
             thresholdInput.value = button.dataset.lowStockThreshold;
+            if (stockInput) {
+                stockInput.value = button.dataset.stockQuantity;
+                editForm.elements.original_stock.value = button.dataset.stockQuantity;
+            }
             categorySelect.value = button.dataset.categoryId;
 
             imagePreview.src = productImage ? productImage.src : defaultImage;
@@ -279,5 +366,6 @@ document.addEventListener("DOMContentLoaded", () => {
         edit.hidden = false;
         document.body.classList.add("productsModalOpen");
         edit.querySelector("[data-validation-summary]")?.focus();
+        edit.dataset.reopen = "false";
     }
 });
