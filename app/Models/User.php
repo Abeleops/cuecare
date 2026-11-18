@@ -30,6 +30,11 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, SoftDeletes;
 
+    public function hasPermission(string $permission): bool
+    {
+        return in_array($permission, config('permissions.roles.'.$this->role?->key, []), true);
+    }
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
