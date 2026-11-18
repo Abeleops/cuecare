@@ -8,6 +8,13 @@ use Illuminate\Validation\Rules\File;
 
 class ProductRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $editingProduct = $this->route('product');
+        $this->errorBag = $editingProduct ? 'productEdit' : 'productCreate';
+        $this->merge(['_edit_id' => $editingProduct?->getKey()]);
+    }
+
     public function authorize(): bool
     {
         return $this->user()?->hasPermission('ProductsManage') === true;
@@ -31,6 +38,7 @@ class ProductRequest extends FormRequest
                 'max:2147483647',
             ],
             'low_stock_threshold' => ['required', 'integer', 'min:0', 'max:2147483647'],
+            'remove_image' => ['sometimes', 'boolean'],
             'image' => [
                 'nullable',
                 File::image()
