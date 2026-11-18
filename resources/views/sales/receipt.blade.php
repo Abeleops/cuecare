@@ -25,6 +25,14 @@
                     <dt>Payment</dt>
                     <dd>{{ strtoupper($sale->payment_method) }}</dd>
                 </div>
+                <div>
+                    <dt>Status</dt>
+                    <dd>{{ ucfirst($sale->status) }}</dd>
+                </div>
+                @if ($sale->payment_method === 'split')
+                    <div><dt>Cash</dt><dd>₱{{ number_format((float) $sale->cash_amount, 2) }}</dd></div>
+                    <div><dt>GCash</dt><dd>₱{{ number_format((float) $sale->gcash_amount, 2) }}</dd></div>
+                @endif
             </dl>
 
             <table class="salesItems receiptItems">
