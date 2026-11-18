@@ -27,9 +27,9 @@
                             <span class="material-symbols-outlined" id="staffEditCameraIcon" aria-hidden="true">photo_camera</span>
                         </span>
                         <span>Change Photo</span>
-                        <small>PNG, JPG (Max 2MB)</small>
+                        <small>PNG, JPG, WebP (Max 2MB)</small>
                     </label>
-                    <input type="file" id="staffEditImage" name="avatar" accept=".png,.jpg,.jpeg" hidden>
+                    <input type="file" id="staffEditImage" name="avatar" accept=".png,.jpg,.jpeg,.webp" hidden>
                 </div>
                 <!-- Staff Information -->
                 <div id="staffEditFields">

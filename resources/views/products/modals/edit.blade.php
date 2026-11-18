@@ -1,6 +1,6 @@
 
 <!-- Edit Product Modal -->
-<div id="productsEditModalOverlay" class="productsModalOverlay" hidden>
+<div id="productsEditModalOverlay" data-reopen="{{ $errors->productEdit->any() ? 'true' : 'false' }}" data-edit-id="{{ old('_edit_id') }}" data-update-url="{{ route('products.update', ['product' => '__ID__']) }}" class="productsModalOverlay" hidden>
     <section id="productsEditModal" class="productsModal" role="dialog" aria-modal="true" aria-labelledby="productsEditModalTitle">
         <div id="productsEditModalHeader">
             <span class="material-symbols-outlined productsEditHeaderIcon" aria-hidden="true">edit</span>
@@ -14,7 +14,15 @@
         </div>
         <form id="productsEditForm" method="POST" action="" enctype="multipart/form-data">
             @csrf
+            @if ($errors->productEdit->any())
+                <div role="alert" tabindex="-1" data-validation-summary>
+                    <p>Please correct the following</p>
+                    <ul>@foreach ($errors->productEdit->all() as $message)<li>{{ $message }}</li>@endforeach</ul>
+                </div>
+            @endif
             @method('PUT')
+            <input type="hidden" name="_edit_id" value="{{ old('_edit_id') }}">
+            <input type="hidden" name="remove_image" id="productsRemoveImageFlag" value="{{ old('remove_image', '0') }}">
             <div id="productsEditModalBody">
                 <!-- Product Image -->
                 <div id="productsEditImageGroup">
@@ -30,7 +38,8 @@
                             </button>
                         </div>
                     </div>
-                    <input type="file" id="productsEditImage" name="image" accept=".png,.jpg,.jpeg" hidden>
+                    <input type="file" id="productsEditImage" name="image" accept=".png,.jpg,.jpeg,.webp" hidden>
+                            @error('image', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                 </div>
                 <!-- Product Fields -->
                 <div id="productsEditFields">
@@ -38,7 +47,8 @@
                         <label for="productsEditName">Product Name <span>*</span></label>
                         <div class="productsEditInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">inventory_2</span>
-                            <input type="text" id="productsEditName" name="name" placeholder="Enter product name" required>
+                            <input type="text" id="productsEditName" name="name" placeholder="Enter product name" required value="{{ $errors->productEdit->any() ? old('name') : '' }}">
+                            @error('name', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                     </div>
                     <div class="productsEditFieldGroup">
@@ -48,9 +58,10 @@
                             <select id="productsEditCategory" name="category_id" required>
                                 <option value="">Select category</option>
                                 @foreach(($categories ?? collect())->flatMap(fn ($category) => $category->children) as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}" @selected($errors->productEdit->any() && (string) old('category_id') === (string) $category->id)>{{ $category->name }}</option>
                                 @endforeach
                             </select>
+                        @error('category_id', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                     </div>
                     <div id="productsEditNumberFields">
@@ -58,13 +69,15 @@
                             <label for="productsEditPrice">Price (₱) <span>*</span></label>
                             <div class="productsEditInputContainer">
                                 <span class="productsEditCurrencyIcon">₱</span>
-                                <input type="number" id="productsEditPrice" name="price" min="0" step="0.01" required>
+                                <input type="number" id="productsEditPrice" name="price" min="0" step="0.01" required value="{{ $errors->productEdit->any() ? old('price') : '' }}">
+                            @error('price', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                             </div>
                         </div>
                         <div class="productsEditFieldGroup">
                             <label for="productsEditThreshold">Low stock threshold <span>*</span></label>
                             <div class="productsEditInputContainer">
-                                <input type="number" id="productsEditThreshold" name="low_stock_threshold" min="0" step="1" required>
+                                <input type="number" id="productsEditThreshold" name="low_stock_threshold" min="0" step="1" required value="{{ $errors->productEdit->any() ? old('low_stock_threshold') : '' }}">
+                            @error('low_stock_threshold', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                             </div>
                         </div>
                     </div>

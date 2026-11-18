@@ -99,6 +99,7 @@
                                             <td>
                                                 <button type="button" class="customersEditButton"
                                                     data-customer-id="{{ $customer->id }}"
+                                                    data-update-url="{{ route('customers.update', $customer) }}"
                                                     data-name="{{ $customer->full_name }}"
                                                     data-phone="{{ $customer->phone }}"
                                                     data-email="{{ $customer->email }}"

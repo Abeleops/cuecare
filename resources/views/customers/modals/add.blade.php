@@ -1,6 +1,6 @@
 
 <!-- Add Customer Modal -->
-<div id="customersAddModalOverlay" class="customersModalOverlay" hidden>
+<div id="customersAddModalOverlay" data-reopen="{{ $errors->customerCreate->any() ? 'true' : 'false' }}" class="customersModalOverlay" hidden>
     <section id="customersAddModal" role="dialog" aria-modal="true" aria-labelledby="customersAddModalTitle">
         <!-- Modal Header -->
         <div id="customersAddModalHeader">
@@ -16,13 +16,20 @@
         <!-- Customer Form -->
         <form id="customersAddForm" method="POST" action="{{ route('customers.store') }}">
             @csrf
+            @if ($errors->customerCreate->any())
+                <div role="alert" tabindex="-1" data-validation-summary>
+                    <p>Please correct the following</p>
+                    <ul>@foreach ($errors->customerCreate->all() as $message)<li>{{ $message }}</li>@endforeach</ul>
+                </div>
+            @endif
             <div id="customersAddModalBody">
                 <!-- Customer Name -->
                 <div class="customersAddFieldGroup">
                     <label for="customersAddName">Customer Name <span>*</span></label>
                     <div class="customersAddInputContainer">
                         <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <input type="text" id="customersAddName" name="full_name" placeholder="Enter full name" autocomplete="name" required>
+                        <input type="text" id="customersAddName" name="full_name" placeholder="Enter full name" autocomplete="name" required value="{{ $errors->customerCreate->any() ? old('full_name') : '' }}">
+                            @error('full_name', 'customerCreate') <p role="alert">{{ $message }}</p> @enderror
                     </div>
                 </div>
                 <!-- Phone Number and Email -->
@@ -31,14 +38,16 @@
                         <label for="customersAddPhone">Phone Number</label>
                         <div class="customersAddInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">call</span>
-                            <input type="tel" id="customersAddPhone" name="phone" placeholder="Enter phone number (e.g., 0917 123 4567)" autocomplete="tel">
+                            <input type="tel" id="customersAddPhone" name="phone" placeholder="Enter phone number (e.g., 0917 123 4567)" autocomplete="tel" value="{{ $errors->customerCreate->any() ? old('phone') : '' }}">
+                            @error('phone', 'customerCreate') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                     </div>
                     <div class="customersAddFieldGroup">
                         <label for="customersAddEmail">Email</label>
                         <div class="customersAddInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">mail</span>
-                            <input type="email" id="customersAddEmail" name="email" placeholder="Enter email (optional)" autocomplete="email">
+                            <input type="email" id="customersAddEmail" name="email" placeholder="Enter email (optional)" autocomplete="email" value="{{ $errors->customerCreate->any() ? old('email') : '' }}">
+                            @error('email', 'customerCreate') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                     </div>
                 </div>
