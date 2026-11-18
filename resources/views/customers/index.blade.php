@@ -50,10 +50,13 @@
                 </a>
             </nav>
             <div id="dashboardSidebarFooter">
-                <a href="{{ route('login') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">logout</span>
-                    <span>Logout</span>
-                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="dashboardNavLink">
+                        <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+                        <span>Logout</span>
+                    </button>
+                </form>
             </div>
         </aside>
         <!-- Main Content -->
