@@ -23,7 +23,7 @@
                     <label for="customersEditName">Customer Name <span>*</span></label>
                     <div class="customersEditInputContainer">
                         <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <input type="text" id="customersEditName" name="full_name" value="Maria Santos" placeholder="Enter full name" autocomplete="name" required>
+                        <input type="text" id="customersEditName" name="full_name" placeholder="Enter full name" autocomplete="name" required>
                     </div>
                 </div>
                 <!-- Phone Number and Email -->
@@ -32,14 +32,14 @@
                         <label for="customersEditPhone">Phone Number</label>
                         <div class="customersEditInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">call</span>
-                            <input type="tel" id="customersEditPhone" name="phone" value="0917 123 4567" placeholder="Enter phone number" autocomplete="tel">
+                            <input type="tel" id="customersEditPhone" name="phone" placeholder="Enter phone number" autocomplete="tel">
                         </div>
                     </div>
                     <div class="customersEditFieldGroup">
                         <label for="customersEditEmail">Email</label>
                         <div class="customersEditInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">mail</span>
-                            <input type="email" id="customersEditEmail" name="email" value="maria.santos@gmail.com" placeholder="Enter email" autocomplete="email">
+                            <input type="email" id="customersEditEmail" name="email" placeholder="Enter email" autocomplete="email">
                         </div>
                     </div>
                 </div>

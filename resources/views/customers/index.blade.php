@@ -19,36 +19,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="GG Billiards & Autocare Logo" id="dashboardSidebarLogo">
                 <p id="dashboardSidebarBusinessName">GG BILLIARDS & AUTOCARE</p>
             </div>
-            <nav id="dashboardSidebarNavigation" aria-label="Main navigation">
-                <a href="{{ route('dashboard') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="{{ route('pos.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                    <span>Record Sale</span>
-                </a>
-                <a href="{{ route('products.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
-                    <span>Products</span>
-                </a>
-                <a href="{{ route('customers.index') }}" class="dashboardNavLink active" aria-current="page">
-                    <span class="material-symbols-outlined" aria-hidden="true">groups</span>
-                    <span>Customers</span>
-                </a>
-                <a href="{{ route('staff.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">account_box</span>
-                    <span>Staff</span>
-                </a>
-                <a href="{{ route('sales.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
-                    <span>Sales History</span>
-                </a>
-                <a href="{{ route('reports.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">monitoring</span>
-                    <span>Reports</span>
-                </a>
-            </nav>
+            @include('partials.navigation')
             <div id="dashboardSidebarFooter">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -67,22 +38,18 @@
                     <h1>Customer List</h1>
                     <p>Manage registered customers and their information</p>
                 </div>
-                <div id="dashboardHeaderProfile">
-                    <span class="material-symbols-outlined" id="dashboardProfileIcon" aria-hidden="true">account_circle</span>
-                    <div id="dashboardProfileDetails">
-                        <h2>Ivan Mark Lizardo</h2>
-                        <p>Admin</p>
-                    </div>
-                </div>
+                @include('partials.profile')
             </header>
             <!-- Customers Content -->
             <div id="customersContent">
                 <!-- Search and Add Customer -->
                 <section id="customersToolbar">
-                    <div id="customersSearchContainer">
+                    <form id="customersSearchContainer" method="GET" action="{{ route('customers.index') }}">
                         <span class="material-symbols-outlined" aria-hidden="true">search</span>
-                        <input type="search" id="customersSearchInput" placeholder="Search customer (e.g., name, phone...)" aria-label="Search customers">
-                    </div>
+                        <input type="search" id="customersSearchInput" name="search" value="{{ request('search') }}"
+                            maxlength="100" placeholder="Search customer (e.g., name, phone...)" aria-label="Search customers">
+                        <button type="submit">Search</button>
+                    </form>
                     <button type="button" id="customersAddButton">
                         <span class="material-symbols-outlined" aria-hidden="true">add</span>
                         Add Customer
@@ -122,114 +89,41 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @if(isset($customers))
+                                @if($customers->isNotEmpty())
                                     @foreach($customers as $customer)
-                                        <tr><td>{{ $customer->customer_code }}</td><td>{{ $customer->full_name }}</td><td>{{ $customer->phone ?: '—' }}</td><td>{{ $customer->email ?: '—' }}</td><td><button type="button" class="customersEditButton" data-customer-id="{{ $customer->id }}" aria-label="Edit {{ $customer->full_name }}">Edit</button><form method="POST" action="{{ route('customers.destroy', $customer) }}" style="display:inline" onsubmit="return confirm('Delete this customer?')">@csrf @method('DELETE')<button type="submit" class="customersDeleteButton">Delete</button></form></td></tr>
+                                        <tr>
+                                            <td>{{ $customer->customer_code }}</td>
+                                            <td>{{ $customer->full_name }}</td>
+                                            <td>{{ $customer->phone ?: '—' }}</td>
+                                            <td>{{ $customer->email ?: '—' }}</td>
+                                            <td>
+                                                <button type="button" class="customersEditButton"
+                                                    data-customer-id="{{ $customer->id }}"
+                                                    data-name="{{ $customer->full_name }}"
+                                                    data-phone="{{ $customer->phone }}"
+                                                    data-email="{{ $customer->email }}"
+                                                    aria-label="Edit {{ $customer->full_name }}">Edit</button>
+                                                <form method="POST" action="{{ route('customers.destroy', $customer) }}"
+                                                    style="display:inline" onsubmit="return confirm('Delete this customer?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="customersDeleteButton">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 @else
-                                <!-- Static Sample Customer 1 -->
-                                <tr>
-                                    <td>CUST-001</td>
-                                    <td>Maria Santos</td>
-                                    <td>0917 123 4567</td>
-                                    <td>maria.santos@gmail.com</td>
-                                    <td>
-                                        <div class="customersActionButtons">
-                                            <button type="button" class="customersEditButton" aria-label="Edit Maria Santos">
-                                                <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-                                            </button>
-                                            <button type="button" class="customersDeleteButton" aria-label="Delete Maria Santos">
-                                                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!-- Static Sample Customer 2 -->
-                                <tr>
-                                    <td>CUST-002</td>
-                                    <td>Carlo Reyes</td>
-                                    <td>0920 765 4321</td>
-                                    <td>carlo.reyes@gmail.com</td>
-                                    <td>
-                                        <div class="customersActionButtons">
-                                            <button type="button" class="customersEditButton" aria-label="Edit Carlo Reyes">
-                                                <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-                                            </button>
-                                            <button type="button" class="customersDeleteButton" aria-label="Delete Carlo Reyes">
-                                                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!-- Static Sample Customer 3 -->
-                                <tr>
-                                    <td>CUST-003</td>
-                                    <td>Angelica Cruz</td>
-                                    <td>0918 555 7890</td>
-                                    <td>angelica.cruz@gmail.com</td>
-                                    <td>
-                                        <div class="customersActionButtons">
-                                            <button type="button" class="customersEditButton" aria-label="Edit Angelica Cruz">
-                                                <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-                                            </button>
-                                            <button type="button" class="customersDeleteButton" aria-label="Delete Angelica Cruz">
-                                                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!-- Static Sample Customer 4 -->
-                                <tr>
-                                    <td>CUST-004</td>
-                                    <td>Mark Villanueva</td>
-                                    <td>0935 222 1111</td>
-                                    <td>mark.villanueva@gmail.com</td>
-                                    <td>
-                                        <div class="customersActionButtons">
-                                            <button type="button" class="customersEditButton" aria-label="Edit Mark Villanueva">
-                                                <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-                                            </button>
-                                            <button type="button" class="customersDeleteButton" aria-label="Delete Mark Villanueva">
-                                                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <!-- Static Sample Customer 5 -->
-                                <tr>
-                                    <td>CUST-005</td>
-                                    <td>Denise Flores</td>
-                                    <td>0919 888 3344</td>
-                                    <td>denise.flores@gmail.com</td>
-                                    <td>
-                                        <div class="customersActionButtons">
-                                            <button type="button" class="customersEditButton" aria-label="Edit Denise Flores">
-                                                <span class="material-symbols-outlined" aria-hidden="true">edit</span>
-                                            </button>
-                                            <button type="button" class="customersDeleteButton" aria-label="Delete Denise Flores">
-                                                <span class="material-symbols-outlined" aria-hidden="true">delete</span>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <tr><td colspan="5">No customers found.</td></tr>
                                 @endif
                             </tbody>
                         </table>
                     </div>
                     <!-- Pagination -->
                     <div id="customersPagination">
-                        <p id="customersPaginationInfo">Showing 1 to 5 of 20 customers</p>
+                        <p id="customersPaginationInfo">Showing {{ $customers->firstItem() ?? 0 }} to {{ $customers->lastItem() ?? 0 }} of {{ $customers->total() }} customers</p>
                         <nav id="customersPaginationControls" aria-label="Customer pagination">
-                            <button type="button" class="customersPaginationButton" aria-label="Previous page" disabled>
-                                <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
-                            </button>
-                            <button type="button" class="customersPaginationButton active" aria-current="page">1</button>
-                            <button type="button" class="customersPaginationButton">2</button>
-                            <button type="button" class="customersPaginationButton">3</button>
-                            <button type="button" class="customersPaginationButton">4</button>
-                            <button type="button" class="customersPaginationButton" aria-label="Next page">
-                                <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
-                            </button>
+                            @if ($customers->previousPageUrl()) <a href="{{ $customers->previousPageUrl() }}">Previous</a> @endif
+                            @if ($customers->nextPageUrl()) <a href="{{ $customers->nextPageUrl() }}">Next</a> @endif
                         </nav>
                     </div>
                 </section>

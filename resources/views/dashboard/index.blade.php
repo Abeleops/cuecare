@@ -18,36 +18,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="GG Billiards & Autocare Logo" id="dashboardSidebarLogo">
                 <p id="dashboardSidebarBusinessName">GG BILLIARDS & AUTOCARE</p>
             </div>
-            <nav id="dashboardSidebarNavigation" aria-label="Main navigation">
-                @can('DashboardView')<a href="{{ route('dashboard') }}" class="dashboardNavLink active" aria-current="page">
-                    <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
-                    <span>Dashboard</span>
-                </a>@endcan
-                @can('PosAccess')<a href="{{ route('pos.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                    <span>Record Sale</span>
-                </a>@endcan
-                @can('ProductsView')<a href="{{ route('products.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
-                    <span>Products</span>
-                </a>@endcan
-                @can('CustomersView')<a href="{{ route('customers.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">groups</span>
-                    <span>Customers</span>
-                </a>@endcan
-                @can('StaffView')<a href="{{ route('staff.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">account_box</span>
-                    <span>Staff</span>
-                </a>@endcan
-                @canany(['SalesViewAll', 'SalesViewOwn'])<a href="{{ route('sales.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
-                    <span>Sales History</span>
-                </a>@endcanany
-                @can('ReportsView')<a href="{{ route('reports.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">monitoring</span>
-                    <span>Reports</span>
-                </a>@endcan
-            </nav>
+            @include('partials.navigation')
             <div id="dashboardSidebarFooter">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -64,27 +35,29 @@
                     <h1>Dashboard</h1>
                     <p>Overview of sales, inventory, and operations</p>
                 </div>
-                <div id="dashboardHeaderProfile">
-                    <span class="material-symbols-outlined" id="dashboardProfileIcon" aria-hidden="true">account_circle</span>
-                    <div id="dashboardProfileDetails">
-                        <h2>Ivan Mark Lizardo</h2>
-                        <p>Admin</p>
-                    </div>
-                </div>
+                @include('partials.profile')
             </header>
             <div id="dashboardContent">
+                <form method="GET" action="{{ route('dashboard') }}">
+                    <label for="dashboardStartDate">From</label>
+                    <input id="dashboardStartDate" type="date" name="start_date" value="{{ $startDate }}">
+                    <label for="dashboardEndDate">To</label>
+                    <input id="dashboardEndDate" type="date" name="end_date" value="{{ $endDate }}">
+                    <button type="submit">Apply</button>
+                </form>
+                @if ($errors->any()) <p role="alert">{{ $errors->first() }}</p> @endif
                 <!-- Dashboard Statistics -->
                 <section id="dashboardStatistics" aria-label="Sales statistics">
                     <article id="dashboardTodaySalesCard" class="dashboardStatCard">
                         <div class="dashboardStatInformation">
                             <div class="dashboardStatValue">
-                                <h2>₱12,450.00</h2>
+                                <h2>₱{{ number_format($periodTotal, 2) }}</h2>
                                 <span class="dashboardGrowthBadge">
                                     <span class="material-symbols-outlined" aria-hidden="true">arrow_upward</span>
-                                    +10.8%
+                                    {{ sprintf('%+.1f%%', $salesGrowth) }}
                                 </span>
                             </div>
-                            <p>Today's Sales</p>
+                            <p>Sales in selected period</p>
                         </div>
                         <div class="dashboardStatIcon dashboardVioletIcon">
                             <span class="material-symbols-outlined" aria-hidden="true">point_of_sale</span>
@@ -93,10 +66,10 @@
                     <article id="dashboardTransactionsCard" class="dashboardStatCard">
                         <div class="dashboardStatInformation">
                             <div class="dashboardStatValue">
-                                <h2>38</h2>
+                                <h2>{{ $periodTransactions }}</h2>
                                 <span class="dashboardGrowthBadge">
                                     <span class="material-symbols-outlined" aria-hidden="true">arrow_upward</span>
-                                    +12.5%
+                                    {{ sprintf('%+.1f%%', $transactionGrowth) }}
                                 </span>
                             </div>
                             <p>Transactions</p>
@@ -108,7 +81,7 @@
                     <article id="dashboardCustomersCard" class="dashboardStatCard">
                         <div class="dashboardStatInformation">
                             <div class="dashboardStatValue">
-                                <h2>20</h2>
+                                <h2>{{ $customerCount ?? 0 }}</h2>
                             </div>
                             <p>Customers</p>
                         </div>
@@ -119,7 +92,7 @@
                     <article id="dashboardAverageOrderCard" class="dashboardStatCard">
                         <div class="dashboardStatInformation">
                             <div class="dashboardStatValue">
-                                <h2>₱327.63</h2>
+                                <h2>₱{{ number_format($averageOrderValue ?? 0, 2) }}</h2>
                             </div>
                             <p>Average Order Value</p>
                         </div>
@@ -128,10 +101,49 @@
                         </div>
                     </article>
                 </section>
-                <!-- Chart Containers - Reserved for Backend Team -->
+                <!-- Sales charts -->
                 <section id="dashboardCharts" aria-label="Sales charts">
-                    <div id="dashboardTopSellingProducts"></div>
-                    <div id="dashboardSalesByCategory"></div>
+                    <div id="dashboardTopSellingProducts" class="dashboardPanel">
+                        <h2>Top selling products</h2>
+                        <table><thead><tr><th>Product</th><th>Units</th><th>Revenue</th></tr></thead><tbody>
+                            @forelse ($topProducts as $product)
+                                <tr>
+                                    <td>
+                                        {{ $product->product_name }}
+                                        <progress aria-label="Units sold for {{ $product->product_name }}"
+                                            value="{{ $product->units_sold }}"
+                                            max="{{ max(1, $topProducts->max('units_sold')) }}"></progress>
+                                    </td>
+                                    <td>{{ $product->units_sold }}</td>
+                                    <td>₱{{ number_format((float) $product->revenue, 2) }}</td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="3">No sales today.</td></tr>
+                            @endforelse
+                        </tbody></table>
+                    </div>
+                    <div id="dashboardSalesByCategory" class="dashboardPanel">
+                        <h2>Sales by category</h2>
+                        <table><thead><tr><th>Category</th><th>Sales</th><th>Share</th></tr></thead><tbody>
+                            @forelse ($categorySales as $category)
+                                <tr>
+                                    <td>
+                                        {{ [
+                                            'food' => 'Food',
+                                            'beverage' => 'Beverages',
+                                            'alcoholic' => 'Alcoholic Drinks',
+                                        ][$category->category_group] ?? $category->category_group }}
+                                        <progress aria-label="Category sales share" value="{{ $category->revenue }}"
+                                            max="{{ max(1, $categorySales->sum('revenue')) }}"></progress>
+                                    </td>
+                                    <td>₱{{ number_format((float) $category->revenue, 2) }}</td>
+                                    <td>{{ number_format($categorySales->sum('revenue') > 0 ? $category->revenue / $categorySales->sum('revenue') * 100 : 0, 1) }}%</td>
+                                </tr>
+                            @empty
+                                <tr><td colspan="3">No sales today.</td></tr>
+                            @endforelse
+                        </tbody></table>
+                    </div>
                 </section>
                 <!-- Dashboard Bottom Panels -->
                 <section id="dashboardBottomPanels" aria-label="Dashboard activity">
@@ -157,33 +169,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
-                                            SI-047681
-                                        </td>
-                                        <td>Dine-In</td>
-                                        <td>₱450.00</td>
-                                        <td>10:45 AM</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
-                                            SI-047680
-                                        </td>
-                                        <td>Dine-In</td>
-                                        <td>₱320.00</td>
-                                        <td>9:32 AM</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
-                                            SI-047679
-                                        </td>
-                                        <td>Dine-In</td>
-                                        <td>₱680.00</td>
-                                        <td>7:31 PM</td>
-                                    </tr>
+                                    @forelse ($recentSales as $sale)
+                                        <tr>
+                                            <td>
+                                                @if (
+                                                    auth()->user()->hasPermission('SalesViewAll') ||
+                                                    (auth()->user()->hasPermission('SalesViewOwn') && $sale->sold_by === auth()->id())
+                                                )
+                                                    <a href="{{ route('sales.show', $sale) }}">{{ $sale->transaction_code }}</a>
+                                                @else
+                                                    {{ $sale->transaction_code }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $sale->order_type === 'takeout' ? 'Takeout' : 'Dine-In' }}</td>
+                                            <td>₱{{ number_format((float) $sale->total_amount, 2) }}</td>
+                                            <td>{{ $sale->completed_at?->format('h:i A') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="4">No transactions found.</td></tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -194,33 +198,20 @@
                                 <span class="material-symbols-outlined dashboardPanelIcon" aria-hidden="true">warning</span>
                                 <h2>Low Stock Alerts</h2>
                             </div>
-                            <a href="{{ route('products.index') }}" class="dashboardPanelLink">
+                            <a href="{{ route('products.index', ['stock' => 'lowStock']) }}" class="dashboardPanelLink">
                                 View All
                                 <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
                             </a>
                         </div>
                         <div id="dashboardLowStockList">
-                            <div class="dashboardLowStockItem">
-                                <div class="dashboardLowStockProduct">
-                                    <span class="material-symbols-outlined" aria-hidden="true">image</span>
-                                    <span>Coke Mismo</span>
+                            @forelse ($lowStockProducts as $product)
+                                <div class="dashboardLowStockItem">
+                                    <div class="dashboardLowStockProduct"><span>{{ $product->name }}</span></div>
+                                    <span class="dashboardStockBadge">{{ $product->stock_quantity }} left</span>
                                 </div>
-                                <span class="dashboardStockBadge">5 left</span>
-                            </div>
-                            <div class="dashboardLowStockItem">
-                                <div class="dashboardLowStockProduct">
-                                    <span class="material-symbols-outlined" aria-hidden="true">image</span>
-                                    <span>Fries</span>
-                                </div>
-                                <span class="dashboardStockBadge">8 left</span>
-                            </div>
-                            <div class="dashboardLowStockItem">
-                                <div class="dashboardLowStockProduct">
-                                    <span class="material-symbols-outlined" aria-hidden="true">image</span>
-                                    <span>Chicken Wings</span>
-                                </div>
-                                <span class="dashboardStockBadge">6 left</span>
-                            </div>
+                            @empty
+                                <p>No low-stock products.</p>
+                            @endforelse
                         </div>
                     </article>
                     <article id="dashboardTodaySummary" class="dashboardPanel">
@@ -233,15 +224,15 @@
                         <div id="dashboardSummaryList">
                             <div class="dashboardSummaryItem">
                                 <span>Total Sales</span>
-                                <span>₱12,450.00</span>
+                                <span>₱{{ number_format($todayTotal, 2) }}</span>
                             </div>
                             <div class="dashboardSummaryItem">
                                 <span>Total Transaction</span>
-                                <span>38</span>
+                                <span>{{ $todayTransactions }}</span>
                             </div>
                             <div class="dashboardSummaryItem">
                                 <span>Items Sold</span>
-                                <span>112</span>
+                                <span>{{ $itemsSold }}</span>
                             </div>
                         </div>
                     </article>

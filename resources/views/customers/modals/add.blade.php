@@ -22,7 +22,7 @@
                     <label for="customersAddName">Customer Name <span>*</span></label>
                     <div class="customersAddInputContainer">
                         <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <input type="text" id="customersAddName" name="full_name" placeholder="Enter full name (e.g., Maria Santos)" autocomplete="name" required>
+                        <input type="text" id="customersAddName" name="full_name" placeholder="Enter full name" autocomplete="name" required>
                     </div>
                 </div>
                 <!-- Phone Number and Email -->
