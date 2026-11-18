@@ -70,7 +70,7 @@ class DashboardController extends Controller
             'topProducts' => $topProducts,
             'categorySales' => $categorySales,
             'customerCount' => Customer::query()->count(),
-            'averageOrderValue' => $todayTransactions > 0 ? $todayTotal / $todayTransactions : 0,
+            'averageOrderValue' => $periodTransactions > 0 ? $periodTotal / $periodTransactions : 0,
             'recentSales' => Sale::query()->latest('completed_at')->limit(5)->get(),
             'lowStockProducts' => Product::query()
                 ->where('is_active', true)
