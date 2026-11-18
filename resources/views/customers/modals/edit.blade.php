@@ -14,14 +14,16 @@
             </button>
         </div>
         <!-- Edit Customer Form -->
-        <form id="customersEditForm">
+        <form id="customersEditForm" method="POST" action="">
+            @csrf
+            @method('PUT')
             <div id="customersEditModalBody">
                 <!-- Customer Name -->
                 <div class="customersEditFieldGroup">
                     <label for="customersEditName">Customer Name <span>*</span></label>
                     <div class="customersEditInputContainer">
                         <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                        <input type="text" id="customersEditName" name="fullName" value="Maria Santos" placeholder="Enter full name" autocomplete="name" required>
+                        <input type="text" id="customersEditName" name="full_name" value="Maria Santos" placeholder="Enter full name" autocomplete="name" required>
                     </div>
                 </div>
                 <!-- Phone Number and Email -->
@@ -34,10 +36,10 @@
                         </div>
                     </div>
                     <div class="customersEditFieldGroup">
-                        <label for="customersEditEmail">Email <span>*</span></label>
+                        <label for="customersEditEmail">Email</label>
                         <div class="customersEditInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">mail</span>
-                            <input type="email" id="customersEditEmail" name="email" value="maria.santos@gmail.com" placeholder="Enter email" autocomplete="email" required>
+                            <input type="email" id="customersEditEmail" name="email" value="maria.santos@gmail.com" placeholder="Enter email" autocomplete="email">
                         </div>
                     </div>
                 </div>
