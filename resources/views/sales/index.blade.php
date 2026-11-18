@@ -20,34 +20,34 @@
                 <p id="dashboardSidebarBusinessName">GG BILLIARDS & AUTOCARE</p>
             </div>
             <nav id="dashboardSidebarNavigation" aria-label="Main navigation">
-                <a href="{{ route('dashboard') }}" class="dashboardNavLink">
+                @can('DashboardView')<a href="{{ route('dashboard') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
                     <span>Dashboard</span>
-                </a>
-                <a href="{{ route('pos.index') }}" class="dashboardNavLink">
+                </a>@endcan
+                @can('PosAccess')<a href="{{ route('pos.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
                     <span>Record Sale</span>
-                </a>
-                <a href="{{ route('products.index') }}" class="dashboardNavLink">
+                </a>@endcan
+                @can('ProductsView')<a href="{{ route('products.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
                     <span>Products</span>
-                </a>
-                <a href="{{ route('customers.index') }}" class="dashboardNavLink">
+                </a>@endcan
+                @can('CustomersView')<a href="{{ route('customers.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">groups</span>
                     <span>Customers</span>
-                </a>
-                <a href="{{ route('staff.index') }}" class="dashboardNavLink">
+                </a>@endcan
+                @can('StaffView')<a href="{{ route('staff.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">account_box</span>
                     <span>Staff</span>
-                </a>
-                <a href="{{ route('sales.index') }}" class="dashboardNavLink active" aria-current="page">
+                </a>@endcan
+                @canany(['SalesViewAll', 'SalesViewOwn'])<a href="{{ route('sales.index') }}" class="dashboardNavLink active" aria-current="page">
                     <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
                     <span>Sales History</span>
-                </a>
-                <a href="{{ route('reports.index') }}" class="dashboardNavLink">
+                </a>@endcanany
+                @can('ReportsView')<a href="{{ route('reports.index') }}" class="dashboardNavLink">
                     <span class="material-symbols-outlined" aria-hidden="true">monitoring</span>
                     <span>Reports</span>
-                </a>
+                </a>@endcan
             </nav>
             <div id="dashboardSidebarFooter">
                 <a href="{{ route('login') }}" class="dashboardNavLink">
@@ -143,6 +143,11 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @if(isset($sales))
+                                    @foreach($sales as $sale)
+                                        <tr><td>{{ $sale->transaction_code }}</td><td>{{ optional($sale->completed_at)->format('M d, Y h:i A') }}</td><td>{{ $sale->customer?->full_name ?: '—' }}</td><td>₱{{ number_format((float) $sale->total_amount, 2) }}</td><td>{{ strtoupper($sale->payment_method) }}</td><td>{{ $sale->soldBy?->full_name }}</td><td><a href="{{ route('sales.show', $sale) }}">View</a> <a href="{{ route('sales.receipt', $sale) }}">Receipt</a></td></tr>
+                                    @endforeach
+                                @else
                                 <!-- Static Sample Transaction 1 -->
                                 <tr>
                                     <td>TRX-0001</td>
@@ -206,7 +211,6 @@
                                     <td>Jan 30, 2025 03:05 PM</td>
                                     <td>Angelica Cruz</td>
                                     <td>₱600.00</td>
-                                    <td>Card</td>
                                     <td>Juan Dela Cruz</td>
                                     <td>
                                         <div class="salesActionButtons">
@@ -238,6 +242,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>

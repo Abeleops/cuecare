@@ -107,7 +107,6 @@
                                 <option value="all">All Methods</option>
                                 <option value="cash">Cash</option>
                                 <option value="gcash">GCash</option>
-                                <option value="card">Card</option>
                             </select>
                         </div>
                         <button type="button" id="reportsGenerateButton">
