@@ -1,7 +1,29 @@
 import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import { bunny } from 'laravel-vite-plugin/fonts';
+import { createRequire } from 'node:module';
+import { copyFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
+
+const require = createRequire(import.meta.url);
+const laravel = require('laravel-vite-plugin').default;
+
+const copyLaravelManifest = {
+    name: 'copy-laravel-manifest',
+    writeBundle() {
+        const generatedManifest = resolve(
+            process.cwd(),
+            'public/build/.vite/manifest.json',
+        );
+        const LaravelManifest = resolve(
+            process.cwd(),
+            'public/build/manifest.json',
+        );
+
+        if (existsSync(generatedManifest)) {
+            copyFileSync(generatedManifest, LaravelManifest);
+        }
+    },
+};
 
 export default defineConfig({
     plugins: [
@@ -18,14 +40,13 @@ export default defineConfig({
                 'resources/js/pos.js',
             ],
             refresh: true,
-            fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
-                }),
-            ],
         }),
         tailwindcss(),
+        copyLaravelManifest,
     ],
+    build: {
+        manifest: 'manifest.json',
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
