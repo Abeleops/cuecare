@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PosController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
@@ -9,40 +10,58 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
 
-// Public routes.
+// Public routes
 
 Route::view('/', 'landing.index')->name('landing.index');
 
-// Authentication.
+// Authentication
 Route::get('/login', [AuthController::class, 'create'])->name('login');
 Route::post('/login', [AuthController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('login.store');
 
-// Health check.
+// Health check
 Route::get('/health', fn () => response()->json(['status' => 'ok']))
     ->name('health');
 
-// Protected routes require authentication and an active account.
+// Protected routes require authentication and an active account
 
 Route::middleware(['auth', 'active'])->group(function (): void {
-    // Session.
+    // Session
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
-    // Dashboard.
-    Route::view('/dashboard', 'dashboard.index')
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])
         ->middleware('permission:DashboardView')
         ->name('dashboard');
 
-    // POS.
-    Route::view('/pos', 'pos.index')
+    // POS
+    Route::get('/pos', [PosController::class, 'index'])
         ->middleware('permission:PosAccess')
         ->name('pos.index');
+    Route::get('/pos/cart', [PosController::class, 'cart'])
+        ->middleware('permission:PosAccess')
+        ->name('pos.cart');
+    Route::put('/pos/cart/discount', [PosController::class, 'discount'])
+        ->middleware('permission:DiscountApply')
+        ->name('pos.cart.discount');
+    Route::get('/pos/customers/search', [PosController::class, 'searchCustomers'])
+        ->middleware('permission:PosAccess')
+        ->name('pos.customers.search');
+    Route::put('/pos/cart/{product}', [PosController::class, 'updateCart'])
+        ->middleware('permission:PosAccess')
+        ->name('pos.cart.update');
+    Route::delete('/pos/cart/{product}', [PosController::class, 'removeCart'])
+        ->middleware('permission:PosAccess')
+        ->name('pos.cart.remove');
+    Route::delete('/pos/cart', [PosController::class, 'clearCart'])
+        ->middleware('permission:PosAccess')
+        ->name('pos.cart.clear');
     Route::post('/pos/checkout', [PosController::class, 'checkout'])
         ->middleware(['permission:PosAccess', 'throttle:30,1'])
         ->name('pos.checkout');
 
-    // Products and inventory.
+    // Products and inventory
     Route::get('/products', [ProductController::class, 'index'])
         ->middleware('permission:ProductsView')
         ->name('products.index');
@@ -59,7 +78,7 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         ->middleware('permission:InventoryAdjust')
         ->name('products.stock');
 
-    // Customers.
+    // Customers
     Route::get('/customers', [CustomerController::class, 'index'])
         ->middleware('permission:CustomersView')
         ->name('customers.index');
@@ -73,7 +92,7 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         ->middleware('permission:CustomersManage')
         ->name('customers.destroy');
 
-    // Staff.
+    // Staff
     Route::get('/staff', [StaffController::class, 'index'])
         ->middleware('permission:StaffView')
         ->name('staff.index');
@@ -87,10 +106,13 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         ->middleware('permission:StaffManage')
         ->name('staff.destroy');
 
-    // Sales.
+    // Sales
     Route::get('/sales', [SaleController::class, 'index'])
         ->middleware('permission:SalesViewOwn')
         ->name('sales.index');
+    Route::get('/sales/export', [SaleController::class, 'export'])
+        ->middleware(['permission:ReportsExport', 'throttle:10,1'])
+        ->name('sales.export');
     Route::get('/sales/{sale}', [SaleController::class, 'show'])
         ->middleware('permission:SalesViewOwn')
         ->name('sales.show');
@@ -101,7 +123,7 @@ Route::middleware(['auth', 'active'])->group(function (): void {
         ->middleware('permission:SalesVoid')
         ->name('sales.void');
 
-    // Reports and exports.
+    // Reports and exports
     Route::get('/reports', [ReportController::class, 'index'])
         ->middleware('permission:ReportsView')
         ->name('reports.index');
