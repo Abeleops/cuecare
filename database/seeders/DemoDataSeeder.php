@@ -116,7 +116,7 @@ class DemoDataSeeder extends Seeder
 
             $sales = [
                 [
-                    'transaction_code' => 'DEMO-CASH-0001',
+                    'transaction_code' => 'TRX-900001',
                     'customer_id' => $customerOneId,
                     'payment_method' => 'cash',
                     'subtotal' => 290.00,
@@ -128,9 +128,10 @@ class DemoDataSeeder extends Seeder
                     ],
                 ],
                 [
-                    'transaction_code' => 'DEMO-GCASH-0001',
+                    'transaction_code' => 'TRX-900002',
                     'customer_id' => $customerTwoId,
                     'payment_method' => 'gcash',
+                    'gcash_reference' => 'DEMO1234',
                     'subtotal' => 180.00,
                     'amount_received' => 180.00,
                     'change_amount' => 0.00,
@@ -172,6 +173,7 @@ class DemoDataSeeder extends Seeder
                         'discount_amount' => 0,
                         'total_amount' => $sale['subtotal'],
                         'payment_method' => $sale['payment_method'],
+                        'gcash_reference' => $sale['gcash_reference'] ?? null,
                         'amount_received' => $sale['amount_received'],
                         'change_amount' => $sale['change_amount'],
                         'status' => 'completed',
