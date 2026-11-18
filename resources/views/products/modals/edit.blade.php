@@ -23,6 +23,9 @@
             @method('PUT')
             <input type="hidden" name="_edit_id" value="{{ old('_edit_id') }}">
             <input type="hidden" name="remove_image" id="productsRemoveImageFlag" value="{{ old('remove_image', '0') }}">
+            @can('InventoryAdjust')
+                <input type="hidden" name="original_stock" value="{{ old('original_stock') }}">
+            @endcan
             <div id="productsEditModalBody">
                 <!-- Product Image -->
                 <div id="productsEditImageGroup">
@@ -48,8 +51,8 @@
                         <div class="productsEditInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">inventory_2</span>
                             <input type="text" id="productsEditName" name="name" placeholder="Enter product name" required value="{{ $errors->productEdit->any() ? old('name') : '' }}">
-                            @error('name', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                         </div>
+                        @error('name', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                     </div>
                     <div class="productsEditFieldGroup">
                         <label for="productsEditCategory">Category <span>*</span></label>
@@ -57,12 +60,13 @@
                             <span class="material-symbols-outlined" aria-hidden="true">sell</span>
                             <select id="productsEditCategory" name="category_id" required>
                                 <option value="">Select category</option>
-                                @foreach(($categories ?? collect())->flatMap(fn ($category) => $category->children) as $category)
+                                @foreach ($availableCategories as $category)
                                     <option value="{{ $category->id }}" @selected($errors->productEdit->any() && (string) old('category_id') === (string) $category->id)>{{ $category->name }}</option>
                                 @endforeach
                             </select>
-                        @error('category_id', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                         </div>
+                        @error('category_id', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
+                        @include('products.modals.category-creator', ['context' => 'Edit'])
                     </div>
                     <div id="productsEditNumberFields">
                         <div class="productsEditFieldGroup">
@@ -70,15 +74,25 @@
                             <div class="productsEditInputContainer">
                                 <span class="productsEditCurrencyIcon">₱</span>
                                 <input type="number" id="productsEditPrice" name="price" min="0" step="0.01" required value="{{ $errors->productEdit->any() ? old('price') : '' }}">
-                            @error('price', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                             </div>
+                            @error('price', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                         </div>
+                        @can('InventoryAdjust')
+                            <div class="productsEditFieldGroup">
+                                <label for="productsEditStockQuantity">Stock quantity <span>*</span></label>
+                                <div class="productsEditInputContainer">
+                                    <input type="number" id="productsEditStockQuantity" name="stock_quantity" min="0" max="2147483647" step="1" required value="{{ $errors->productEdit->any() ? old('stock_quantity') : '' }}">
+                                </div>
+                                @error('stock_quantity', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
+                                @error('original_stock', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
+                            </div>
+                        @endcan
                         <div class="productsEditFieldGroup">
                             <label for="productsEditThreshold">Low stock threshold <span>*</span></label>
                             <div class="productsEditInputContainer">
                                 <input type="number" id="productsEditThreshold" name="low_stock_threshold" min="0" step="1" required value="{{ $errors->productEdit->any() ? old('low_stock_threshold') : '' }}">
-                            @error('low_stock_threshold', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                             </div>
+                            @error('low_stock_threshold', 'productEdit') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                     </div>
                 </div>
