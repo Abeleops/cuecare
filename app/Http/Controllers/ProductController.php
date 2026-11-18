@@ -85,7 +85,13 @@ class ProductController extends Controller
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
+        } elseif ($request->boolean('remove_image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $data['image'] = null;
         }
+        unset($data['remove_image']);
         // Stock changes use the separate adjustment route
         unset($data['stock_quantity']);
         $product->update($data);
