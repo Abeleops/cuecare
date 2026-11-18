@@ -122,9 +122,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         // Get Customer Information From Selected Row
-        nameInput.value = cells[1].textContent.trim();
-        phoneInput.value = cells[2].textContent.trim();
-        emailInput.value = cells[3].textContent.trim();
+        nameInput.value = button.dataset.name;
+        phoneInput.value = button.dataset.phone;
+        emailInput.value = button.dataset.email;
 
         previousFocus = document.activeElement;
 
