@@ -122,6 +122,7 @@
                                             <td>
                                                 <button type="button" class="staffEditButton"
                                                     data-user-id="{{ $member->id }}"
+                                                    data-update-url="{{ route('staff.update', $member) }}"
                                                     data-role-key="{{ $member->role?->key }}"
                                                     aria-label="Edit {{ $member->full_name }}">Edit</button>
                                                 <form method="POST" action="{{ route('staff.destroy', $member) }}"

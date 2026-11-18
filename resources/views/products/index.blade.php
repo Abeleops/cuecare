@@ -153,6 +153,7 @@
                                                     <div class="productsActionButtons">
                                                         <button type="button" class="productsEditButton"
                                                             data-product-id="{{ $product->id }}"
+                                                            data-update-url="{{ route('products.update', $product) }}"
                                                             data-category-id="{{ $product->category_id }}"
                                                             data-low-stock-threshold="{{ $product->low_stock_threshold }}"
                                                             aria-label="Edit {{ $product->name }}">

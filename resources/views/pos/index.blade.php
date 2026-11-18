@@ -12,7 +12,13 @@
     @vite(['resources/css/app.css', 'resources/js/pos.js'])
 </head>
 <body>
-    <div id="posPage">
+    <div id="posPage"
+        data-cart-url="{{ route('pos.cart') }}"
+        data-cart-clear-url="{{ route('pos.cart.clear') }}"
+        data-discount-url="{{ route('pos.cart.discount') }}"
+        data-cart-update-url="{{ route('pos.cart.update', ['product' => '__ID__']) }}"
+        data-cart-remove-url="{{ route('pos.cart.remove', ['product' => '__ID__']) }}"
+        data-customer-search-url="{{ route('pos.customers.search') }}">
         <!-- Sidebar -->
         <aside id="dashboardSidebar">
             <div id="dashboardSidebarBranding">

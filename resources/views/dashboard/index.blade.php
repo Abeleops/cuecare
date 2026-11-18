@@ -105,7 +105,8 @@
                 <section id="dashboardCharts" aria-label="Sales charts">
                     <div id="dashboardTopSellingProducts" class="dashboardPanel">
                         <h2>Top selling products</h2>
-                        <table><thead><tr><th>Product</th><th>Units</th><th>Revenue</th></tr></thead><tbody>
+                        <p>Gross sales do not include sale-level discounts</p>
+                        <table><thead><tr><th>Product</th><th>Units</th><th>Gross sales</th></tr></thead><tbody>
                             @forelse ($topProducts as $product)
                                 <tr>
                                     <td>
@@ -124,7 +125,8 @@
                     </div>
                     <div id="dashboardSalesByCategory" class="dashboardPanel">
                         <h2>Sales by category</h2>
-                        <table><thead><tr><th>Category</th><th>Sales</th><th>Share</th></tr></thead><tbody>
+                        <p>Gross sales do not include sale-level discounts</p>
+                        <table><thead><tr><th>Category</th><th>Gross sales</th><th>Share</th></tr></thead><tbody>
                             @forelse ($categorySales as $category)
                                 <tr>
                                     <td>
