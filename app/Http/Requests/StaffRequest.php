@@ -22,7 +22,28 @@ class StaffRequest extends FormRequest
     public function rules(): array
     {
         $user = $this->route('user');
+        $passwordRule = Password::min(10);
+        if (app()->isProduction()) {
+            $passwordRule->uncompromised();
+        }
 
-        return ['full_name' => ['required', 'string', 'max:150'], 'username' => ['required', 'string', 'max:50', 'regex:/^[A-Za-z0-9._-]+$/', Rule::unique('users', 'username')->ignore($user)], 'email' => ['nullable', 'email:rfc', 'max:150', Rule::unique('users', 'email')->ignore($user)], 'role' => ['required', Rule::exists('roles', 'key')], 'password' => [$user ? 'nullable' : 'required', Password::min(10)], 'avatar' => ['nullable', File::image()->types(['jpg', 'jpeg', 'png', 'webp'])->max(2048)->dimensions(Rule::dimensions()->maxWidth(4096)->maxHeight(4096))], 'is_active' => ['sometimes', 'boolean']];
+        return [
+            'full_name' => ['required', 'string', 'max:150'],
+            'username' => [
+                'required', 'string', 'max:50', 'regex:/^[A-Za-z0-9._-]+$/',
+                Rule::unique('users', 'username')->ignore($user),
+            ],
+            'email' => ['nullable', 'email:rfc', 'max:150', Rule::unique('users', 'email')->ignore($user)],
+            'role' => ['required', Rule::exists('roles', 'key')],
+            'password' => [$user ? 'nullable' : 'required', 'different:username', $passwordRule],
+            'avatar' => [
+                'nullable',
+                File::image()
+                    ->types(['jpg', 'jpeg', 'png', 'webp'])
+                    ->max(2048)
+                    ->dimensions(Rule::dimensions()->maxWidth(4096)->maxHeight(4096)),
+            ],
+            'is_active' => ['sometimes', 'boolean'],
+        ];
     }
 }
