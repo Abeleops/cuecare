@@ -7359,3 +7359,218 @@ button.dashboardNavLink {
         flex-wrap: wrap;
     }
 }
+
+/* Product form layout */
+.productsStatusMessage {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #34784b;
+    border-radius: 0.5rem;
+    color: #c5f3d0;
+    background: #173321;
+    font-size: 0.875rem;
+}
+
+#productsAddModal,
+#productsEditModal {
+    width: min(42rem, 100%);
+}
+
+#productsAddForm,
+#productsEditForm {
+    flex: 1;
+    overflow: hidden;
+}
+
+#productsAddModalBody,
+#productsEditModalBody {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 1.25rem;
+    padding: 1.25rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#productsAddImageGroup,
+#productsEditImageGroup {
+    width: 100%;
+}
+
+#productsAddImageUpload {
+    min-height: 8rem;
+}
+
+#productsAddNumberFields,
+#productsEditNumberFields {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.productsAddFieldGroup > label,
+.productsEditFieldGroup > label {
+    white-space: normal;
+    font-size: 0.75rem;
+}
+
+.productsAddInputContainer,
+.productsEditInputContainer,
+.productsCategorySelect {
+    min-height: 2.75rem;
+}
+
+.productsAddInputContainer input,
+.productsEditInputContainer input,
+.productsEditInputContainer select {
+    font-size: 0.8125rem;
+}
+
+.productsCategorySelect {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.625rem;
+    border: 1px solid #383d45;
+    border-radius: 0.375rem;
+    background: var(--productsInputColor);
+}
+
+.productsCategorySelect:focus-within {
+    border-color: var(--productsAccentColor);
+}
+
+.productsCategorySelect .material-symbols-outlined {
+    color: #c4c4c8;
+    font-size: 1.125rem;
+}
+
+.productsCategorySelect select {
+    width: 100%;
+    min-width: 0;
+    min-height: 2.75rem;
+    border: 0;
+    outline: 0;
+    color: var(--textColor);
+    background: transparent;
+    font: inherit;
+    font-size: 0.8125rem;
+}
+
+.productsCategorySelect option,
+.productsCategoryFields option {
+    color: var(--textColor);
+    background: var(--productsSurfaceColor);
+}
+
+.productsCategoryToggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.35rem 0;
+    border: 0;
+    background: transparent;
+    color: var(--productsAccentColor);
+    font: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.productsCategoryToggle .material-symbols-outlined {
+    font-size: 1.125rem;
+}
+
+.productsCategoryFields {
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.875rem;
+    border: 1px solid var(--productsBorderColor);
+    border-radius: 0.5rem;
+    background: var(--productsInputColor);
+}
+
+.productsCategoryFields[hidden] {
+    display: none;
+}
+
+.productsCategoryFields label,
+.productsCategoryResult,
+.productsCategoryMessage {
+    font-size: 0.75rem;
+    line-height: 1.4;
+}
+
+.productsCategoryFields input,
+.productsCategoryFields select {
+    width: 100%;
+    min-height: 2.5rem;
+    padding: 0.5rem;
+    border: 1px solid #484e57;
+    border-radius: 0.375rem;
+    color: var(--textColor);
+    background: var(--productsSurfaceColor);
+    font: inherit;
+    font-size: 0.8125rem;
+}
+
+.productsCategoryMessage {
+    color: #ff8c8c;
+}
+
+.productsCategoryResult {
+    color: #9bdba9;
+}
+
+.productsCategoryActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.productsCategoryActions button {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #484e57;
+    border-radius: 0.375rem;
+    color: var(--textColor);
+    background: transparent;
+    font: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.productsCategoryActions [data-category-save] {
+    border-color: var(--productsAccentColor);
+    color: #111;
+    background: var(--productsAccentColor);
+}
+
+.productsModalOverlay :is(button, input, select):focus-visible {
+    outline: 2px solid var(--productsAccentColor);
+    outline-offset: 2px;
+}
+
+.productsModalOverlay :is(.productsAddInputContainer, .productsEditInputContainer, .productsCategorySelect):focus-within {
+    border-color: var(--productsAccentColor);
+    box-shadow: 0 0 0 1px var(--productsAccentColor);
+}
+
+.productsModalOverlay :is(.productsAddInputContainer, .productsEditInputContainer, .productsCategorySelect) :is(input, select):focus-visible {
+    outline: none;
+}
+
+@media (max-width: 560px) {
+    #productsAddModalBody,
+    #productsEditModalBody {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #productsAddImageGroup,
+    #productsEditImageGroup {
+        max-width: 9rem;
+    }
+
+    #productsAddNumberFields,
+    #productsEditNumberFields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
