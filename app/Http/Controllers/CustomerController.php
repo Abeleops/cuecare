@@ -13,22 +13,41 @@ class CustomerController extends Controller
 {
     public function index(Request $request): View
     {
-        $sort = $request->input('sort', 'full_name');
-        abort_unless(in_array($sort, ['customer_code', 'full_name', 'created_at'], true), 422);
-        $customers = Customer::query()->when($request->filled('search'), fn ($query) => $query->where(function ($query) use ($request): void { $term = '%'.$request->string('search').'%'; $query->where('full_name', 'like', $term)->orWhere('phone', 'like', $term)->orWhere('email', 'like', $term); }))->orderBy($sort)->paginate(25)->withQueryString();
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+            'sort' => ['nullable', 'in:customer_code,full_name,created_at'],
+        ]);
+        $search = trim($filters['search'] ?? '');
+        $term = '%'.str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $search).'%';
+        $customers = Customer::query()
+            ->when($search !== '', fn ($query) => $query->where(function ($query) use ($term): void {
+                $query->where('full_name', 'like', $term)
+                    ->orWhere('phone', 'like', $term)
+                    ->orWhere('email', 'like', $term);
+            }))
+            ->orderBy($filters['sort'] ?? 'full_name')
+            ->paginate(25)
+            ->withQueryString();
+
         return view('customers.index', ['customers' => $customers]);
     }
 
     public function store(CustomerRequest $request, AuditLogger $audit): RedirectResponse
     {
-        $customer = Customer::query()->create([...$request->validated(), 'customer_code' => 'CUST-'.str_pad((string) (Customer::withTrashed()->max('id') + 1), 6, '0', STR_PAD_LEFT)]);
+        $customer = Customer::query()->create([
+            ...$request->validated(),
+            'customer_code' => 'CUST-'.str_pad((string) (Customer::withTrashed()->max('id') + 1), 6, '0', STR_PAD_LEFT),
+        ]);
         $audit->record('customer_created', $customer);
+
         return back()->with('status', 'Customer created.');
     }
 
-    public function update(CustomerRequest $request, Customer $customer): RedirectResponse
+    public function update(CustomerRequest $request, Customer $customer, AuditLogger $audit): RedirectResponse
     {
         $customer->update($request->validated());
+        $audit->record('customer_updated', $customer);
+
         return back()->with('status', 'Customer updated.');
     }
 
@@ -36,6 +55,7 @@ class CustomerController extends Controller
     {
         $customer->delete();
         $audit->record('customer_deleted', $customer);
+
         return back()->with('status', 'Customer deleted.');
     }
 }
