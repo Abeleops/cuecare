@@ -121,7 +121,7 @@
                             </div>
                             <div id="reportsSalesTrendChart">
                                 <table>
-                                    <thead><tr><th>Date</th><th>Sales</th></tr></thead>
+                                    <thead><tr><th scope="col">Date</th><th scope="col">Sales</th></tr></thead>
                                     <tbody>
                                         @forelse ($dailyTotals as $day)
                                             <tr>

@@ -6488,13 +6488,50 @@ button.dashboardNavLink {
     height: 12.5rem;
 }
 
-/* Sales Trend Chart Placeholder */
+/* Sales Trend */
 
 #reportsSalesTrendChart {
     flex: 1;
     min-height: 0;
     width: 100%;
     border-radius: 0.375rem;
+    overflow: auto;
+}
+
+#reportsSalesTrendChart table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#reportsSalesTrendChart th,
+#reportsSalesTrendChart td {
+    padding: 0.5rem 0;
+    text-align: left;
+    vertical-align: middle;
+}
+
+#reportsSalesTrendChart th {
+    color: var(--dashboardMutedColor);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+#reportsSalesTrendChart td {
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+}
+
+#reportsSalesTrendChart th + th,
+#reportsSalesTrendChart td + td {
+    padding-left: 1rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+#reportsSalesTrendChart progress {
+    width: min(100%, 20rem);
+    height: 0.375rem;
+    margin-top: 0.375rem;
 }
 
 /* Top Selling Products */
