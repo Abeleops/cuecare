@@ -6,6 +6,7 @@ enum Permission: string
 {
     case DashboardView = 'DashboardView';
     case PosAccess = 'PosAccess';
+    case DiscountApply = 'DiscountApply';
     case ProductsView = 'ProductsView';
     case ProductsManage = 'ProductsManage';
     case InventoryAdjust = 'InventoryAdjust';
