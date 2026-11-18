@@ -4,6 +4,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 uses(DatabaseTransactions::class);
 
@@ -73,9 +74,12 @@ it('shows split sales in all reports but excludes them from individual payment f
     $this->get(route('reports.index'))->assertOk()->assertViewHas('salesTotal', 250.0)->assertSee('Cash + GCash: ₱100.00');
     $this->get(route('reports.index', ['payment' => 'cash']))->assertOk()->assertViewHas('salesTotal', 100.0);
     $this->get(route('reports.index', ['payment' => 'gcash']))->assertOk()->assertViewHas('salesTotal', 50.0);
-    $this->get(route('reports.export', ['type' => 'sales']))->assertOk()->assertSee('SPLIT1');
-    $this->get(route('reports.export', ['type' => 'sales', 'payment' => 'cash']))->assertOk()->assertDontSee('SPLIT1');
-    $this->get(route('reports.export', ['type' => 'sales', 'payment' => 'gcash']))->assertOk()->assertDontSee('SPLIT1');
+    $all = readReportWorkbook($this->get(route('reports.export', ['type' => 'sales']))->assertOk()->getContent());
+    $cash = readReportWorkbook($this->get(route('reports.export', ['type' => 'sales', 'payment' => 'cash']))->assertOk()->getContent());
+    $gcash = readReportWorkbook($this->get(route('reports.export', ['type' => 'sales', 'payment' => 'gcash']))->assertOk()->getContent());
+    expect(array_column($all->getActiveSheet()->toArray(), 0))->toContain('SPLIT1')
+        ->and(array_column($cash->getActiveSheet()->toArray(), 0))->not->toContain('SPLIT1')
+        ->and(array_column($gcash->getActiveSheet()->toArray(), 0))->not->toContain('SPLIT1');
 });
 
 it('exports only active inventory and escapes spreadsheet formulas', function (): void {
@@ -97,7 +101,13 @@ it('exports only active inventory and escapes spreadsheet formulas', function ()
         'is_active' => false,
     ]);
     $this->get(route('reports.inventory'))->assertOk()->assertSee('=1+1')->assertDontSee('Inactive product');
-    $this->get(route('reports.export', ['type' => 'inventory']))->assertOk()->assertSee("'=1+1", false)->assertDontSee('Inactive product');
+    $response = $this->get(route('reports.export', ['type' => 'inventory']))->assertOk();
+    $sheet = readReportWorkbook($response->getContent())->getActiveSheet();
+    expect($sheet->getCell('A6')->getValue())->toBe('=1+1')
+        ->and($sheet->getCell('A6')->getDataType())->toBe(DataType::TYPE_STRING)
+        ->and($sheet->getCell('C6')->getValue())->toEqual(1)
+        ->and($sheet->getCell('D6')->getDataType())->toBe(DataType::TYPE_NUMERIC)
+        ->and(array_column($sheet->toArray(), 0))->not->toContain('Inactive product');
 });
 
 it('restricts report exports to administrators and rate limits repeated exports', function (): void {
@@ -126,8 +136,11 @@ it('exports sales through the dedicated route with the same filters and permissi
     $export = $this->get(route('sales.export', $filters));
 
     $report->assertOk();
-    $export->assertOk()->assertSee('CASH1')->assertDontSee('GCASH1')->assertDontSee('VOID1');
-    expect($export->getContent())->toBe($report->getContent());
+    $export->assertOk();
+    $reportRows = readReportWorkbook($report->getContent())->getActiveSheet()->toArray();
+    $exportRows = readReportWorkbook($export->getContent())->getActiveSheet()->toArray();
+    expect(array_column($exportRows, 0))->toContain('CASH1')->not->toContain('GCASH1', 'VOID1')
+        ->and($exportRows)->toBe($reportRows);
 
     foreach (['cashier', 'staff'] as $key) {
         $role = Role::query()->create(['name' => 'Export '.$key, 'key' => $key]);
