@@ -79,7 +79,7 @@
                         </div>
                         <button type="submit" id="reportsInventoryGenerateButton">Apply filters</button>
                         @can('ReportsExport')
-                            <button type="submit" id="reportsInventoryExportButton" formaction="{{ route('reports.export') }}" name="type" value="inventory">Export CSV</button>
+                            <button type="submit" id="reportsInventoryExportButton" formaction="{{ route('reports.export') }}" name="type" value="inventory">Export Excel</button>
                         @endcan
                     </form>
                     <!-- Inventory Statistics -->

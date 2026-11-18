@@ -78,7 +78,7 @@
                             Generate Report
                         </button>
                         @can('ReportsExport')
-                            <button type="submit" id="reportsExportButton" formaction="{{ route('reports.export') }}" name="type" value="sales">Export CSV</button>
+                            <button type="submit" id="reportsExportButton" formaction="{{ route('reports.export') }}" name="type" value="sales">Export Excel</button>
                         @endcan
                     </form>
                     @if ($errors->any()) <p role="alert">{{ $errors->first() }}</p> @endif
