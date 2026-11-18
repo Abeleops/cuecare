@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class StaffController extends Controller
@@ -42,12 +43,17 @@ class StaffController extends Controller
         $role = Role::query()->where('key', $data['role'])->firstOrFail();
         unset($data['role'], $data['password_confirmation']);
         $data['role_id'] = $role->id;
-        $data['staff_code'] = 'STF-'.str_pad((string) (User::withTrashed()->max('id') + 1), 4, '0', STR_PAD_LEFT);
+        $data['staff_code'] = 'TMP-'.Str::random(16);
         $data['date_joined'] = today();
         if ($request->hasFile('avatar')) {
             $data['avatar'] = $images->store($request->file('avatar'), 'avatars', 'avatar');
         }
-        $user = User::query()->create($data);
+        $user = DB::transaction(function () use ($data): User {
+            $user = User::query()->create($data);
+            $user->update(['staff_code' => 'STF-'.str_pad((string) $user->id, 4, '0', STR_PAD_LEFT)]);
+
+            return $user;
+        });
         $audit->record('staff_created', $user, ['role' => $role->key]);
 
         return back()->with('status', 'Staff account created.');
