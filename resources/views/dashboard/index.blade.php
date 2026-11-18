@@ -105,46 +105,51 @@
                 <section id="dashboardCharts" aria-label="Sales charts">
                     <div id="dashboardTopSellingProducts" class="dashboardPanel">
                         <h2>Top selling products</h2>
-                        <p>Gross sales do not include sale-level discounts</p>
-                        <table><thead><tr><th>Product</th><th>Units</th><th>Gross sales</th></tr></thead><tbody>
+                        <p class="dashboardGraphNote">Bars show units sold · Gross sales exclude sale-level discounts</p>
+                        <ul class="dashboardGraphList" aria-label="Top products by units sold">
                             @forelse ($topProducts as $product)
-                                <tr>
-                                    <td>
-                                        {{ $product->product_name }}
-                                        <progress aria-label="Units sold for {{ $product->product_name }}"
-                                            value="{{ $product->units_sold }}"
-                                            max="{{ max(1, $topProducts->max('units_sold')) }}"></progress>
-                                    </td>
-                                    <td>{{ $product->units_sold }}</td>
-                                    <td>₱{{ number_format((float) $product->revenue, 2) }}</td>
-                                </tr>
+                                <li class="dashboardGraphRow">
+                                    <div class="dashboardGraphLabel">
+                                        <span>{{ $product->product_name }}</span>
+                                        <span class="dashboardGraphValue">{{ number_format($product->units_sold) }} sold · ₱{{ number_format((float) $product->revenue, 2) }}</span>
+                                    </div>
+                                    <progress aria-label="{{ $product->product_name }}: {{ $product->units_sold }} units sold"
+                                        value="{{ $product->units_sold }}"
+                                        max="{{ max(1, $topProducts->max('units_sold')) }}"></progress>
+                                </li>
                             @empty
-                                <tr><td colspan="3">No sales today.</td></tr>
+                                <li class="dashboardGraphEmpty">No sales for this period</li>
                             @endforelse
-                        </tbody></table>
+                        </ul>
                     </div>
                     <div id="dashboardSalesByCategory" class="dashboardPanel">
                         <h2>Sales by category</h2>
-                        <p>Gross sales do not include sale-level discounts</p>
-                        <table><thead><tr><th>Category</th><th>Gross sales</th><th>Share</th></tr></thead><tbody>
+                        <p class="dashboardGraphNote">Bars show share of gross sales · Discounts are not included</p>
+                        @php
+                            $categoryTotal = $categorySales->sum('revenue');
+                        @endphp
+                        <ul class="dashboardGraphList" aria-label="Gross sales share by category">
                             @forelse ($categorySales as $category)
-                                <tr>
-                                    <td>
-                                        {{ [
-                                            'food' => 'Food',
-                                            'beverage' => 'Beverages',
-                                            'alcoholic' => 'Alcoholic Drinks',
-                                        ][$category->category_group] ?? $category->category_group }}
-                                        <progress aria-label="Category sales share" value="{{ $category->revenue }}"
-                                            max="{{ max(1, $categorySales->sum('revenue')) }}"></progress>
-                                    </td>
-                                    <td>₱{{ number_format((float) $category->revenue, 2) }}</td>
-                                    <td>{{ number_format($categorySales->sum('revenue') > 0 ? $category->revenue / $categorySales->sum('revenue') * 100 : 0, 1) }}%</td>
-                                </tr>
+                                @php
+                                    $categoryName = [
+                                        'food' => 'Food',
+                                        'beverage' => 'Beverages',
+                                        'alcoholic' => 'Alcoholic Drinks',
+                                    ][$category->category_group] ?? $category->category_group;
+                                    $categoryShare = $categoryTotal > 0 ? $category->revenue / $categoryTotal * 100 : 0;
+                                @endphp
+                                <li class="dashboardGraphRow">
+                                    <div class="dashboardGraphLabel">
+                                        <span>{{ $categoryName }}</span>
+                                        <span class="dashboardGraphValue">₱{{ number_format((float) $category->revenue, 2) }} · {{ number_format($categoryShare, 1) }}%</span>
+                                    </div>
+                                    <progress aria-label="{{ $categoryName }}: {{ number_format($categoryShare, 1) }}% of gross sales"
+                                        value="{{ $category->revenue }}" max="{{ $categoryTotal > 0 ? $categoryTotal : 1 }}"></progress>
+                                </li>
                             @empty
-                                <tr><td colspan="3">No sales today.</td></tr>
+                                <li class="dashboardGraphEmpty">No sales for this period</li>
                             @endforelse
-                        </tbody></table>
+                        </ul>
                     </div>
                 </section>
                 <!-- Dashboard Bottom Panels -->
