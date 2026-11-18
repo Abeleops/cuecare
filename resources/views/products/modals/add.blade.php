@@ -49,10 +49,21 @@
                         </div>
                         <div class="productsAddFieldGroup">
                             <label for="productsAddThreshold">Low Stock Threshold <span>*</span></label>
-                            <div class="productsAddInputContainer"><input type="number" id="productsAddThreshold" name="low_stock_threshold" value="10" min="0" step="1" required></div>
+                            <div class="productsAddInputContainer">
+                                <input type="number" id="productsAddThreshold" name="low_stock_threshold"
+                                    value="10" min="0" step="1" required>
+                            </div>
                         </div>
                     </div>
-                    <div class="productsAddFieldGroup"><label for="productsAddCategory">Category <span>*</span></label><select id="productsAddCategory" name="category_id" required><option value="">Select category</option>@foreach(($categories ?? collect())->flatMap(fn ($category) => $category->children) as $category)<option value="{{ $category->id }}">{{ $category->name }}</option>@endforeach</select></div>
+                    <div class="productsAddFieldGroup">
+                        <label for="productsAddCategory">Category <span>*</span></label>
+                        <select id="productsAddCategory" name="category_id" required>
+                            <option value="">Select category</option>
+                            @foreach(($categories ?? collect())->flatMap(fn ($category) => $category->children) as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
             <div id="productsAddModalFooter">
