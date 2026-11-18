@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\BlockAbusiveIp;
 use App\Http\Middleware\EnsureActiveUser;
 use App\Http\Middleware\RequirePermission;
 use App\Http\Middleware\SecurityHeaders;
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias(['active' => EnsureActiveUser::class, 'permission' => RequirePermission::class]);
         $middleware->append(SecurityHeaders::class);
+        $middleware->append(BlockAbusiveIp::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
