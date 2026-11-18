@@ -71,9 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        alert("Customer form validated! Demo only — no customer was saved.");
-
-        closeModal();
+        addForm.submit();
     });
 });
 
@@ -108,6 +106,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Open Edit Customer Modal
     function openEditModal(button) {
+        if (button.dataset.customerId) {
+            editForm.action = `/customers/${button.dataset.customerId}`;
+        }
         const row = button.closest("tr");
 
         if (!row) {
@@ -178,8 +179,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        alert("Customer changes validated! Demo only — no changes were saved.");
-
-        closeEditModal();
+        editForm.submit();
     });
 });

@@ -114,9 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        alert("Product form validated! Demo only — no product was saved.");
-
-        closeModal();
+        addForm.submit();
     });
 });
 
@@ -155,6 +153,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Open Edit Modal
     editButtons.forEach(function (button) {
         button.addEventListener("click", function () {
+            if (button.dataset.productId) {
+                editForm.action = `/products/${button.dataset.productId}`;
+            }
             const row = button.closest("tr");
 
             if (!row) {
@@ -277,8 +278,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        alert("Product changes validated! Demo only — no changes were saved.");
-
-        closeEditModal();
+        editForm.submit();
     });
 });

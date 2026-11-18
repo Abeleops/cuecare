@@ -165,11 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        alert(
-            "Staff form validated! Demo only — no staff account was created.",
-        );
-
-        closeModal();
+        addForm.submit();
     });
 });
 
@@ -241,6 +237,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Open Edit Staff Modal
     function openEditModal(button) {
+        if (button.dataset.userId) {
+            editForm.action = `/staff/${button.dataset.userId}`;
+        }
         const row = button.closest("tr");
 
         if (!row) {
@@ -257,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fullNameInput.value = cells[2].textContent.trim();
         usernameInput.value = cells[3].textContent.trim();
 
-        const staffRole = cells[4].textContent.trim().toLowerCase();
+        const staffRole = button.dataset.roleKey || cells[4].textContent.trim().toLowerCase();
 
         const matchingRole = Array.from(roleSelect.options).find(
             function (option) {
@@ -376,8 +375,6 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        alert("Staff changes validated! Demo only — no changes were saved.");
-
-        closeEditModal();
+        editForm.submit();
     });
 });
