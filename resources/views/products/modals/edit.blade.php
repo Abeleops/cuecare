@@ -12,7 +12,9 @@
                 <span class="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
         </div>
-        <form id="productsEditForm">
+        <form id="productsEditForm" method="POST" action="" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
             <div id="productsEditModalBody">
                 <!-- Product Image -->
                 <div id="productsEditImageGroup">
@@ -77,7 +79,7 @@
                                 <button type="button" id="productsEditDecreaseStock" aria-label="Decrease stock quantity">
                                     <span class="material-symbols-outlined" aria-hidden="true">remove</span>
                                 </button>
-                                <input type="number" id="productsEditStock" name="stock" value="50" min="0" step="1" required>
+                                <input type="number" id="productsEditStock" name="stock_quantity" value="50" min="0" step="1" required>
                                 <button type="button" id="productsEditIncreaseStock" aria-label="Increase stock quantity">
                                     <span class="material-symbols-outlined" aria-hidden="true">add</span>
                                 </button>
