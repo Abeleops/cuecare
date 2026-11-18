@@ -56,7 +56,7 @@ class SaleController extends Controller
 
     public function export(Request $request, ReportController $reports, AuditLogger $audit): Response
     {
-        // Keep sales exports consistent with the report filters and CSV escaping
+        // Keep sales exports consistent with the report filters
         $request->merge(['type' => 'sales']);
 
         return $reports->export($request, $audit);

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Services\AuditLogger;
+use App\Services\ReportWorkbookService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
@@ -111,9 +112,13 @@ class ReportController extends Controller
         $type = $filters['type'];
         if ($type === 'sales') {
             [$start, $end] = $this->reportDateRange($filters);
+            $details = 'Period: '.$start->toDateString().' to '.$end->toDateString()
+                .' | Payment: '.($filters['payment'] ?? 'all');
             $rows = Sale::query()->with('soldBy')->where('status', 'completed')->whereBetween('completed_at', [$start, $end])
                 ->when(! empty($filters['payment']), fn ($query) => $query->where('payment_method', $filters['payment']))->latest('completed_at')->get();
         } else {
+            $category = ! empty($filters['category']) ? Category::query()->find($filters['category'])?->name : 'All categories';
+            $details = 'Category: '.$category.' | Stock: '.str_replace('_', ' ', $filters['stock'] ?? 'all');
             $rows = Product::query()->where('products.is_active', true)->with('category')
                 ->when(! empty($filters['category']), fn ($query) => $query->where('category_id', $filters['category']))
                 ->when(($filters['stock'] ?? null) === 'out_of_stock', fn ($query) => $query->where('stock_quantity', 0))
@@ -127,34 +132,29 @@ class ReportController extends Controller
         }
         $lines = [];
         if ($type === 'sales') {
-            $lines[] = ['Transaction Code', 'Date', 'Cashier', 'Total', 'Payment'];
+            $headings = ['Transaction Code', 'Date', 'Cashier', 'Total', 'Payment'];
             foreach ($rows as $sale) {
                 $lines[] = [
                     $sale->transaction_code,
                     optional($sale->completed_at)->toIso8601String(),
                     $sale->soldBy?->full_name,
-                    $sale->total_amount,
+                    (float) $sale->total_amount,
                     $sale->payment_method,
                 ];
             }
         } else {
-            $lines[] = ['Product', 'Category', 'Price', 'Stock', 'Low Stock Threshold'];
+            $headings = ['Product', 'Category', 'Price', 'Stock', 'Low Stock Threshold'];
             foreach ($rows as $product) {
-                $lines[] = [$product->name, $product->category?->name, $product->price, $product->stock_quantity, $product->low_stock_threshold];
+                $lines[] = [$product->name, $product->category?->name, (float) $product->price, (int) $product->stock_quantity, (int) $product->low_stock_threshold];
             }
         }
-        // Prefix spreadsheet formulas before quoting CSV fields
-        $csv = collect($lines)->map(fn (array $line) => collect($line)->map(function ($value): string {
-            $value = (string) $value;
-            if (preg_match('/^[\x00-\x20]*[=+@\-]/u', $value)) {
-                $value = "'".$value;
-            }
-
-            return '"'.str_replace('"', '""', $value).'"';
-        })->implode(','))->implode("\r\n")."\r\n";
+        $workbook = app(ReportWorkbookService::class)->create($type, $details, $headings, $lines);
         $audit->record('export', null, ['type' => $type]);
 
-        return response($csv, 200, ['Content-Type' => 'text/csv; charset=UTF-8', 'Content-Disposition' => 'attachment; filename="'.$type.'-report.csv"']);
+        return response($workbook, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="'.$type.'-report.xlsx"',
+        ]);
     }
 
     private function reportDateRange(array $filters): array
