@@ -19,6 +19,7 @@ class EnsureActiveUser
             return redirect()->route('login');
         }
         if ($user) {
+            $user->loadMissing('role');
             $lastActivity = (int) $request->session()->get('last_activity', 0);
             if ($lastActivity > 0 && now()->timestamp - $lastActivity > 1800) {
                 auth()->logout();
