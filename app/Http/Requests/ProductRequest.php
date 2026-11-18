@@ -30,9 +30,15 @@ class ProductRequest extends FormRequest
             ],
             'name' => ['required', 'string', 'max:150'],
             'price' => ['required', 'numeric', 'min:0', 'max:9999999999.99'],
-            // Stock edits go through the adjustment route
             'stock_quantity' => [
-                $this->isMethod('post') ? 'required' : 'prohibited',
+                $this->isMethod('post') ? 'required' : 'required_with:original_stock',
+                Rule::prohibitedIf(! $this->isMethod('post') && ! $this->has('original_stock')),
+                'integer',
+                'min:0',
+                'max:2147483647',
+            ],
+            'original_stock' => [
+                Rule::requiredIf(! $this->isMethod('post') && $this->has('stock_quantity')),
                 'integer',
                 'min:0',
                 'max:2147483647',
