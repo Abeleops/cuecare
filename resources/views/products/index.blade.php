@@ -42,6 +42,9 @@
             </header>
             <!-- Products Content -->
             <div id="productsContent">
+                @if (session('status'))
+                    <div class="productsStatusMessage" role="status">{{ session('status') }}</div>
+                @endif
                 <!-- Category Tabs and Add Product -->
                 <section id="productsToolbar">
                     <div id="productsCategoryTabs">
@@ -70,10 +73,8 @@
                         <label for="productsCategorySelect">Category:</label>
                         <select id="productsCategorySelect" name="category">
                             <option value="">All Categories</option>
-                            @foreach ($categories as $group)
-                                @foreach ($group->children as $category)
-                                    <option value="{{ $category->id }}" @selected((string) request('category') === (string) $category->id)>{{ $category->name }}</option>
-                                @endforeach
+                            @foreach ($availableCategories as $category)
+                                <option value="{{ $category->id }}" @selected((string) request('category') === (string) $category->id)>{{ $category->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -155,6 +156,7 @@
                                                             data-product-id="{{ $product->id }}"
                                                             data-update-url="{{ route('products.update', $product) }}"
                                                             data-category-id="{{ $product->category_id }}"
+                                                            data-stock-quantity="{{ $product->stock_quantity }}"
                                                             data-low-stock-threshold="{{ $product->low_stock_threshold }}"
                                                             aria-label="Edit {{ $product->name }}">
                                                             <span class="material-symbols-outlined" aria-hidden="true">edit</span>
