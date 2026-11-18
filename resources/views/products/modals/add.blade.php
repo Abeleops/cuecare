@@ -37,8 +37,8 @@
                         <div class="productsAddInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">inventory_2</span>
                             <input type="text" id="productsAddName" name="name" placeholder="Enter product name" required value="{{ $errors->productCreate->any() ? old('name') : '' }}">
-                            @error('name', 'productCreate') <p role="alert">{{ $message }}</p> @enderror
                         </div>
+                        @error('name', 'productCreate') <p role="alert">{{ $message }}</p> @enderror
                     </div>
                     <div id="productsAddNumberFields">
                         <div class="productsAddFieldGroup">
@@ -46,35 +46,39 @@
                             <div class="productsAddInputContainer">
                                 <span class="productsAddCurrencyIcon">₱</span>
                                 <input type="number" id="productsAddPrice" name="price" placeholder="Enter price" min="0" step="0.01" required value="{{ $errors->productCreate->any() ? old('price') : '' }}">
-                            @error('price', 'productCreate') <p role="alert">{{ $message }}</p> @enderror
                             </div>
+                            @error('price', 'productCreate') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                         <div class="productsAddFieldGroup">
                             <label for="productsAddStock">Stock Quantity <span>*</span></label>
                             <div class="productsAddInputContainer">
                                 <span class="material-symbols-outlined" aria-hidden="true">tag</span>
                                 <input type="number" id="productsAddStock" name="stock_quantity" placeholder="Enter quantity" min="0" step="1" required value="{{ $errors->productCreate->any() ? old('stock_quantity') : '' }}">
-                            @error('stock_quantity', 'productCreate') <p role="alert">{{ $message }}</p> @enderror
                             </div>
+                            @error('stock_quantity', 'productCreate') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                         <div class="productsAddFieldGroup">
                             <label for="productsAddThreshold">Low Stock Threshold <span>*</span></label>
                             <div class="productsAddInputContainer">
                                 <input type="number" id="productsAddThreshold" name="low_stock_threshold"
                                     min="0" step="1" required value="{{ $errors->productCreate->any() ? old('low_stock_threshold') : '10' }}">
-                            @error('low_stock_threshold', 'productCreate') <p role="alert">{{ $message }}</p> @enderror
                             </div>
+                            @error('low_stock_threshold', 'productCreate') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                     </div>
                     <div class="productsAddFieldGroup">
                         <label for="productsAddCategory">Category <span>*</span></label>
-                        <select id="productsAddCategory" name="category_id" required>
-                            <option value="">Select category</option>
-                            @foreach(($categories ?? collect())->flatMap(fn ($category) => $category->children) as $category)
-                                <option value="{{ $category->id }}" @selected($errors->productCreate->any() && (string) old('category_id') === (string) $category->id)>{{ $category->name }}</option>
-                            @endforeach
-                        </select>
+                        <div class="productsCategorySelect">
+                            <span class="material-symbols-outlined" aria-hidden="true">sell</span>
+                            <select id="productsAddCategory" name="category_id" required>
+                                <option value="">Select category</option>
+                                @foreach ($availableCategories as $category)
+                                    <option value="{{ $category->id }}" @selected($errors->productCreate->any() && (string) old('category_id') === (string) $category->id)>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         @error('category_id', 'productCreate') <p role="alert">{{ $message }}</p> @enderror
+                        @include('products.modals.category-creator', ['context' => 'Add'])
                     </div>
                 </div>
             </div>
