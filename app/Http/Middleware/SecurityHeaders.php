@@ -11,7 +11,12 @@ class SecurityHeaders
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
-        $response->headers->set('Content-Security-Policy', "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'");
+        $contentSecurityPolicy = "default-src 'self'; "
+            ."img-src 'self' data:; "
+            ."style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+            ."font-src 'self' https://fonts.gstatic.com; "
+            ."script-src 'self'";
+        $response->headers->set('Content-Security-Policy', $contentSecurityPolicy);
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
