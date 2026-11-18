@@ -4,6 +4,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 
 uses(DatabaseTransactions::class);
 
@@ -38,7 +39,21 @@ it('exports only completed sales matching the selected filters', function (): vo
     ]);
     $user = (new User)->forceFill(['id' => 1, 'is_active' => true]);
     $user->setRelation('role', (new Role)->forceFill(['key' => 'admin']));
-    $this->actingAs($user)->get(route('reports.export', ['type' => 'sales', 'start_date' => '2025-03-01', 'end_date' => '2025-03-30', 'payment' => 'cash']))
-        ->assertOk()->assertSee('TRX-000001')->assertDontSee('TRX-000002')->assertSee("'=Formula", false);
+    $response = $this->actingAs($user)->get(route('reports.export', ['type' => 'sales', 'start_date' => '2025-03-01', 'end_date' => '2025-03-30', 'payment' => 'cash']));
+    $response->assertOk()->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        ->assertHeader('Content-Disposition', 'attachment; filename="sales-report.xlsx"');
+    $sheet = readReportWorkbook($response->getContent())->getActiveSheet();
+    expect($sheet->getCell('A6')->getValue())->toBe('TRX-000001')
+        ->and($sheet->getCell('A7')->getValue())->toBeNull()
+        ->and($sheet->getCell('C6')->getValue())->toBe('=Formula')
+        ->and($sheet->getCell('C6')->getDataType())->toBe(DataType::TYPE_STRING)
+        ->and($sheet->getCell('D6')->getValue())->toEqual(125)
+        ->and($sheet->getCell('D6')->getDataType())->toBe(DataType::TYPE_NUMERIC)
+        ->and($sheet->getCell('A5')->getValue())->toBe('Transaction Code')
+        ->and($sheet->getFreezePane())->toBe('A6')
+        ->and($sheet->getStyle('A5')->getFont()->getBold())->toBeTrue()
+        ->and($sheet->getStyle('A5')->getFill()->getStartColor()->getRGB())->toBe('FFB800')
+        ->and($sheet->getStyle('D6')->getNumberFormat()->getFormatCode())->toContain('₱')
+        ->and($sheet->getCell('A2')->getValue())->toContain('2025-03-01', '2025-03-30', 'cash');
     $this->assertDatabaseHas('audit_logs', ['action' => 'export']);
 });
