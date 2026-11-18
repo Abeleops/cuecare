@@ -117,7 +117,6 @@ class PosController extends Controller
             'products' => $products,
             'categories' => Category::query()
                 ->where('is_active', true)
-                ->whereNotNull('parent_id')
                 ->orderBy('name')
                 ->get(),
         ]);
