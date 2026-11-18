@@ -131,11 +131,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const nameInput = document.getElementById("productsEditName");
     const priceInput = document.getElementById("productsEditPrice");
-    const stockInput = document.getElementById("productsEditStock");
+    const thresholdInput = document.getElementById("productsEditThreshold");
     const categorySelect = document.getElementById("productsEditCategory");
-
-    const decreaseButton = document.getElementById("productsEditDecreaseStock");
-    const increaseButton = document.getElementById("productsEditIncreaseStock");
 
     const imageInput = document.getElementById("productsEditImage");
     const imagePreview = document.getElementById("productsEditImagePreview");
@@ -166,27 +163,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const productName = row.querySelector(".productsProductInfo span");
             const productImage = row.querySelector(".productsProductImage");
-            const productCategory = row.querySelector(".productsCategoryBadge");
 
             nameInput.value = productName ? productName.textContent.trim() : "";
             priceInput.value = cells[3]
                 ? cells[3].textContent.replace(/[^\d.]/g, "")
                 : "";
-            stockInput.value = cells[4] ? cells[4].textContent.trim() : "0";
-
-            if (productCategory) {
-                const categoryName = productCategory.textContent.trim();
-
-                const matchingOption = Array.from(categorySelect.options).find(
-                    function (option) {
-                        return option.textContent.trim() === categoryName;
-                    },
-                );
-
-                categorySelect.value = matchingOption
-                    ? matchingOption.value
-                    : "";
-            }
+            thresholdInput.value = button.dataset.lowStockThreshold;
+            categorySelect.value = button.dataset.categoryId;
 
             imagePreview.src = productImage ? productImage.src : defaultImage;
             imageInput.value = "";
@@ -224,18 +207,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (event.key === "Escape" && !editOverlay.hidden) {
             closeEditModal();
         }
-    });
-
-    // Decrease Stock
-    decreaseButton.addEventListener("click", function () {
-        const currentStock = Number(stockInput.value) || 0;
-        stockInput.value = Math.max(0, currentStock - 1);
-    });
-
-    // Increase Stock
-    increaseButton.addEventListener("click", function () {
-        const currentStock = Number(stockInput.value) || 0;
-        stockInput.value = currentStock + 1;
     });
 
     // Change Product Image
