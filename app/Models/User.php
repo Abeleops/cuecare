@@ -60,6 +60,7 @@ class User extends Authenticatable
         return [
             'is_active' => 'boolean',
             'date_joined' => 'date',
+            'locked_until' => 'datetime',
             'password' => 'hashed',
         ];
     }

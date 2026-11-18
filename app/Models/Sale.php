@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'total_amount',
     'payment_method',
     'gcash_reference',
+    'cash_amount',
+    'gcash_amount',
     'order_type',
     'amount_received',
     'change_amount',
@@ -28,12 +30,12 @@ class Sale extends Model
 {
     public function customer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class)->withTrashed();
     }
 
     public function soldBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'sold_by');
+        return $this->belongsTo(User::class, 'sold_by')->withTrashed();
     }
 
     public function items(): HasMany
@@ -52,6 +54,8 @@ class Sale extends Model
             'total_amount' => 'decimal:2',
             'amount_received' => 'decimal:2',
             'change_amount' => 'decimal:2',
+            'cash_amount' => 'decimal:2',
+            'gcash_amount' => 'decimal:2',
             'completed_at' => 'datetime',
         ];
     }
