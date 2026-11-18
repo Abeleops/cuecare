@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let previewUrl = null;
 
     // Reset Profile Picture
-    function resetImagePreview() {
+    function resetImagePreview(clearInput = true) {
         const preview = avatarContainer.querySelector(".staffAddImagePreview");
 
         if (preview) {
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         avatarContainer.querySelector(".staffAddAvatarIcon").hidden = false;
-        imageInput.value = "";
+        if (clearInput) imageInput.value = "";
 
         if (previewUrl) {
             URL.revokeObjectURL(previewUrl);
@@ -114,16 +114,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const allowedTypes = ["image/png", "image/jpeg"];
+        const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
         const maxSize = 2 * 1024 * 1024;
 
         if (!allowedTypes.includes(file.type) || file.size > maxSize) {
-            alert("Please upload a PNG or JPG image up to 2MB.");
+            alert("Please upload a PNG, JPG or WebP image up to 2MB.");
             imageInput.value = "";
             return;
         }
 
-        resetImagePreview();
+        resetImagePreview(false);
 
         previewUrl = URL.createObjectURL(file);
 
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Open Edit Staff Modal
     function openEditModal(button) {
         if (button.dataset.userId) {
-            editForm.action = `/staff/${button.dataset.userId}`;
+            editForm.action = button.dataset.updateUrl;
         }
         const row = button.closest("tr");
 
@@ -350,11 +350,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const allowedTypes = ["image/png", "image/jpeg"];
+        const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
         const maxSize = 2 * 1024 * 1024;
 
         if (!allowedTypes.includes(file.type) || file.size > maxSize) {
-            alert("Please upload a PNG or JPG image up to 2MB.");
+            alert("Please upload a PNG, JPG or WebP image up to 2MB.");
             imageInput.value = "";
             return;
         }
