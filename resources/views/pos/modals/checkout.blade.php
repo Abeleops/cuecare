@@ -1,6 +1,6 @@
 
 <!-- Checkout Modal -->
-<div id="posCheckoutModalOverlay" class="posModalOverlay" hidden>
+<div id="posCheckoutModalOverlay" class="posModalOverlay" data-has-errors="{{ $errors->any() ? 'true' : 'false' }}" hidden>
     <section id="posCheckoutModal" role="dialog" aria-modal="true" aria-labelledby="posCheckoutModalTitle" tabindex="-1">
         <!-- Modal Header -->
         <div id="posCheckoutModalHeader">
@@ -14,7 +14,16 @@
             </button>
         </div>
         <!-- Checkout Form -->
-        <form id="posCheckoutForm">
+        <form id="posCheckoutForm" method="POST" action="{{ route('pos.checkout') }}">
+            @csrf
+            <div class="posOrderTypeField">
+                <label for="posOrderType">Order type</label>
+                <select id="posOrderType" name="order_type">
+                    <option value="dine_in" @selected(old('order_type', 'dine_in') === 'dine_in')>Dine-In</option>
+                    <option value="takeout" @selected(old('order_type') === 'takeout')>Takeout</option>
+                </select>
+            </div>
+            <div id="posCheckoutItems"></div>
             <div id="posCheckoutModalBody">
                 <!-- Order Summary -->
                 <section id="posCheckoutOrderSummary" aria-labelledby="posCheckoutOrderTitle">
@@ -30,31 +39,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Static Sample Order Items -->
-                                <tr>
-                                    <td>Bottled Water</td>
-                                    <td>2</td>
-                                    <td>₱20.00</td>
-                                    <td>₱40.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Softdrink</td>
-                                    <td>1</td>
-                                    <td>₱35.00</td>
-                                    <td>₱35.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Chips</td>
-                                    <td>1</td>
-                                    <td>₱50.00</td>
-                                    <td>₱50.00</td>
-                                </tr>
+                                <tr><td colspan="4">No items in the order.</td></tr>
                             </tbody>
                         </table>
                     </div>
                     <div id="posCheckoutTotal">
                         <strong>Total Amount</strong>
-                        <strong id="posCheckoutTotalAmount">₱125.00</strong>
+                        <strong id="posCheckoutTotalAmount">₱0.00</strong>
                     </div>
                 </section>
                 <!-- Right Column -->
@@ -87,65 +78,11 @@
                                 </div>
                                 <!-- Customer Suggestions -->
                                 <div id="posCheckoutCustomerSuggestions" role="listbox" aria-label="Customer suggestions" hidden>
-                                    <!-- Walk-in Customer -->
-                                    <button type="button" class="posCheckoutCustomerSuggestion" data-customer-id="" data-customer-name="Walk-in / No Customer" role="option" aria-selected="false">
-                                        <span class="material-symbols-outlined" aria-hidden="true">person_off</span>
-                                        <span class="posCheckoutSuggestionDetails">
-                                            <strong>Walk-in / No Customer</strong>
-                                            <small>No registered customer required</small>
-                                        </span>
-                                    </button>
-                                    <!-- Static Sample Customers -->
-                                    <button type="button" class="posCheckoutCustomerSuggestion" data-customer-id="CUST-001" data-customer-name="Maria Santos" role="option" aria-selected="false">
-                                        <span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
-                                        <span class="posCheckoutSuggestionDetails">
-                                            <strong>Maria Santos</strong>
-                                            <small>0917 123 4567</small>
-                                        </span>
-                                    </button>
-                                    <button type="button" class="posCheckoutCustomerSuggestion" data-customer-id="CUST-002" data-customer-name="Carlo Reyes" role="option" aria-selected="false">
-                                        <span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
-                                        <span class="posCheckoutSuggestionDetails">
-                                            <strong>Carlo Reyes</strong>
-                                            <small>0920 765 4321</small>
-                                        </span>
-                                    </button>
-                                    <button type="button" class="posCheckoutCustomerSuggestion" data-customer-id="CUST-003" data-customer-name="Angelica Cruz" role="option" aria-selected="false">
-                                        <span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
-                                        <span class="posCheckoutSuggestionDetails">
-                                            <strong>Angelica Cruz</strong>
-                                            <small>0918 555 7890</small>
-                                        </span>
-                                    </button>
-                                    <button type="button" class="posCheckoutCustomerSuggestion" data-customer-id="CUST-004" data-customer-name="Mark Villanueva" role="option" aria-selected="false">
-                                        <span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
-                                        <span class="posCheckoutSuggestionDetails">
-                                            <strong>Mark Villanueva</strong>
-                                            <small>0935 222 1111</small>
-                                        </span>
-                                    </button>
-                                    <button type="button" class="posCheckoutCustomerSuggestion" data-customer-id="CUST-005" data-customer-name="Denise Flores" role="option" aria-selected="false">
-                                        <span class="material-symbols-outlined" aria-hidden="true">account_circle</span>
-                                        <span class="posCheckoutSuggestionDetails">
-                                            <strong>Denise Flores</strong>
-                                            <small>0919 888 3344</small>
-                                        </span>
-                                    </button>
-                                    <!-- No Matching Customers -->
-                                    <div id="posCheckoutNoCustomerResults" hidden>
-                                        <span class="material-symbols-outlined" aria-hidden="true">person_search</span>
-                                        <p>No customers found</p>
-                                        <small>Click Add New to register a customer.</small>
-                                    </div>
                                 </div>
                                 <!-- Selected Customer ID -->
-                                <input type="hidden" id="posCheckoutSelectedCustomerId" name="customerId" value="">
+                                <input type="hidden" id="posCheckoutSelectedCustomerId" name="customer_id" value="">
                             </div>
                             <!-- Add New Customer Button -->
-                            <button type="button" id="posCheckoutAddCustomerButton">
-                                <span class="material-symbols-outlined" aria-hidden="true">person_add</span>
-                                Add New
-                            </button>
                         </div>
                     </section>
                     <!-- Payment Details -->
@@ -156,14 +93,31 @@
                             <p id="posCheckoutPaymentMethodLabel">Payment Method <span>*</span></p>
                             <div id="posCheckoutPaymentOptions" role="group" aria-labelledby="posCheckoutPaymentMethodLabel">
                                 <label class="posCheckoutPaymentOption">
-                                    <input type="radio" name="paymentMethod" value="cash" checked required>
+                                    <input type="radio" name="payment_method" value="cash" @checked(old('payment_method', 'cash') === 'cash') required>
                                     <span>Cash</span>
                                 </label>
                                 <label class="posCheckoutPaymentOption">
-                                    <input type="radio" name="paymentMethod" value="gcash">
+                                    <input type="radio" name="payment_method" value="gcash" @checked(old('payment_method') === 'gcash')>
                                     <span>GCash</span>
                                 </label>
+                                <label class="posCheckoutPaymentOption">
+                                    <input type="radio" name="payment_method" value="split" @checked(old('payment_method') === 'split')>
+                                    <span>Cash + GCash</span>
+                                </label>
                             </div>
+                        </div>
+                        <div id="posSplitPaymentGroup" hidden>
+                            <label for="posCashAmount">Cash amount (₱)</label>
+                            <input type="number" id="posCashAmount" name="cash_amount" value="{{ old('cash_amount') }}" min="0.01" step="0.01">
+                            @error('cash_amount') <p role="alert">{{ $message }}</p> @enderror
+                            <label for="posGcashAmount">GCash amount (₱)</label>
+                            <input type="number" id="posGcashAmount" name="gcash_amount" value="{{ old('gcash_amount') }}" min="0.01" step="0.01">
+                            @error('gcash_amount') <p role="alert">{{ $message }}</p> @enderror
+                        </div>
+                        <div id="posGcashReferenceGroup" hidden>
+                            <label for="posGcashReference">GCash reference</label>
+                            <input id="posGcashReference" name="gcash_reference" maxlength="50" pattern="[A-Za-z0-9]+" autocomplete="off">
+                            @error('gcash_reference') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                         <!-- Amount Received -->
                         <div id="posCheckoutAmountGroup">
@@ -175,19 +129,20 @@
                                 <input
                                     type="number"
                                     id="posCheckoutAmountReceived"
-                                    name="amountReceived"
+                                    name="amount_received"
                                     placeholder="Enter amount received"
-                                    value="200.00"
+                                    value="{{ old('amount_received') }}"
                                     min="0"
                                     step="0.01"
                                     required
                                 >
                             </div>
+                            @error('amount_received') <p role="alert">{{ $message }}</p> @enderror
                         </div>
                         <!-- Change -->
                         <div id="posCheckoutChangeContainer" aria-live="polite">
                             <span>Change</span>
-                            <strong id="posCheckoutChangeAmount">₱75.00</strong>
+                            <strong id="posCheckoutChangeAmount">Calculated after payment</strong>
                         </div>
                     </section>
                 </div>
