@@ -77,11 +77,11 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const allowedTypes = ["image/png", "image/jpeg"];
+        const allowedTypes = ["image/png", "image/jpeg", "image/webp"];
         const maxSize = 2 * 1024 * 1024;
 
         if (!allowedTypes.includes(file.type) || file.size > maxSize) {
-            alert("Please upload a PNG or JPG image up to 2MB.");
+            alert("Please upload a PNG, JPG or WebP image up to 2MB.");
             imageInput.value = "";
             return;
         }
@@ -135,6 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const categorySelect = document.getElementById("productsEditCategory");
 
     const imageInput = document.getElementById("productsEditImage");
+    const removeImageFlag = document.getElementById("productsRemoveImageFlag");
     const imagePreview = document.getElementById("productsEditImagePreview");
     const removeImageButton = document.getElementById(
         "productsEditRemoveImage",
@@ -151,7 +152,8 @@ document.addEventListener("DOMContentLoaded", function () {
     editButtons.forEach(function (button) {
         button.addEventListener("click", function () {
             if (button.dataset.productId) {
-                editForm.action = `/products/${button.dataset.productId}`;
+                editForm.action = button.dataset.updateUrl;
+                editForm.elements._edit_id.value = button.dataset.productId;
             }
             const row = button.closest("tr");
 
@@ -173,6 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             imagePreview.src = productImage ? productImage.src : defaultImage;
             imageInput.value = "";
+            removeImageFlag.value = "0";
 
             previousFocus = document.activeElement;
             editOverlay.hidden = false;
@@ -218,10 +221,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (
-            !["image/png", "image/jpeg"].includes(file.type) ||
+            !["image/png", "image/jpeg", "image/webp"].includes(file.type) ||
             file.size > 2 * 1024 * 1024
         ) {
-            alert("Please select a PNG or JPG image up to 2MB.");
+            alert("Please select a PNG, JPG or WebP image up to 2MB.");
             imageInput.value = "";
             return;
         }
@@ -232,6 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
             imagePreview.src = event.target.result;
         };
 
+        removeImageFlag.value = "0";
         reader.readAsDataURL(file);
     });
 
@@ -239,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
     removeImageButton.addEventListener("click", function () {
         imagePreview.src = defaultImage;
         imageInput.value = "";
+        removeImageFlag.value = "1";
     });
 
     // Demo Save Changes
@@ -251,4 +256,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         editForm.submit();
     });
+});
+
+// Restore the form that failed server validation
+document.addEventListener("DOMContentLoaded", () => {
+    const add = document.getElementById("productsAddModalOverlay");
+    const edit = document.getElementById("productsEditModalOverlay");
+    if (add?.dataset.reopen === "true") {
+        add.hidden = false;
+        document.body.classList.add("productsModalOpen");
+        add.querySelector("[data-validation-summary]")?.focus();
+    }
+    if (edit?.dataset.reopen === "true") {
+        const form = edit.querySelector("form");
+        const button = Array.from(document.querySelectorAll(".productsEditButton"))
+            .find((item) => item.dataset.productId === edit.dataset.editId);
+        const values = Array.from(form.elements).filter((element) => element.name && element.type !== "file")
+            .map((element) => [element, element.value]);
+        button?.click();
+        values.forEach(([element, value]) => { element.value = value; });
+        form.action = edit.dataset.updateUrl.replace("__ID__", encodeURIComponent(edit.dataset.editId));
+        edit.hidden = false;
+        document.body.classList.add("productsModalOpen");
+        edit.querySelector("[data-validation-summary]")?.focus();
+    }
 });
