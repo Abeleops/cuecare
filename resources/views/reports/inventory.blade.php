@@ -19,36 +19,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="GG Billiards & Autocare Logo" id="dashboardSidebarLogo">
                 <p id="dashboardSidebarBusinessName">GG BILLIARDS & AUTOCARE</p>
             </div>
-            <nav id="dashboardSidebarNavigation" aria-label="Main navigation">
-                <a href="{{ route('dashboard') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="{{ route('pos.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                    <span>Record Sale</span>
-                </a>
-                <a href="{{ route('products.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
-                    <span>Products</span>
-                </a>
-                <a href="{{ route('customers.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">groups</span>
-                    <span>Customers</span>
-                </a>
-                <a href="{{ route('staff.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">account_box</span>
-                    <span>Staff</span>
-                </a>
-                <a href="{{ route('sales.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
-                    <span>Sales History</span>
-                </a>
-                <a href="{{ route('reports.index') }}" class="dashboardNavLink active" aria-current="page">
-                    <span class="material-symbols-outlined" aria-hidden="true">monitoring</span>
-                    <span>Reports</span>
-                </a>
-            </nav>
+            @include('partials.navigation')
             <div id="dashboardSidebarFooter">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -67,13 +38,7 @@
                     <h1>Reports</h1>
                     <p>Generate sales and inventory reports</p>
                 </div>
-                <div id="dashboardHeaderProfile">
-                    <span class="material-symbols-outlined" id="dashboardProfileIcon" aria-hidden="true">account_circle</span>
-                    <div id="dashboardProfileDetails">
-                        <h2>Ivan Mark Lizardo</h2>
-                        <p>Admin</p>
-                    </div>
-                </div>
+                @include('partials.profile')
             </header>
             <!-- Inventory Report Content -->
             <div id="reportsContent">
@@ -91,94 +56,99 @@
                 <!-- Inventory Report -->
                 <section id="reportsInventorySection" aria-label="Inventory report">
                     <!-- Filters and Actions -->
-                    <div id="reportsInventoryFilters">
-                        <div id="reportsInventoryDateFilter">
-                            <label for="reportsInventoryDateRange">Date Range</label>
-                            <div id="reportsInventoryDateContainer">
-                                <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
-                                <select id="reportsInventoryDateRange">
-                                    <option value="jan2025">Jan 01, 2025 – Jan 31, 2025</option>
-                                    <option value="today">Today</option>
-                                    <option value="week">This Week</option>
-                                    <option value="month">This Month</option>
-                                </select>
-                            </div>
-                        </div>
+                    <form id="reportsInventoryFilters" method="GET" action="{{ route('reports.inventory') }}">
                         <div id="reportsInventoryCategoryFilter">
                             <label for="reportsInventoryCategory">Category</label>
-                            <select id="reportsInventoryCategory">
-                                <option value="all">All Categories</option>
-                                <option value="silog">Silog Meals</option>
-                                <option value="poppersRice">Chicken Poppers with Rice</option>
-                                <option value="riceMeals">Rice Meals</option>
-                                <option value="wings">Chicken Wings</option>
-                                <option value="poppers">Chicken Poppers</option>
-                                <option value="pulutan">Pulutan</option>
-                                <option value="snacks">Snacks &amp; Appetizers</option>
-                                <option value="extras">Extras &amp; Add-ons</option>
-                                <option value="softdrinks">Softdrinks &amp; Refreshments</option>
-                                <option value="fruitySoda">Fruity Soda</option>
-                                <option value="frappe">Frappe</option>
-                                <option value="ggTower">GG Tower</option>
-                                <option value="beer">Beer</option>
-                                <option value="hardLiquors">Hard Liquors</option>
-                                <option value="brandy">Brandy</option>
+                            <select id="reportsInventoryCategory" name="category">
+                                <option value="">All Categories</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" @selected((string) request('category') === (string) $category->id)>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
-                        <button type="button" id="reportsInventoryGenerateButton">
-                            <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
-                            Generate Report
-                        </button>
-                        <button type="button" id="reportsInventoryExportButton">
-                            <span class="material-symbols-outlined" aria-hidden="true">download</span>
-                            Export
-                            <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
-                        </button>
-                    </div>
+                        <div>
+                            <label for="reportsInventoryStock">Stock status</label>
+                            <select id="reportsInventoryStock" name="stock">
+                                <option value="">All Stock</option>
+                                <option value="in_stock" @selected(request('stock') === 'in_stock')>In Stock</option>
+                                <option value="low_stock" @selected(request('stock') === 'low_stock')>Low Stock</option>
+                                <option value="out_of_stock" @selected(request('stock') === 'out_of_stock')>Out of Stock</option>
+                            </select>
+                        </div>
+                        <button type="submit" id="reportsInventoryGenerateButton">Apply filters</button>
+                        @can('ReportsExport')
+                            <button type="submit" id="reportsInventoryExportButton" formaction="{{ route('reports.export') }}" name="type" value="inventory">Export CSV</button>
+                        @endcan
+                    </form>
                     <!-- Inventory Statistics -->
                     <section id="reportsInventoryStatistics" aria-label="Inventory statistics">
                         <article class="reportsInventoryStatCard">
                             <span class="material-symbols-outlined reportsInventoryStatIcon" aria-hidden="true">deployed_code</span>
                             <div class="reportsInventoryStatInformation">
                                 <p>Total Products</p>
-                                <h2>85</h2>
+                                <h2>{{ $totalProducts }}</h2>
                             </div>
                         </article>
                         <article class="reportsInventoryStatCard">
                             <span class="material-symbols-outlined reportsInventoryStatIcon" aria-hidden="true">inventory_2</span>
                             <div class="reportsInventoryStatInformation">
                                 <p>Total Stock Units</p>
-                                <h2>1,248</h2>
+                                <h2>{{ number_format($totalStock) }}</h2>
                             </div>
                         </article>
                         <article class="reportsInventoryStatCard">
                             <span class="material-symbols-outlined reportsInventoryStatIcon" aria-hidden="true">warning</span>
                             <div class="reportsInventoryStatInformation">
                                 <p>Low Stock Items</p>
-                                <h2>8</h2>
+                                <h2>{{ $lowStock }}</h2>
                             </div>
                         </article>
                         <article class="reportsInventoryStatCard">
                             <span class="material-symbols-outlined reportsInventoryStatIcon reportsInventoryDangerIcon" aria-hidden="true">block</span>
                             <div class="reportsInventoryStatInformation">
                                 <p>Out of Stock</p>
-                                <h2>3</h2>
+                                <h2>{{ $outOfStock }}</h2>
                             </div>
                         </article>
                     </section>
-                    <!-- Empty Chart Containers -->
+                    <!-- Inventory charts -->
                     <section id="reportsInventoryCharts" aria-label="Inventory charts">
                         <article id="reportsInventoryByCategory" class="reportsPanel">
                             <div class="reportsPanelHeader">
                                 <h2>Inventory by Category</h2>
                             </div>
-                            <div id="reportsInventoryCategoryChart"></div>
+                            <div id="reportsInventoryCategoryChart">
+                                <table>
+                                    <thead><tr><th>Category</th><th>Stock units</th></tr></thead>
+                                    <tbody>
+                                        @forelse ($categorySummary as $category)
+                                            <tr>
+                                                <td>
+                                                    {{ $category->name }}
+                                                    <progress aria-label="Stock for {{ $category->name }}"
+                                                        value="{{ $category->stock_units }}"
+                                                        max="{{ max(1, $categorySummary->max('stock_units')) }}"></progress>
+                                                </td>
+                                                <td>{{ $category->stock_units }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr><td colspan="2">No products found.</td></tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </article>
                         <article id="reportsStockStatusOverview" class="reportsPanel">
                             <div class="reportsPanelHeader">
                                 <h2>Stock Status Overview</h2>
                             </div>
-                            <div id="reportsStockStatusChart"></div>
+                            <div id="reportsStockStatusChart">
+                                <p>In stock: {{ $totalProducts - $lowStock - $outOfStock }}</p>
+                                <p>Low stock: {{ $lowStock }}</p>
+                                <p>Out of stock: {{ $outOfStock }}</p>
+                            </div>
                         </article>
                     </section>
                     <!-- Inventory Stock Details -->
@@ -193,68 +163,34 @@
                                         <th scope="col">Product</th>
                                         <th scope="col">Category</th>
                                         <th scope="col">Current Stock</th>
+                                        <th scope="col">Threshold</th>
                                         <th scope="col">Stock Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="reportsInventoryProduct">
-                                                <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Bottled Water placeholder">
-                                                <span>Bottled Water</span>
-                                            </div>
-                                        </td>
-                                        <td>Softdrinks &amp; Refreshments</td>
-                                        <td>32</td>
-                                        <td><span class="reportsInventoryStatus reportsInventoryInStock">In Stock</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="reportsInventoryProduct">
-                                                <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Coke Mismo placeholder">
-                                                <span>Coke Mismo</span>
-                                            </div>
-                                        </td>
-                                        <td>Softdrinks &amp; Refreshments</td>
-                                        <td>7</td>
-                                        <td><span class="reportsInventoryStatus reportsInventoryLowStock">Low Stock</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="reportsInventoryProduct">
-                                                <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Fries placeholder">
-                                                <span>Fries</span>
-                                            </div>
-                                        </td>
-                                        <td>Snacks &amp; Appetizers</td>
-                                        <td>0</td>
-                                        <td><span class="reportsInventoryStatus reportsInventoryOutOfStock">Out of Stock</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="reportsInventoryProduct">
-                                                <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Tapsilog placeholder">
-                                                <span>Tapsilog</span>
-                                            </div>
-                                        </td>
-                                        <td>Silog Meals</td>
-                                        <td>18</td>
-                                        <td><span class="reportsInventoryStatus reportsInventoryInStock">In Stock</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="reportsInventoryProduct">
-                                                <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Nutella Frappe placeholder">
-                                                <span>Nutella Frappe</span>
-                                            </div>
-                                        </td>
-                                        <td>Frappe</td>
-                                        <td>4</td>
-                                        <td><span class="reportsInventoryStatus reportsInventoryLowStock">Low Stock</span></td>
-                                    </tr>
+                                    @forelse ($products as $product)
+                                        <tr>
+                                            <td>{{ $product->name }}</td>
+                                            <td>{{ $product->category?->name }}</td>
+                                            <td>{{ $product->stock_quantity }}</td>
+                                            <td>{{ $product->low_stock_threshold }}</td>
+                                            <td>
+                                                {{ $product->stock_quantity === 0
+                                                    ? 'Out of Stock'
+                                                    : ($product->stock_quantity <= $product->low_stock_threshold ? 'Low Stock' : 'In Stock') }}
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="5">No products found.</td></tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
+                        <p>Showing {{ $products->firstItem() ?? 0 }} to {{ $products->lastItem() ?? 0 }} of {{ $products->total() }} products</p>
+                        <nav aria-label="Inventory report pagination">
+                            @if ($products->previousPageUrl()) <a href="{{ $products->previousPageUrl() }}">Previous</a> @endif
+                            @if ($products->nextPageUrl()) <a href="{{ $products->nextPageUrl() }}">Next</a> @endif
+                        </nav>
                     </section>
                 </section>
             </div>

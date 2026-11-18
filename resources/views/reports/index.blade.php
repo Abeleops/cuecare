@@ -19,36 +19,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="GG Billiards & Autocare Logo" id="dashboardSidebarLogo">
                 <p id="dashboardSidebarBusinessName">GG BILLIARDS & AUTOCARE</p>
             </div>
-            <nav id="dashboardSidebarNavigation" aria-label="Main navigation">
-                <a href="{{ route('dashboard') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">dashboard</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="{{ route('pos.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
-                    <span>Record Sale</span>
-                </a>
-                <a href="{{ route('products.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">deployed_code</span>
-                    <span>Products</span>
-                </a>
-                <a href="{{ route('customers.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">groups</span>
-                    <span>Customers</span>
-                </a>
-                <a href="{{ route('staff.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">account_box</span>
-                    <span>Staff</span>
-                </a>
-                <a href="{{ route('sales.index') }}" class="dashboardNavLink">
-                    <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
-                    <span>Sales History</span>
-                </a>
-                <a href="{{ route('reports.index') }}" class="dashboardNavLink active" aria-current="page">
-                    <span class="material-symbols-outlined" aria-hidden="true">monitoring</span>
-                    <span>Reports</span>
-                </a>
-            </nav>
+            @include('partials.navigation')
             <div id="dashboardSidebarFooter">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -67,13 +38,7 @@
                     <h1>Reports</h1>
                     <p>Generate sales and inventory reports</p>
                 </div>
-                <div id="dashboardHeaderProfile">
-                    <span class="material-symbols-outlined" id="dashboardProfileIcon" aria-hidden="true">account_circle</span>
-                    <div id="dashboardProfileDetails">
-                        <h2>Ivan Mark Lizardo</h2>
-                        <p>Admin</p>
-                    </div>
-                </div>
+                @include('partials.profile')
             </header>
             <!-- Reports Content -->
             <div id="reportsContent">
@@ -91,64 +56,59 @@
                 <!-- Sales Report -->
                 <section id="reportsSalesSection" aria-label="Sales report">
                     <!-- Filters and Actions -->
-                    <div id="reportsFilters">
+                    <form id="reportsFilters" method="GET" action="{{ route('reports.index') }}">
                         <div id="reportsDateFilter">
-                            <label for="reportsDateRange">Date Range</label>
+                            <label for="reportsStartDate">Date Range</label>
                             <div id="reportsDateRangeContainer">
                                 <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
-                                <select id="reportsDateRange">
-                                    <option value="jan2025">Jan 01, 2025 – Jan 31, 2025</option>
-                                    <option value="today">Today</option>
-                                    <option value="week">This Week</option>
-                                    <option value="month">This Month</option>
-                                </select>
+                                <input type="date" id="reportsStartDate" name="start_date" value="{{ $startDate }}" aria-label="Start date">
+                                <input type="date" name="end_date" value="{{ $endDate }}" aria-label="End date">
                             </div>
                         </div>
                         <div id="reportsPaymentFilter">
                             <label for="reportsPaymentMethod">Payment Method</label>
-                            <select id="reportsPaymentMethod">
-                                <option value="all">All Methods</option>
-                                <option value="cash">Cash</option>
-                                <option value="gcash">GCash</option>
+                            <select id="reportsPaymentMethod" name="payment">
+                                <option value="">All Methods</option>
+                                <option value="cash" @selected($payment === 'cash')>Cash</option>
+                                <option value="gcash" @selected($payment === 'gcash')>GCash</option>
                             </select>
                         </div>
-                        <button type="button" id="reportsGenerateButton">
+                        <button type="submit" id="reportsGenerateButton">
                             <span class="material-symbols-outlined" aria-hidden="true">refresh</span>
                             Generate Report
                         </button>
-                        <button type="button" id="reportsExportButton">
-                            <span class="material-symbols-outlined" aria-hidden="true">download</span>
-                            Export
-                            <span class="material-symbols-outlined" aria-hidden="true">expand_more</span>
-                        </button>
-                    </div>
+                        @can('ReportsExport')
+                            <button type="submit" id="reportsExportButton" formaction="{{ route('reports.export') }}" name="type" value="sales">Export CSV</button>
+                        @endcan
+                    </form>
+                    @if ($errors->any()) <p role="alert">{{ $errors->first() }}</p> @endif
                     <!-- Sales Statistics -->
                     <section id="reportsSalesStatistics" aria-label="Sales statistics">
                         <article class="reportsStatCard">
                             <span class="material-symbols-outlined reportsStatIcon" aria-hidden="true">shopping_cart</span>
                             <div class="reportsStatInformation">
                                 <p>Total Sales</p>
-                                <h2>₱12,450.00</h2>
+                                <h2>₱{{ number_format($salesTotal, 2) }}</h2>
                             </div>
                         </article>
                         <article class="reportsStatCard">
                             <span class="material-symbols-outlined reportsStatIcon" aria-hidden="true">receipt_long</span>
                             <div class="reportsStatInformation">
                                 <p>Total Transactions</p>
-                                <h2>54</h2>
+                                <h2>{{ $transactionCount }}</h2>
                             </div>
                         </article>
                         <article class="reportsStatCard">
                             <span class="material-symbols-outlined reportsStatIcon" aria-hidden="true">shopping_basket</span>
                             <div class="reportsStatInformation">
                                 <p>Average Sale</p>
-                                <h2>₱230.56</h2>
+                                <h2>₱{{ number_format($averageSale, 2) }}</h2>
                             </div>
                         </article>
                         <article class="reportsStatCard reportsGrowthCard">
                             <span class="material-symbols-outlined" aria-hidden="true">trending_up</span>
                             <div class="reportsStatInformation">
-                                <h2>+12.8%</h2>
+                                <h2>{{ sprintf('%+.1f%%', $growth) }}</h2>
                                 <p>vs. previous period</p>
                             </div>
                         </article>
@@ -159,7 +119,25 @@
                             <div class="reportsPanelHeader">
                                 <h2>Sales Trend</h2>
                             </div>
-                            <div id="reportsSalesTrendChart"></div>
+                            <div id="reportsSalesTrendChart">
+                                <table>
+                                    <thead><tr><th>Date</th><th>Sales</th></tr></thead>
+                                    <tbody>
+                                        @forelse ($dailyTotals as $day)
+                                            <tr>
+                                                <td>
+                                                    {{ $day->sale_date }}
+                                                    <progress aria-label="Sales on {{ $day->sale_date }}"
+                                                        value="{{ $day->total }}" max="{{ max(1, $dailyTotals->max('total')) }}"></progress>
+                                                </td>
+                                                <td>₱{{ number_format((float) $day->total, 2) }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr><td colspan="2">No sales for this period.</td></tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </article>
                         <article id="reportsTopSellingProducts" class="reportsPanel">
                             <div class="reportsPanelHeader">
@@ -170,46 +148,15 @@
                                 </a>
                             </div>
                             <div id="reportsTopProductsList">
-                                <div class="reportsTopProductItem">
-                                    <div class="reportsTopProductInformation">
-                                        <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Bottled Water placeholder">
-                                        <span>Bottled Water</span>
+                                @forelse ($topProducts as $product)
+                                    <div class="reportsTopProductItem">
+                                        <span>{{ $product->product_name }}</span>
+                                        <span>{{ $product->units }} sold</span>
+                                        <span>₱{{ number_format((float) $product->revenue, 2) }}</span>
                                     </div>
-                                    <span>32 sold</span>
-                                    <span>₱480.00</span>
-                                </div>
-                                <div class="reportsTopProductItem">
-                                    <div class="reportsTopProductInformation">
-                                        <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Softdrink placeholder">
-                                        <span>Softdrink</span>
-                                    </div>
-                                    <span>28 sold</span>
-                                    <span>₱560.00</span>
-                                </div>
-                                <div class="reportsTopProductItem">
-                                    <div class="reportsTopProductInformation">
-                                        <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Chips placeholder">
-                                        <span>Chips</span>
-                                    </div>
-                                    <span>18 sold</span>
-                                    <span>₱360.00</span>
-                                </div>
-                                <div class="reportsTopProductItem">
-                                    <div class="reportsTopProductInformation">
-                                        <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Instant Noodles placeholder">
-                                        <span>Instant Noodles</span>
-                                    </div>
-                                    <span>15 sold</span>
-                                    <span>₱225.00</span>
-                                </div>
-                                <div class="reportsTopProductItem">
-                                    <div class="reportsTopProductInformation">
-                                        <img src="{{ asset('images/noImagePlaceholderWhite.png') }}" alt="Cup Noodles placeholder">
-                                        <span>Cup Noodles</span>
-                                    </div>
-                                    <span>12 sold</span>
-                                    <span>₱120.00</span>
-                                </div>
+                                @empty
+                                    <p>No products sold for this period.</p>
+                                @endforelse
                             </div>
                         </article>
                     </section>
@@ -219,7 +166,11 @@
                             <div class="reportsPanelHeader">
                                 <h2>Sales by Payment Method</h2>
                             </div>
-                            <div id="reportsPaymentContent"></div>
+                            <div id="reportsPaymentContent">
+                                <p>Cash: ₱{{ number_format((float) ($paymentTotals['cash'] ?? 0), 2) }}</p>
+                                <p>GCash: ₱{{ number_format((float) ($paymentTotals['gcash'] ?? 0), 2) }}</p>
+                                <p>Cash + GCash: ₱{{ number_format((float) ($paymentTotals['split'] ?? 0), 2) }}</p>
+                            </div>
                         </article>
                         <article id="reportsSalesSummary" class="reportsPanel">
                             <div class="reportsPanelHeader">
@@ -231,21 +182,21 @@
                                         <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
                                         <span>Total Sales</span>
                                     </div>
-                                    <span>₱12,450.00</span>
+                                    <span>₱{{ number_format($salesTotal, 2) }}</span>
                                 </div>
                                 <div class="reportsSummaryItem">
                                     <div>
                                         <span class="material-symbols-outlined" aria-hidden="true">shopping_cart</span>
                                         <span>Total Transactions</span>
                                     </div>
-                                    <span>54</span>
+                                    <span>{{ $transactionCount }}</span>
                                 </div>
                                 <div class="reportsSummaryItem">
                                     <div>
                                         <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
                                         <span>Average Sale per Transaction</span>
                                     </div>
-                                    <span>₱230.56</span>
+                                    <span>₱{{ number_format($averageSale, 2) }}</span>
                                 </div>
                             </div>
                         </article>
