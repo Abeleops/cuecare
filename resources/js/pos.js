@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const urls = document.getElementById('posPage').dataset;
     const successDialog = document.getElementById('posSuccessDialog');
     if (successDialog) successDialog.showModal();
     const form = document.getElementById('posCheckoutForm');
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchTimer = setTimeout(async () => {
             searchController = new AbortController();
             try {
-                const response = await fetch('/pos/customers/search?' + new URLSearchParams({ q: query }), {
+                const response = await fetch(urls.customerSearchUrl + '?' + new URLSearchParams({ q: query }), {
                     headers: { Accept: 'application/json' },
                     signal: searchController.signal,
                 });
@@ -162,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function change(id, quantity) {
         try {
             await request(
-                '/pos/cart/' + encodeURIComponent(id),
+                (quantity ? urls.cartUpdateUrl : urls.cartRemoveUrl).replace('__ID__', encodeURIComponent(id)),
                 quantity ? 'PUT' : 'DELETE',
                 quantity ? { quantity } : undefined,
             );
@@ -180,10 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     document.getElementById('posClearOrderButton').addEventListener('click', () => {
-        request('/pos/cart', 'DELETE').catch((error) => { status.textContent = error.message; });
+        request(urls.cartClearUrl, 'DELETE').catch((error) => { status.textContent = error.message; });
     });
     document.getElementById('posApplyDiscount')?.addEventListener('click', () => {
-        request('/pos/cart/discount', 'PUT', {
+        request(urls.discountUrl, 'PUT', {
             type: document.getElementById('posDiscountType').value,
             value: document.getElementById('posDiscountInput').value,
         })
@@ -209,5 +210,5 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
-    request('/pos/cart').catch((error) => { status.textContent = error.message; });
+    request(urls.cartUrl).catch((error) => { status.textContent = error.message; });
 });

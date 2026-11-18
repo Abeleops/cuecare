@@ -107,7 +107,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Open Edit Customer Modal
     function openEditModal(button) {
         if (button.dataset.customerId) {
-            editForm.action = `/customers/${button.dataset.customerId}`;
+            editForm.action = button.dataset.updateUrl;
+            editForm.elements._edit_id.value = button.dataset.customerId;
         }
         const row = button.closest("tr");
 
@@ -181,4 +182,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
         editForm.submit();
     });
+});
+
+// Restore the form that failed server validation
+document.addEventListener("DOMContentLoaded", () => {
+    const add = document.getElementById("customersAddModalOverlay");
+    const edit = document.getElementById("customersEditModalOverlay");
+    if (add?.dataset.reopen === "true") {
+        add.hidden = false;
+        document.body.classList.add("customersModalOpen");
+        add.querySelector("[data-validation-summary]")?.focus();
+    }
+    if (edit?.dataset.reopen === "true") {
+        const form = edit.querySelector("form");
+        const button = Array.from(document.querySelectorAll(".customersEditButton"))
+            .find((item) => item.dataset.customerId === edit.dataset.editId);
+        const values = Array.from(form.elements).filter((element) => element.name && element.type !== "file")
+            .map((element) => [element, element.value]);
+        button?.click();
+        values.forEach(([element, value]) => { element.value = value; });
+        form.action = edit.dataset.updateUrl.replace("__ID__", encodeURIComponent(edit.dataset.editId));
+        edit.hidden = false;
+        document.body.classList.add("customersModalOpen");
+        edit.querySelector("[data-validation-summary]")?.focus();
+    }
 });
