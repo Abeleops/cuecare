@@ -12,7 +12,8 @@
                 <span class="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
         </div>
-        <form id="productsAddForm">
+        <form id="productsAddForm" method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
+            @csrf
             <div id="productsAddModalBody">
                 <div id="productsAddImageGroup">
                     <label for="productsAddImage">Product Image</label>
@@ -43,10 +44,15 @@
                             <label for="productsAddStock">Stock Quantity <span>*</span></label>
                             <div class="productsAddInputContainer">
                                 <span class="material-symbols-outlined" aria-hidden="true">tag</span>
-                                <input type="number" id="productsAddStock" name="stock" placeholder="Enter quantity" min="0" step="1" required>
+                                <input type="number" id="productsAddStock" name="stock_quantity" placeholder="Enter quantity" min="0" step="1" required>
                             </div>
                         </div>
+                        <div class="productsAddFieldGroup">
+                            <label for="productsAddThreshold">Low Stock Threshold <span>*</span></label>
+                            <div class="productsAddInputContainer"><input type="number" id="productsAddThreshold" name="low_stock_threshold" value="10" min="0" step="1" required></div>
+                        </div>
                     </div>
+                    <div class="productsAddFieldGroup"><label for="productsAddCategory">Category <span>*</span></label><select id="productsAddCategory" name="category_id" required><option value="">Select category</option>@foreach(($categories ?? collect())->flatMap(fn ($category) => $category->children) as $category)<option value="{{ $category->id }}">{{ $category->name }}</option>@endforeach</select></div>
                 </div>
             </div>
             <div id="productsAddModalFooter">
