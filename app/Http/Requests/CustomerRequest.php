@@ -14,6 +14,9 @@ class CustomerRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        $editingCustomer = $this->route('customer');
+        $this->errorBag = $editingCustomer ? 'customerEdit' : 'customerCreate';
+        $this->merge(['_edit_id' => $editingCustomer?->getKey()]);
         $phone = trim(preg_replace('/[\x00-\x1F\x7F]/u', '', (string) $this->input('phone')));
         $email = trim((string) $this->input('email'));
         // Store missing contact details as null, not empty strings
