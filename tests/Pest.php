@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Tests\TestCase;
 
 /*
@@ -47,4 +49,20 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+function readReportWorkbook(string $contents): Spreadsheet
+{
+    $path = tempnam(sys_get_temp_dir(), 'cuecare-report-');
+    if ($path === false) {
+        throw new RuntimeException('Unable to create a temporary report file');
+    }
+
+    try {
+        file_put_contents($path, $contents);
+
+        return (new Xlsx)->load($path);
+    } finally {
+        unlink($path);
+    }
 }
