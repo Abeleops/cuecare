@@ -36,7 +36,7 @@
                         <label for="staffAddFullName">Full Name <span>*</span></label>
                         <div class="staffAddInputContainer">
                             <span class="material-symbols-outlined" aria-hidden="true">person</span>
-                            <input type="text" id="staffAddFullName" name="full_name" placeholder="Enter full name (e.g., Juan Dela Cruz)" autocomplete="name" required>
+                            <input type="text" id="staffAddFullName" name="full_name" placeholder="Enter full name" autocomplete="name" required>
                         </div>
                     </div>
                     <div class="staffAddFieldGroup">
