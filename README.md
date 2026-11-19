@@ -40,25 +40,10 @@ Administrators manage the application, cashiers can use the POS and view their o
 Run these commands from the project directory. On Windows with Herd, use its PHP executable if `php` is unavailable in your terminal.
 
 1. Create a MySQL database named `cuecare_db` using phpMyAdmin or your database tool.
-2. Create a `.env` file in the project root if one does not already exist. This repository does not currently include an `.env.example`. Start with these settings and replace the database credentials:
+2. Create a `.env` file in the project root if one does not already exist. Copy `.env.example` and replace the database credentials:
 
    ```dotenv
-   APP_NAME="GG Billiards & Autocare POS"
-   APP_ENV=local
-   APP_KEY=
-   APP_DEBUG=true
-   APP_URL=http://127.0.0.1:8000
-
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=cuecare_db
-   DB_USERNAME=root
-   DB_PASSWORD=
-
-   SESSION_DRIVER=database
-   CACHE_STORE=database
-   QUEUE_CONNECTION=sync
+   copy .env.example .env
    ```
 
 3. Install dependencies:
